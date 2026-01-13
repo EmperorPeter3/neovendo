@@ -11,6 +11,8 @@ import SearchPage from "./pages/SearchPage";
 import CreateListing from "./pages/CreateListing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Messages from "./pages/Messages";
 import ChatPage from "./pages/ChatPage";
 import Profile from "./pages/Profile";
@@ -34,6 +36,8 @@ const App = () => (
               <Route path="/create" element={<CreateListing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
+              <Route path="/forgot-password" element={<ForgotPassword />} />
+              <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/messages" element={<Messages />} />
               <Route path="/chat/:id" element={<ChatPage />} />
               <Route path="/profile" element={<Profile />} />
