@@ -9,11 +9,17 @@ interface ListingCardProps {
 }
 
 const categoryColors: Record<Category, string> = {
-  electronics: 'bg-blue-100 text-blue-700',
-  furniture: 'bg-amber-100 text-amber-700',
+  transport: 'bg-blue-100 text-blue-700',
+  realEstate: 'bg-rose-100 text-rose-700',
   jobs: 'bg-purple-100 text-purple-700',
   services: 'bg-emerald-100 text-emerald-700',
-  realEstate: 'bg-rose-100 text-rose-700',
+  personalItems: 'bg-amber-100 text-amber-700',
+  homeAndGarden: 'bg-green-100 text-green-700',
+  autoParts: 'bg-slate-100 text-slate-700',
+  electronics: 'bg-indigo-100 text-indigo-700',
+  hobbies: 'bg-pink-100 text-pink-700',
+  animals: 'bg-yellow-100 text-yellow-700',
+  business: 'bg-cyan-100 text-cyan-700',
 };
 
 export const ListingCard = ({ listing }: ListingCardProps) => {

@@ -9,13 +9,20 @@ import { ArrowLeft, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
 import { EditListingDialog } from '@/components/EditListingDialog';
+import { Category } from '@/types/listing';
 
-const categoryIcons: Record<string, string> = {
-  electronics: '📱',
-  furniture: '🛋️',
+const categoryIcons: Record<Category, string> = {
+  transport: '🚗',
+  realEstate: '🏠',
   jobs: '💼',
   services: '🔧',
-  realEstate: '🏠',
+  personalItems: '👕',
+  homeAndGarden: '🏡',
+  autoParts: '🔩',
+  electronics: '📱',
+  hobbies: '🎨',
+  animals: '🐕',
+  business: '🏢',
 };
 
 const MyListings = () => {
@@ -140,7 +147,7 @@ const MyListings = () => {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-3xl">
-                              {categoryIcons[listing.category]}
+                              {categoryIcons[listing.category as Category] || '📦'}
                             </div>
                           )}
                         </div>
@@ -153,7 +160,7 @@ const MyListings = () => {
                             €{Number(listing.price).toLocaleString()}
                           </p>
                           <p className="text-sm text-muted-foreground">
-                            {categoryIcons[listing.category]} {t(listing.category as TranslationKey)}
+                            {categoryIcons[listing.category as Category] || '📦'} {t(listing.category as TranslationKey)}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {listing.city}, {listing.country}
@@ -208,7 +215,7 @@ const MyListings = () => {
                             />
                           ) : (
                             <div className="w-full h-full flex items-center justify-center text-2xl">
-                              {categoryIcons[listing.category]}
+                              {categoryIcons[listing.category as Category] || '📦'}
                             </div>
                           )}
                         </div>
@@ -233,7 +240,15 @@ const MyListings = () => {
         {/* Edit Dialog */}
         {editingListing && (
           <EditListingDialog
-            listing={editingListing}
+            listing={{
+              id: editingListing.id,
+              title: editingListing.title,
+              description: editingListing.description || '',
+              category: editingListing.category as Category,
+              price: editingListing.price,
+              city: editingListing.city,
+              country: editingListing.country,
+            }}
             open={!!editingListing}
             onOpenChange={(open) => !open && setEditingListing(null)}
           />

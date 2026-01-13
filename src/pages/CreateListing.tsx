@@ -11,8 +11,7 @@ import { ImagePlus, X, ArrowLeft, Loader2 } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateListing, useUploadListingImage } from '@/hooks/useListings';
-
-type CategoryType = 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+import { Category } from '@/types/listing';
 
 const CreateListing = () => {
   const { t } = useLanguage();
@@ -25,7 +24,7 @@ const CreateListing = () => {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState<CategoryType | ''>('');
+  const [category, setCategory] = useState<Category | ''>('');
   const [price, setPrice] = useState('');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
@@ -99,7 +98,7 @@ const CreateListing = () => {
       await createListing.mutateAsync({
         title,
         description,
-        category: category as CategoryType,
+        category,
         price: parseFloat(price),
         city,
         country,
@@ -198,7 +197,7 @@ const CreateListing = () => {
                   <button
                     key={cat.id}
                     type="button"
-                    onClick={() => setCategory(cat.id as CategoryType)}
+                    onClick={() => setCategory(cat.id)}
                     className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
                       category === cat.id
                         ? 'border-primary bg-primary/5 text-primary'

@@ -272,11 +272,17 @@ export type Database = {
     Enums: {
       app_role: "admin" | "moderator" | "user"
       listing_category:
-        | "electronics"
-        | "furniture"
+        | "transport"
+        | "realEstate"
         | "jobs"
         | "services"
-        | "realEstate"
+        | "personalItems"
+        | "homeAndGarden"
+        | "autoParts"
+        | "electronics"
+        | "hobbies"
+        | "animals"
+        | "business"
       listing_status: "active" | "deleted"
     }
     CompositeTypes: {
@@ -407,11 +413,17 @@ export const Constants = {
     Enums: {
       app_role: ["admin", "moderator", "user"],
       listing_category: [
-        "electronics",
-        "furniture",
+        "transport",
+        "realEstate",
         "jobs",
         "services",
-        "realEstate",
+        "personalItems",
+        "homeAndGarden",
+        "autoParts",
+        "electronics",
+        "hobbies",
+        "animals",
+        "business",
       ],
       listing_status: ["active", "deleted"],
     },

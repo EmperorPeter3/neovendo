@@ -11,11 +11,17 @@ interface CategoryCardProps {
 }
 
 const categoryGradients: Record<Category, string> = {
-  electronics: 'from-blue-500 to-cyan-400',
-  furniture: 'from-amber-500 to-orange-400',
+  transport: 'from-blue-500 to-cyan-400',
+  realEstate: 'from-rose-500 to-red-400',
   jobs: 'from-purple-500 to-pink-400',
   services: 'from-emerald-500 to-teal-400',
-  realEstate: 'from-rose-500 to-red-400',
+  personalItems: 'from-amber-500 to-orange-400',
+  homeAndGarden: 'from-green-500 to-lime-400',
+  autoParts: 'from-slate-500 to-gray-400',
+  electronics: 'from-indigo-500 to-violet-400',
+  hobbies: 'from-pink-500 to-fuchsia-400',
+  animals: 'from-yellow-500 to-amber-400',
+  business: 'from-cyan-500 to-blue-400',
 };
 
 export const CategoryCard = ({ category }: CategoryCardProps) => {
