@@ -75,6 +75,9 @@ export const translations = {
     back: "Back",
     seeMore: "See more",
     all: "All",
+    allRegions: "All regions",
+    selectRegion: "Select region",
+    allCategories: "All categories",
   },
   pt: {
     home: "Início",
@@ -135,6 +138,9 @@ export const translations = {
     back: "Voltar",
     seeMore: "Ver mais",
     all: "Todos",
+    allRegions: "Todas as regiões",
+    selectRegion: "Selecionar região",
+    allCategories: "Todas as categorias",
   },
   es: {
     home: "Inicio",
@@ -195,6 +201,9 @@ export const translations = {
     back: "Volver",
     seeMore: "Ver más",
     all: "Todos",
+    allRegions: "Todas las regiones",
+    selectRegion: "Seleccionar región",
+    allCategories: "Todas las categorías",
   },
   de: {
     home: "Startseite",
@@ -255,6 +264,9 @@ export const translations = {
     back: "Zurück",
     seeMore: "Mehr sehen",
     all: "Alle",
+    allRegions: "Alle Regionen",
+    selectRegion: "Region auswählen",
+    allCategories: "Alle Kategorien",
   },
   fr: {
     home: "Accueil",
@@ -315,6 +327,9 @@ export const translations = {
     back: "Retour",
     seeMore: "Voir plus",
     all: "Tous",
+    allRegions: "Toutes les régions",
+    selectRegion: "Sélectionner une région",
+    allCategories: "Toutes les catégories",
   },
   it: {
     home: "Home",
@@ -375,6 +390,9 @@ export const translations = {
     back: "Indietro",
     seeMore: "Vedi altro",
     all: "Tutti",
+    allRegions: "Tutte le regioni",
+    selectRegion: "Seleziona regione",
+    allCategories: "Tutte le categorie",
   },
   ru: {
     home: "Главная",
@@ -435,6 +453,9 @@ export const translations = {
     back: "Назад",
     seeMore: "Показать ещё",
     all: "Все",
+    allRegions: "Все регионы",
+    selectRegion: "Выберите регион",
+    allCategories: "Все категории",
   },
 } as const;
 
