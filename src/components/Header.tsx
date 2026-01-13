@@ -1,15 +1,18 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Search, Plus, MessageCircle, User, Menu, X, Globe } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Search, Plus, MessageCircle, User, Menu, X, Globe, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Language } from '@/i18n/translations';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const languages: { code: Language; label: string; flag: string }[] = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
@@ -24,8 +27,20 @@ const languages: { code: Language; label: string; flag: string }[] = [
 export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
+  const { user, profile, signOut } = useAuth();
+  const navigate = useNavigate();
 
   const currentLang = languages.find(l => l.code === language);
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
+
+  const getInitials = (name?: string) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border">
@@ -78,25 +93,78 @@ export const Header = () => {
               </DropdownMenuContent>
             </DropdownMenu>
 
-            <Link to="/messages">
-              <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
-                <MessageCircle className="w-5 h-5" />
-              </Button>
-            </Link>
+            {user ? (
+              <>
+                <Link to="/messages">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                    <MessageCircle className="w-5 h-5" />
+                  </Button>
+                </Link>
 
-            <Link to="/create">
-              <Button size="sm" className="gap-2 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
-                <Plus className="w-4 h-4" />
-                {t('sell')}
-              </Button>
-            </Link>
+                <Link to="/create">
+                  <Button size="sm" className="gap-2 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
+                    <Plus className="w-4 h-4" />
+                    {t('sell')}
+                  </Button>
+                </Link>
 
-            <Link to="/login">
-              <Button variant="outline" size="sm" className="gap-2">
-                <User className="w-4 h-4" />
-                {t('login')}
-              </Button>
-            </Link>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="icon" className="rounded-full">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage src={profile?.avatar_url || undefined} />
+                        <AvatarFallback className="bg-primary/10 text-primary text-sm">
+                          {getInitials(profile?.name)}
+                        </AvatarFallback>
+                      </Avatar>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-48">
+                    <div className="px-2 py-1.5 text-sm font-medium">
+                      {profile?.name || 'User'}
+                    </div>
+                    <div className="px-2 pb-1.5 text-xs text-muted-foreground">
+                      {profile?.email}
+                    </div>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/profile')}>
+                      <User className="w-4 h-4 mr-2" />
+                      Profile
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                      My Listings
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
+                      <LogOut className="w-4 h-4 mr-2" />
+                      {t('logout')}
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </>
+            ) : (
+              <>
+                <Link to="/messages">
+                  <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
+                    <MessageCircle className="w-5 h-5" />
+                  </Button>
+                </Link>
+
+                <Link to="/create">
+                  <Button size="sm" className="gap-2 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity">
+                    <Plus className="w-4 h-4" />
+                    {t('sell')}
+                  </Button>
+                </Link>
+
+                <Link to="/login">
+                  <Button variant="outline" size="sm" className="gap-2">
+                    <User className="w-4 h-4" />
+                    {t('login')}
+                  </Button>
+                </Link>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -133,12 +201,35 @@ export const Header = () => {
                   {t('sell')}
                 </Button>
               </Link>
-              <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="outline" className="w-full justify-start gap-2">
-                  <User className="w-4 h-4" />
-                  {t('login')}
-                </Button>
-              </Link>
+              
+              {user ? (
+                <>
+                  <Link to="/profile" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start gap-2">
+                      <User className="w-4 h-4" />
+                      Profile
+                    </Button>
+                  </Link>
+                  <Button 
+                    variant="ghost" 
+                    className="w-full justify-start gap-2 text-destructive"
+                    onClick={() => {
+                      handleSignOut();
+                      setMobileMenuOpen(false);
+                    }}
+                  >
+                    <LogOut className="w-4 h-4" />
+                    {t('logout')}
+                  </Button>
+                </>
+              ) : (
+                <Link to="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Button variant="outline" className="w-full justify-start gap-2">
+                    <User className="w-4 h-4" />
+                    {t('login')}
+                  </Button>
+                </Link>
+              )}
 
               {/* Mobile Language Selector */}
               <div className="pt-2 border-t border-border mt-2">
