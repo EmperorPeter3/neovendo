@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -7,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
+import { EditListingDialog } from '@/components/EditListingDialog';
 
 const categoryIcons: Record<string, string> = {
   electronics: '📱',
@@ -22,6 +24,8 @@ const MyListings = () => {
   const { data: listings, isLoading } = useMyListings();
   const deleteListing = useDeleteListing();
   const { toast } = useToast();
+
+  const [editingListing, setEditingListing] = useState<typeof listings extends (infer T)[] | undefined ? T | null : null>(null);
 
   if (!authLoading && !user) {
     return (
@@ -165,6 +169,13 @@ const MyListings = () => {
                           <Button 
                             variant="outline" 
                             size="icon"
+                            onClick={() => setEditingListing(listing)}
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button 
+                            variant="outline" 
+                            size="icon"
                             onClick={() => handleDelete(listing.id)}
                             className="text-destructive hover:text-destructive"
                           >
@@ -217,6 +228,15 @@ const MyListings = () => {
               </div>
             )}
           </div>
+        )}
+
+        {/* Edit Dialog */}
+        {editingListing && (
+          <EditListingDialog
+            listing={editingListing}
+            open={!!editingListing}
+            onOpenChange={(open) => !open && setEditingListing(null)}
+          />
         )}
       </div>
     </Layout>
