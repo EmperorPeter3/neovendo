@@ -6,6 +6,9 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useListing } from '@/hooks/useListings';
 import { useCreateChat } from '@/hooks/useChats';
+import { useListingReviews, useCanReview } from '@/hooks/useReviews';
+import { ReviewForm } from '@/components/ReviewForm';
+import { ReviewsList } from '@/components/ReviewsList';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -41,6 +44,10 @@ const ListingDetail = () => {
 
   const { data: listing, isLoading, error } = useListing(id || '');
   const createChat = useCreateChat();
+  
+  const sellerId = listing?.owner?.user_id || '';
+  const { data: reviews = [] } = useListingReviews(id || '');
+  const { data: canReviewData } = useCanReview(id || '', sellerId);
 
   const handleContact = async () => {
     if (!user) {
@@ -205,6 +212,36 @@ const ListingDetail = () => {
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {listing.description || 'No description provided.'}
               </p>
+            </div>
+
+            {/* Reviews Section */}
+            <div className="mt-8">
+              <h2 className="font-display text-xl font-bold text-foreground mb-4">
+                Reviews {reviews.length > 0 && `(${reviews.length})`}
+              </h2>
+              
+              {/* Review Form - only show if user can review */}
+              {canReviewData?.canReview && !canReviewData?.hasReviewed && sellerId && (
+                <div className="mb-6">
+                  <ReviewForm 
+                    listingId={id || ''} 
+                    sellerId={sellerId}
+                  />
+                </div>
+              )}
+
+              {canReviewData?.hasReviewed && (
+                <p className="text-sm text-muted-foreground mb-4 bg-secondary/50 rounded-lg p-3">
+                  ✓ You have already reviewed this seller
+                </p>
+              )}
+
+              <ReviewsList 
+                reviews={reviews} 
+                averageRating={listing.owner?.rating ? Number(listing.owner.rating) : undefined}
+                totalCount={listing.owner?.rating_count || undefined}
+                showHeader={reviews.length > 0}
+              />
             </div>
           </div>
 
