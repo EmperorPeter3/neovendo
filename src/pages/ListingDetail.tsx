@@ -1,8 +1,11 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { mockListings } from '@/data/mockListings';
+import { useAuth } from '@/contexts/AuthContext';
+import { useListing } from '@/hooks/useListings';
+import { useCreateChat } from '@/hooks/useChats';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -12,20 +15,102 @@ import {
   Share2, 
   ChevronLeft, 
   ChevronRight,
-  Star
+  Star,
+  Loader2
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useState } from 'react';
 import { TranslationKey } from '@/i18n/translations';
+import { useToast } from '@/hooks/use-toast';
+
+const categoryIcons: Record<string, string> = {
+  electronics: '📱',
+  furniture: '🛋️',
+  jobs: '💼',
+  services: '🔧',
+  realEstate: '🏠',
+};
 
 const ListingDetail = () => {
   const { id } = useParams();
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  const listing = mockListings.find(l => l.id === id);
+  const { data: listing, isLoading, error } = useListing(id || '');
+  const createChat = useCreateChat();
 
-  if (!listing) {
+  const handleContact = async () => {
+    if (!user) {
+      navigate('/login');
+      return;
+    }
+
+    if (!listing?.owner?.user_id) {
+      toast({
+        title: 'Error',
+        description: 'Cannot contact seller',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Can't message yourself
+    if (listing.owner.user_id === user.id) {
+      toast({
+        title: 'Info',
+        description: 'This is your own listing',
+      });
+      return;
+    }
+
+    try {
+      const chat = await createChat.mutateAsync({
+        listingId: listing.id,
+        sellerId: listing.owner.user_id,
+      });
+      navigate(`/chat/${chat.id}`);
+    } catch (error: any) {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to start chat',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const getInitials = (name?: string) => {
+    if (!name) return 'U';
+    return name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
+  };
+
+  if (isLoading) {
+    return (
+      <Layout>
+        <div className="container py-6 md:py-8">
+          <div className="animate-pulse">
+            <div className="h-6 bg-muted rounded w-20 mb-6" />
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2">
+                <div className="aspect-[4/3] bg-muted rounded-2xl mb-8" />
+                <div className="h-6 bg-muted rounded w-1/3 mb-4" />
+                <div className="h-4 bg-muted rounded w-full mb-2" />
+                <div className="h-4 bg-muted rounded w-2/3" />
+              </div>
+              <div className="space-y-6">
+                <div className="bg-card rounded-2xl p-6 h-64" />
+                <div className="bg-card rounded-2xl p-6 h-32" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </Layout>
+    );
+  }
+
+  if (error || !listing) {
     return (
       <Layout>
         <div className="container py-16 text-center">
@@ -38,7 +123,8 @@ const ListingDetail = () => {
     );
   }
 
-  const images = listing.images.length > 0 ? listing.images : ['/placeholder.svg'];
+  const images = listing.images && listing.images.length > 0 ? listing.images : [];
+  const hasImages = images.length > 0;
 
   return (
     <Layout>
@@ -53,11 +139,17 @@ const ListingDetail = () => {
           {/* Images Section */}
           <div className="lg:col-span-2">
             <div className="relative rounded-2xl overflow-hidden bg-muted aspect-[4/3]">
-              <img
-                src={images[currentImageIndex]}
-                alt={listing.title}
-                className="w-full h-full object-cover"
-              />
+              {hasImages ? (
+                <img
+                  src={images[currentImageIndex]}
+                  alt={listing.title}
+                  className="w-full h-full object-cover"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center text-8xl bg-secondary/50">
+                  {categoryIcons[listing.category]}
+                </div>
+              )}
               
               {images.length > 1 && (
                 <>
@@ -90,10 +182,29 @@ const ListingDetail = () => {
               )}
             </div>
 
+            {/* Image Thumbnails */}
+            {images.length > 1 && (
+              <div className="flex gap-2 mt-4 overflow-x-auto pb-2">
+                {images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentImageIndex(index)}
+                    className={`w-20 h-20 rounded-lg overflow-hidden flex-shrink-0 border-2 transition-colors ${
+                      index === currentImageIndex ? 'border-primary' : 'border-transparent'
+                    }`}
+                  >
+                    <img src={img} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+
             {/* Description */}
             <div className="mt-8">
               <h2 className="font-display text-xl font-bold text-foreground mb-4">{t('description')}</h2>
-              <p className="text-muted-foreground leading-relaxed">{listing.description}</p>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                {listing.description || 'No description provided.'}
+              </p>
             </div>
           </div>
 
@@ -103,7 +214,7 @@ const ListingDetail = () => {
             <div className="bg-card rounded-2xl shadow-card p-6">
               <div className="flex items-start justify-between mb-4">
                 <span className="px-3 py-1 rounded-full text-sm font-medium bg-secondary text-secondary-foreground">
-                  {t(listing.category as TranslationKey)}
+                  {categoryIcons[listing.category]} {t(listing.category as TranslationKey)}
                 </span>
                 <div className="flex gap-2">
                   <button className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground">
@@ -120,7 +231,7 @@ const ListingDetail = () => {
               </h1>
 
               <p className="text-3xl font-bold text-primary mb-4">
-                €{listing.price.toLocaleString()}
+                €{Number(listing.price).toLocaleString()}
               </p>
 
               <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
@@ -130,14 +241,24 @@ const ListingDetail = () => {
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
-                  <span>{formatDistanceToNow(listing.createdAt, { addSuffix: true })}</span>
+                  <span>{formatDistanceToNow(new Date(listing.created_at), { addSuffix: true })}</span>
                 </div>
               </div>
 
-              <Button className="w-full gradient-hero text-primary-foreground gap-2 h-12 text-base">
-                <MessageCircle className="w-5 h-5" />
-                {t('contact')}
-              </Button>
+              {listing.owner?.user_id !== user?.id && (
+                <Button 
+                  onClick={handleContact}
+                  className="w-full gradient-hero text-primary-foreground gap-2 h-12 text-base"
+                  disabled={createChat.isPending}
+                >
+                  {createChat.isPending ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <MessageCircle className="w-5 h-5" />
+                  )}
+                  {t('contact')}
+                </Button>
+              )}
             </div>
 
             {/* Seller Card */}
@@ -145,17 +266,20 @@ const ListingDetail = () => {
               <h3 className="font-display font-semibold text-foreground mb-4">{t('postedBy')}</h3>
               
               <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-full bg-secondary flex items-center justify-center">
-                  <span className="text-xl font-semibold text-secondary-foreground">
-                    {listing.ownerName.charAt(0)}
-                  </span>
-                </div>
+                <Avatar className="h-14 w-14">
+                  <AvatarImage src={listing.owner?.avatar_url || undefined} />
+                  <AvatarFallback className="bg-primary/10 text-primary text-xl">
+                    {getInitials(listing.owner?.name)}
+                  </AvatarFallback>
+                </Avatar>
                 <div>
-                  <p className="font-semibold text-foreground">{listing.ownerName}</p>
-                  <div className="flex items-center gap-1 text-sm text-muted-foreground">
-                    <Star className="w-4 h-4 text-warning fill-warning" />
-                    <span>4.8 (23 reviews)</span>
-                  </div>
+                  <p className="font-semibold text-foreground">{listing.owner?.name || 'Unknown'}</p>
+                  {listing.owner?.rating !== undefined && Number(listing.owner.rating) > 0 && (
+                    <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                      <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+                      <span>{Number(listing.owner.rating).toFixed(1)}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>

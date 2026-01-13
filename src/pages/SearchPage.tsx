@@ -1,15 +1,74 @@
-import { useState, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useSearchParams, Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { SearchBar } from '@/components/SearchBar';
-import { ListingCard } from '@/components/ListingCard';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { mockListings, categories } from '@/data/mockListings';
-import { Category } from '@/types/listing';
-import { SlidersHorizontal, X } from 'lucide-react';
+import { useListings, ListingWithOwner } from '@/hooks/useListings';
+import { categories } from '@/data/mockListings';
+import { SlidersHorizontal, X, MapPin } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
+
+type CategoryType = 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+
+const categoryIcons: Record<string, string> = {
+  electronics: '📱',
+  furniture: '🛋️',
+  jobs: '💼',
+  services: '🔧',
+  realEstate: '🏠',
+};
+
+const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
+  const { t } = useLanguage();
+  
+  return (
+    <Link to={`/listing/${listing.id}`} className="group block">
+      <div className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
+        <div className="aspect-[4/3] overflow-hidden bg-muted relative">
+          {listing.images?.[0] ? (
+            <img
+              src={listing.images[0]}
+              alt={listing.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-5xl bg-secondary/50">
+              {categoryIcons[listing.category]}
+            </div>
+          )}
+          <span className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium bg-card/90 backdrop-blur-sm text-foreground">
+            {t(listing.category as TranslationKey)}
+          </span>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+            {listing.title}
+          </h3>
+          <p className="text-xl font-bold text-primary mb-2">
+            €{Number(listing.price).toLocaleString()}
+          </p>
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>{listing.city}, {listing.country}</span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+const ListingCardSkeleton = () => (
+  <div className="bg-card rounded-2xl overflow-hidden shadow-card animate-pulse">
+    <div className="aspect-[4/3] bg-muted" />
+    <div className="p-4">
+      <div className="h-5 bg-muted rounded w-3/4 mb-2" />
+      <div className="h-6 bg-muted rounded w-1/3 mb-2" />
+      <div className="h-4 bg-muted rounded w-1/2" />
+    </div>
+  </div>
+);
 
 const SearchPage = () => {
   const { t } = useLanguage();
@@ -17,38 +76,27 @@ const SearchPage = () => {
   const [showFilters, setShowFilters] = useState(false);
 
   const query = searchParams.get('q') || '';
-  const categoryFilter = searchParams.get('category') as Category | null;
+  const categoryParam = searchParams.get('category') as CategoryType | null;
+  
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
-  const [selectedCategory, setSelectedCategory] = useState<Category | null>(categoryFilter);
+  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(categoryParam);
+  const [searchQuery, setSearchQuery] = useState(query);
 
-  const filteredListings = useMemo(() => {
-    return mockListings.filter(listing => {
-      // Text search
-      if (query) {
-        const searchLower = query.toLowerCase();
-        if (!listing.title.toLowerCase().includes(searchLower) &&
-            !listing.description.toLowerCase().includes(searchLower)) {
-          return false;
-        }
-      }
+  // Update local state when URL params change
+  useEffect(() => {
+    setSearchQuery(query);
+    setSelectedCategory(categoryParam);
+    setMinPrice(searchParams.get('minPrice') || '');
+    setMaxPrice(searchParams.get('maxPrice') || '');
+  }, [query, categoryParam, searchParams]);
 
-      // Category filter
-      if (selectedCategory && listing.category !== selectedCategory) {
-        return false;
-      }
-
-      // Price filter
-      if (minPrice && listing.price < Number(minPrice)) {
-        return false;
-      }
-      if (maxPrice && listing.price > Number(maxPrice)) {
-        return false;
-      }
-
-      return true;
-    });
-  }, [query, selectedCategory, minPrice, maxPrice]);
+  const { data: listings, isLoading } = useListings({
+    search: query || undefined,
+    category: selectedCategory || undefined,
+    minPrice: minPrice ? Number(minPrice) : undefined,
+    maxPrice: maxPrice ? Number(maxPrice) : undefined,
+  });
 
   const handleSearch = (newQuery: string) => {
     setSearchParams(prev => {
@@ -101,7 +149,7 @@ const SearchPage = () => {
         {/* Search Header */}
         <div className="flex flex-col md:flex-row gap-4 mb-8">
           <div className="flex-1">
-            <SearchBar initialValue={query} onSearch={handleSearch} />
+            <SearchBar initialValue={searchQuery} onSearch={handleSearch} />
           </div>
           <Button
             variant="outline"
@@ -145,9 +193,87 @@ const SearchPage = () => {
                     {categories.map(cat => (
                       <button
                         key={cat.id}
-                        onClick={() => setSelectedCategory(cat.id)}
+                        onClick={() => setSelectedCategory(cat.id as CategoryType)}
                         className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
                           selectedCategory === cat.id ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                        }`}
+                      >
+                        {cat.icon} {t(cat.id as TranslationKey)}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Price Filter */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-foreground mb-3">
+                    {t('priceRange')}
+                  </label>
+                  <div className="flex gap-2">
+                    <Input
+                      type="number"
+                      placeholder={t('minPrice')}
+                      value={minPrice}
+                      onChange={(e) => setMinPrice(e.target.value)}
+                      className="flex-1"
+                    />
+                    <Input
+                      type="number"
+                      placeholder={t('maxPrice')}
+                      value={maxPrice}
+                      onChange={(e) => setMaxPrice(e.target.value)}
+                      className="flex-1"
+                    />
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-2">
+                  <Button variant="outline" onClick={handleResetFilters} className="flex-1">
+                    {t('reset')}
+                  </Button>
+                  <Button onClick={handleApplyFilters} className="flex-1 gradient-hero text-primary-foreground">
+                    {t('apply')}
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Mobile Filters */}
+          {showFilters && (
+            <div className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
+              <div className="absolute inset-x-4 top-20 bg-card rounded-2xl shadow-card p-6 max-h-[70vh] overflow-y-auto">
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="font-display font-semibold text-foreground">{t('filters')}</h3>
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="p-1 hover:bg-secondary rounded-full transition-colors"
+                  >
+                    <X className="w-5 h-5 text-muted-foreground" />
+                  </button>
+                </div>
+
+                {/* Category Filter */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-foreground mb-3">
+                    {t('category')}
+                  </label>
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setSelectedCategory(null)}
+                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                        !selectedCategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
+                      }`}
+                    >
+                      {t('all')}
+                    </button>
+                    {categories.map(cat => (
+                      <button
+                        key={cat.id}
+                        onClick={() => setSelectedCategory(cat.id as CategoryType)}
+                        className={`px-3 py-2 rounded-lg text-sm transition-colors ${
+                          selectedCategory === cat.id ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
                         }`}
                       >
                         {cat.icon} {t(cat.id as TranslationKey)}
@@ -196,19 +322,25 @@ const SearchPage = () => {
           <div className="flex-1">
             <div className="flex items-center justify-between mb-6">
               <h2 className="font-display text-xl font-bold text-foreground">
-                {t('listings')} ({filteredListings.length})
+                {t('listings')} ({listings?.length || 0})
               </h2>
             </div>
 
-            {filteredListings.length > 0 ? (
+            {isLoading ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredListings.map((listing, index) => (
+                {[1, 2, 3, 4, 5, 6].map(i => (
+                  <ListingCardSkeleton key={i} />
+                ))}
+              </div>
+            ) : listings && listings.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                {listings.map((listing, index) => (
                   <div
                     key={listing.id}
                     className="animate-slide-up"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <ListingCard listing={listing} />
+                    <ListingCardDB listing={listing} />
                   </div>
                 ))}
               </div>
