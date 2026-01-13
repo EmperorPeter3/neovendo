@@ -10,6 +10,7 @@ import { useListingReviews, useCanReview } from '@/hooks/useReviews';
 import { ReviewForm } from '@/components/ReviewForm';
 import { ReviewsList } from '@/components/ReviewsList';
 import { FavoriteButton } from '@/components/FavoriteButton';
+import { ShareButton } from '@/components/ShareButton';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -256,9 +257,7 @@ const ListingDetail = () => {
                 </span>
                 <div className="flex gap-2">
                   <FavoriteButton listingId={listing.id} />
-                  <button className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground">
-                    <Share2 className="w-5 h-5" />
-                  </button>
+                  <ShareButton title={listing.title} />
                 </div>
               </div>
 
