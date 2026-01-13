@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Plus, MessageCircle, User, Menu, X, Globe, LogOut } from 'lucide-react';
+import { Search, Plus, MessageCircle, User, Menu, X, Globe, LogOut, Heart } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -134,6 +134,10 @@ export const Header = () => {
                     <DropdownMenuItem onClick={() => navigate('/my-listings')}>
                       My Listings
                     </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/favorites')}>
+                      <Heart className="w-4 h-4 mr-2" />
+                      Favorites
+                    </DropdownMenuItem>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem onClick={handleSignOut} className="text-destructive">
                       <LogOut className="w-4 h-4 mr-2" />
@@ -208,6 +212,12 @@ export const Header = () => {
                     <Button variant="ghost" className="w-full justify-start gap-2">
                       <User className="w-4 h-4" />
                       Profile
+                    </Button>
+                  </Link>
+                  <Link to="/favorites" onClick={() => setMobileMenuOpen(false)}>
+                    <Button variant="ghost" className="w-full justify-start gap-2">
+                      <Heart className="w-4 h-4" />
+                      Favorites
                     </Button>
                   </Link>
                   <Button 

@@ -9,6 +9,7 @@ import { useCreateChat } from '@/hooks/useChats';
 import { useListingReviews, useCanReview } from '@/hooks/useReviews';
 import { ReviewForm } from '@/components/ReviewForm';
 import { ReviewsList } from '@/components/ReviewsList';
+import { FavoriteButton } from '@/components/FavoriteButton';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -254,9 +255,7 @@ const ListingDetail = () => {
                   {categoryIcons[listing.category]} {t(listing.category as TranslationKey)}
                 </span>
                 <div className="flex gap-2">
-                  <button className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground">
-                    <Heart className="w-5 h-5" />
-                  </button>
+                  <FavoriteButton listingId={listing.id} />
                   <button className="p-2 rounded-full hover:bg-secondary transition-colors text-muted-foreground hover:text-foreground">
                     <Share2 className="w-5 h-5" />
                   </button>
