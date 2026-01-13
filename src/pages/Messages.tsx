@@ -3,15 +3,20 @@ import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useChats } from '@/hooks/useChats';
+import { useMessageNotifications } from '@/hooks/useMessageNotifications';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { MessageCircle, ArrowLeft } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
+import { NotificationBanner } from '@/components/NotificationBanner';
 
 const Messages = () => {
   const { t } = useLanguage();
   const { user, isLoading: authLoading } = useAuth();
   const { data: chats, isLoading } = useChats();
+  
+  // Enable message notifications
+  useMessageNotifications();
 
   if (!authLoading && !user) {
     return (
@@ -56,6 +61,8 @@ const Messages = () => {
         <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-6">
           {t('messages')}
         </h1>
+
+        <NotificationBanner />
 
         {isLoading ? (
           <div className="space-y-4">
