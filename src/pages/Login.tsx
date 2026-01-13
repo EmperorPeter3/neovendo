@@ -4,6 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { Mail, Lock, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -11,6 +12,7 @@ const Login = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { signIn } = useAuth();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -20,15 +22,24 @@ const Login = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    // Simulate login - in real app this would call auth
-    setTimeout(() => {
+    const { error } = await signIn(email, password);
+
+    if (error) {
       toast({
-        title: t('success'),
-        description: 'Welcome back!',
+        title: 'Error',
+        description: error.message,
+        variant: 'destructive',
       });
       setIsLoading(false);
-      navigate('/');
-    }, 1000);
+      return;
+    }
+
+    toast({
+      title: t('success'),
+      description: 'Welcome back!',
+    });
+    setIsLoading(false);
+    navigate('/');
   };
 
   return (
