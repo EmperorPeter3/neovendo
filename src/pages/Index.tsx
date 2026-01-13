@@ -1,14 +1,15 @@
 import { Layout } from '@/components/Layout';
-import { SearchBar } from '@/components/SearchBar';
-import { CategoryCard } from '@/components/CategoryCard';
+import { CategoryDropdown } from '@/components/CategoryDropdown';
+import { RegionSelector } from '@/components/RegionSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
-import { categories } from '@/data/mockListings';
-import { ArrowRight, MapPin } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { ArrowRight, MapPin, Search } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { TranslationKey } from '@/i18n/translations';
-import heroIllustration from '@/assets/hero-illustration.png';
+import { useState } from 'react';
+import { Category } from '@/types/listing';
 
 const categoryIcons: Record<string, string> = {
   electronics: '📱',
@@ -70,60 +71,65 @@ const ListingCardSkeleton = () => (
 
 const Index = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const { data: listings, isLoading } = useListings({ limit: 8 });
+  
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
+  const [selectedRegion, setSelectedRegion] = useState<{ country?: string; city?: string }>({});
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery) params.set('q', searchQuery);
+    if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedRegion.country) params.set('country', selectedRegion.country);
+    if (selectedRegion.city) params.set('city', selectedRegion.city);
+    navigate(`/search?${params.toString()}`);
+  };
 
   return (
     <Layout>
-      {/* Hero Section */}
-      <section className="relative py-12 md:py-20 overflow-hidden">
-        {/* Background decoration */}
-        <div className="absolute inset-0 -z-10">
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-primary/5 rounded-full blur-3xl" />
-          <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-accent/5 rounded-full blur-3xl" />
-        </div>
-
+      {/* Search Section */}
+      <section className="py-8 md:py-12 bg-secondary/30">
         <div className="container">
-          <div className="grid md:grid-cols-2 gap-8 items-center">
-            <div className="text-center md:text-left animate-fade-in">
-              <h1 className="font-display text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 text-balance">
-                {t('heroTitle')}
-              </h1>
-              <p className="text-lg md:text-xl text-muted-foreground max-w-xl mb-8 text-balance">
-                {t('heroSubtitle')}
-              </p>
-              <div className="max-w-xl">
-                <SearchBar variant="hero" />
+          <form onSubmit={handleSearch}>
+            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+              {/* Category Dropdown */}
+              <CategoryDropdown 
+                value={selectedCategory} 
+                onChange={setSelectedCategory} 
+              />
+              
+              {/* Search Input - 70% width on desktop */}
+              <div className="flex-1 md:flex-[0.7] relative">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+                  <Search className="w-5 h-5" />
+                </div>
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t('searchPlaceholder')}
+                  className="h-12 pl-12 pr-4 text-base rounded-xl border-2 border-border bg-card"
+                />
               </div>
-            </div>
-            
-            <div className="hidden md:block animate-slide-up" style={{ animationDelay: '100ms' }}>
-              <img 
-                src={heroIllustration} 
-                alt="Online marketplace illustration" 
-                className="w-full max-w-md mx-auto drop-shadow-2xl"
+              
+              {/* Search Button */}
+              <Button
+                type="submit"
+                className="h-12 px-6 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity rounded-xl"
+              >
+                {t('search')}
+              </Button>
+              
+              {/* Region Selector */}
+              <RegionSelector 
+                value={selectedRegion}
+                onChange={setSelectedRegion}
               />
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Categories Section */}
-      <section className="py-12 bg-secondary/30">
-        <div className="container">
-          <h2 className="font-display text-2xl font-bold text-foreground mb-6">
-            {t('categories')}
-          </h2>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
-            {categories.map((category, index) => (
-              <div
-                key={category.id}
-                className="animate-slide-up"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <CategoryCard category={category} />
-              </div>
-            ))}
-          </div>
+          </form>
         </div>
       </section>
 
