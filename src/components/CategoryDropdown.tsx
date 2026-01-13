@@ -17,11 +17,17 @@ interface CategoryDropdownProps {
 
 const categories: { id: Category | ''; icon: string }[] = [
   { id: '', icon: '🔍' },
-  { id: 'electronics', icon: '📱' },
-  { id: 'furniture', icon: '🛋️' },
+  { id: 'transport', icon: '🚗' },
+  { id: 'realEstate', icon: '🏠' },
   { id: 'jobs', icon: '💼' },
   { id: 'services', icon: '🔧' },
-  { id: 'realEstate', icon: '🏠' },
+  { id: 'personalItems', icon: '👕' },
+  { id: 'homeAndGarden', icon: '🏡' },
+  { id: 'autoParts', icon: '🔩' },
+  { id: 'electronics', icon: '📱' },
+  { id: 'hobbies', icon: '🎨' },
+  { id: 'animals', icon: '🐕' },
+  { id: 'business', icon: '🏢' },
 ];
 
 export const CategoryDropdown = ({ value = '', onChange }: CategoryDropdownProps) => {
@@ -42,7 +48,7 @@ export const CategoryDropdown = ({ value = '', onChange }: CategoryDropdownProps
           <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-[200px] bg-card border-border">
+      <DropdownMenuContent align="start" className="w-[200px] bg-card border-border max-h-[400px] overflow-y-auto">
         {categories.map((category) => (
           <DropdownMenuItem
             key={category.id || 'all'}

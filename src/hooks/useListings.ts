@@ -1,12 +1,13 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { Category } from '@/types/listing';
 
 export interface ListingWithOwner {
   id: string;
   title: string;
   description: string | null;
-  category: 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+  category: Category;
   price: number;
   city: string;
   country: string;
@@ -44,7 +45,7 @@ export const useListings = (filters?: {
         .order('created_at', { ascending: false });
 
       if (filters?.category) {
-        query = query.eq('category', filters.category as 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate');
+        query = query.eq('category', filters.category as Category);
       }
       if (filters?.minPrice !== undefined) {
         query = query.gte('price', filters.minPrice);
@@ -123,7 +124,7 @@ export const useCreateListing = () => {
     mutationFn: async (listing: {
       title: string;
       description: string;
-      category: 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+      category: Category;
       price: number;
       city: string;
       country: string;
@@ -160,7 +161,7 @@ export const useUpdateListing = () => {
       id: string;
       title?: string;
       description?: string;
-      category?: 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+      category?: Category;
       price?: number;
       city?: string;
       country?: string;

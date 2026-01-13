@@ -1,4 +1,15 @@
-export type Category = 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+export type Category = 
+  | 'transport'
+  | 'realEstate'
+  | 'jobs'
+  | 'services'
+  | 'personalItems'
+  | 'homeAndGarden'
+  | 'autoParts'
+  | 'electronics'
+  | 'hobbies'
+  | 'animals'
+  | 'business';
 
 export type ListingStatus = 'active' | 'deleted';
 

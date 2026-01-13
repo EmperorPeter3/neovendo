@@ -20,11 +20,12 @@ import { Loader2 } from 'lucide-react';
 import { useUpdateListing } from '@/hooks/useListings';
 import { useToast } from '@/hooks/use-toast';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { Category } from '@/types/listing';
 
 const listingSchema = z.object({
   title: z.string().trim().min(1, 'Title is required').max(100, 'Title must be less than 100 characters'),
   description: z.string().max(2000, 'Description must be less than 2000 characters').optional(),
-  category: z.enum(['electronics', 'furniture', 'jobs', 'services', 'realEstate']),
+  category: z.enum(['transport', 'realEstate', 'jobs', 'services', 'personalItems', 'homeAndGarden', 'autoParts', 'electronics', 'hobbies', 'animals', 'business']),
   price: z.number().min(0, 'Price must be positive'),
   city: z.string().trim().min(1, 'City is required').max(100, 'City must be less than 100 characters'),
   country: z.string().trim().min(1, 'Country is required').max(100, 'Country must be less than 100 characters'),
@@ -35,7 +36,7 @@ interface EditListingDialogProps {
     id: string;
     title: string;
     description: string | null;
-    category: 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
+    category: Category;
     price: number;
     city: string;
     country: string;
@@ -51,7 +52,7 @@ export const EditListingDialog = ({ listing, open, onOpenChange }: EditListingDi
 
   const [title, setTitle] = useState(listing.title);
   const [description, setDescription] = useState(listing.description || '');
-  const [category, setCategory] = useState(listing.category);
+  const [category, setCategory] = useState<Category>(listing.category);
   const [price, setPrice] = useState(listing.price.toString());
   const [city, setCity] = useState(listing.city);
   const [country, setCountry] = useState(listing.country);
@@ -136,16 +137,22 @@ export const EditListingDialog = ({ listing, open, onOpenChange }: EditListingDi
 
           <div>
             <label className="block text-sm font-medium mb-1.5">{t('category')}</label>
-            <Select value={category} onValueChange={(v) => setCategory(v as typeof category)}>
+            <Select value={category} onValueChange={(v) => setCategory(v as Category)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="electronics">📱 {t('electronics')}</SelectItem>
-                <SelectItem value="furniture">🛋️ {t('furniture')}</SelectItem>
+                <SelectItem value="transport">🚗 {t('transport')}</SelectItem>
+                <SelectItem value="realEstate">🏠 {t('realEstate')}</SelectItem>
                 <SelectItem value="jobs">💼 {t('jobs')}</SelectItem>
                 <SelectItem value="services">🔧 {t('services')}</SelectItem>
-                <SelectItem value="realEstate">🏠 {t('realEstate')}</SelectItem>
+                <SelectItem value="personalItems">👕 {t('personalItems')}</SelectItem>
+                <SelectItem value="homeAndGarden">🏡 {t('homeAndGarden')}</SelectItem>
+                <SelectItem value="autoParts">🔩 {t('autoParts')}</SelectItem>
+                <SelectItem value="electronics">📱 {t('electronics')}</SelectItem>
+                <SelectItem value="hobbies">🎨 {t('hobbies')}</SelectItem>
+                <SelectItem value="animals">🐕 {t('animals')}</SelectItem>
+                <SelectItem value="business">🏢 {t('business')}</SelectItem>
               </SelectContent>
             </Select>
             {errors.category && <p className="text-sm text-destructive mt-1">{errors.category}</p>}
