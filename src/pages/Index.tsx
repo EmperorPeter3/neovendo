@@ -94,16 +94,16 @@ const Index = () => {
       <section className="py-8 md:py-12 bg-secondary/30">
         <div className="container">
           <form onSubmit={handleSearch}>
-            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
+            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full">
               {/* Category Dropdown */}
               <CategoryDropdown 
                 value={selectedCategory} 
                 onChange={setSelectedCategory} 
               />
               
-              {/* Search Input - 70% width on desktop */}
-              <div className="flex-1 md:flex-[0.7] relative">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground">
+              {/* Search Input with Button inside */}
+              <div className="flex-1 relative flex">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
                   <Search className="w-5 h-5" />
                 </div>
                 <Input
@@ -111,17 +111,15 @@ const Index = () => {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder={t('searchPlaceholder')}
-                  className="h-12 pl-12 pr-4 text-base rounded-xl border-2 border-border bg-card"
+                  className="h-12 pl-12 pr-4 text-base rounded-xl rounded-r-none border-2 border-r-0 border-border bg-card flex-1"
                 />
+                <Button
+                  type="submit"
+                  className="h-12 px-6 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity rounded-xl rounded-l-none"
+                >
+                  {t('search')}
+                </Button>
               </div>
-              
-              {/* Search Button */}
-              <Button
-                type="submit"
-                className="h-12 px-6 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity rounded-xl"
-              >
-                {t('search')}
-              </Button>
               
               {/* Region Selector */}
               <RegionSelector 
@@ -179,34 +177,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section */}
-      <section className="py-16 md:py-20">
-        <div className="container">
-          <div className="relative rounded-3xl overflow-hidden gradient-hero p-8 md:p-12 lg:p-16 text-center">
-            <div className="relative z-10">
-              <h2 className="font-display text-3xl md:text-4xl font-bold text-primary-foreground mb-4">
-                Ready to sell?
-              </h2>
-              <p className="text-primary-foreground/80 text-lg mb-8 max-w-xl mx-auto">
-                List your item in minutes and connect with local buyers instantly.
-              </p>
-              <Link to="/create">
-                <Button
-                  size="lg"
-                  className="bg-card text-primary hover:bg-card/90 font-semibold px-8"
-                >
-                  {t('createListing')}
-                  <ArrowRight className="w-5 h-5 ml-2" />
-                </Button>
-              </Link>
-            </div>
-            
-            {/* Decorative elements */}
-            <div className="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-white/5 rounded-full blur-2xl" />
-          </div>
-        </div>
-      </section>
     </Layout>
   );
 };
