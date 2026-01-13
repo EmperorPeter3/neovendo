@@ -1,16 +1,76 @@
 import { Layout } from '@/components/Layout';
 import { SearchBar } from '@/components/SearchBar';
 import { CategoryCard } from '@/components/CategoryCard';
-import { ListingCard } from '@/components/ListingCard';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { mockListings, categories } from '@/data/mockListings';
-import { ArrowRight } from 'lucide-react';
+import { useListings, ListingWithOwner } from '@/hooks/useListings';
+import { categories } from '@/data/mockListings';
+import { ArrowRight, MapPin } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { TranslationKey } from '@/i18n/translations';
 import heroIllustration from '@/assets/hero-illustration.png';
+
+const categoryIcons: Record<string, string> = {
+  electronics: '📱',
+  furniture: '🛋️',
+  jobs: '💼',
+  services: '🔧',
+  realEstate: '🏠',
+};
+
+const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
+  const { t } = useLanguage();
+  
+  return (
+    <Link to={`/listing/${listing.id}`} className="group block">
+      <div className="bg-card rounded-2xl overflow-hidden shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1">
+        <div className="aspect-[4/3] overflow-hidden bg-muted relative">
+          {listing.images?.[0] ? (
+            <img
+              src={listing.images[0]}
+              alt={listing.title}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center text-5xl bg-secondary/50">
+              {categoryIcons[listing.category]}
+            </div>
+          )}
+          <span className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium bg-card/90 backdrop-blur-sm text-foreground">
+            {t(listing.category as TranslationKey)}
+          </span>
+        </div>
+        <div className="p-4">
+          <h3 className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
+            {listing.title}
+          </h3>
+          <p className="text-xl font-bold text-primary mb-2">
+            €{Number(listing.price).toLocaleString()}
+          </p>
+          <div className="flex items-center gap-1 text-sm text-muted-foreground">
+            <MapPin className="w-3.5 h-3.5" />
+            <span>{listing.city}, {listing.country}</span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
+
+const ListingCardSkeleton = () => (
+  <div className="bg-card rounded-2xl overflow-hidden shadow-card animate-pulse">
+    <div className="aspect-[4/3] bg-muted" />
+    <div className="p-4">
+      <div className="h-5 bg-muted rounded w-3/4 mb-2" />
+      <div className="h-6 bg-muted rounded w-1/3 mb-2" />
+      <div className="h-4 bg-muted rounded w-1/2" />
+    </div>
+  </div>
+);
 
 const Index = () => {
   const { t } = useLanguage();
+  const { data: listings, isLoading } = useListings({ limit: 8 });
 
   return (
     <Layout>
@@ -82,17 +142,34 @@ const Index = () => {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {mockListings.slice(0, 8).map((listing, index) => (
-              <div
-                key={listing.id}
-                className="animate-slide-up"
-                style={{ animationDelay: `${index * 50}ms` }}
-              >
-                <ListingCard listing={listing} />
-              </div>
-            ))}
-          </div>
+          {isLoading ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {[1, 2, 3, 4, 5, 6, 7, 8].map(i => (
+                <ListingCardSkeleton key={i} />
+              ))}
+            </div>
+          ) : listings && listings.length > 0 ? (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {listings.map((listing, index) => (
+                <div
+                  key={listing.id}
+                  className="animate-slide-up"
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <ListingCardDB listing={listing} />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12 bg-card rounded-2xl">
+              <p className="text-muted-foreground text-lg mb-4">{t('noListings')}</p>
+              <Link to="/create">
+                <Button className="gradient-hero text-primary-foreground">
+                  {t('createListing')}
+                </Button>
+              </Link>
+            </div>
+          )}
         </div>
       </section>
 
