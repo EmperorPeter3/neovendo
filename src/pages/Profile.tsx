@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -9,6 +9,8 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ArrowLeft, Camera, Star, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
+import { useUserReviews } from '@/hooks/useReviews';
+import { ReviewsList } from '@/components/ReviewsList';
 
 const Profile = () => {
   const { t } = useLanguage();
@@ -18,6 +20,14 @@ const Profile = () => {
   const [name, setName] = useState(profile?.name || '');
   const [isUpdating, setIsUpdating] = useState(false);
   const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
+
+  const { data: reviews = [] } = useUserReviews(user?.id || '');
+
+  useEffect(() => {
+    if (profile?.name) {
+      setName(profile.name);
+    }
+  }, [profile?.name]);
 
   if (!authLoading && !user) {
     return (
@@ -208,6 +218,20 @@ const Profile = () => {
               )}
             </Button>
           </div>
+
+          {/* Reviews Section */}
+          {reviews.length > 0 && (
+            <div className="mt-8 pt-6 border-t border-border">
+              <h2 className="font-display text-xl font-bold text-foreground mb-4">
+                My Reviews ({reviews.length})
+              </h2>
+              <ReviewsList 
+                reviews={reviews}
+                averageRating={profile?.rating ? Number(profile.rating) : undefined}
+                totalCount={profile?.rating_count || undefined}
+              />
+            </div>
+          )}
 
           {/* Member Since */}
           {profile && (

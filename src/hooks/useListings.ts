@@ -20,6 +20,7 @@ export interface ListingWithOwner {
     name: string;
     avatar_url: string | null;
     rating: number;
+    rating_count: number | null;
     user_id: string;
   } | null;
 }
@@ -72,7 +73,7 @@ export const useListings = (filters?: {
       const ownerIds = [...new Set(listings?.map(l => l.owner_id) || [])];
       const { data: owners } = await supabase
         .from('profiles')
-        .select('id, name, avatar_url, rating, user_id')
+        .select('id, name, avatar_url, rating, rating_count, user_id')
         .in('user_id', ownerIds);
 
       const ownersMap = new Map(owners?.map(o => [o.user_id, o]) || []);
@@ -101,7 +102,7 @@ export const useListing = (id: string) => {
       // Fetch owner
       const { data: owner } = await supabase
         .from('profiles')
-        .select('id, name, avatar_url, rating, user_id')
+        .select('id, name, avatar_url, rating, rating_count, user_id')
         .eq('user_id', listing.owner_id)
         .maybeSingle();
 
