@@ -1,0 +1,217 @@
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { Layout } from '@/components/Layout';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { categories } from '@/data/mockListings';
+import { Category } from '@/types/listing';
+import { ImagePlus, X, ArrowLeft } from 'lucide-react';
+import { Link } from 'react-router-dom';
+import { TranslationKey } from '@/i18n/translations';
+import { useToast } from '@/hooks/use-toast';
+
+const CreateListing = () => {
+  const { t } = useLanguage();
+  const navigate = useNavigate();
+  const { toast } = useToast();
+
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [category, setCategory] = useState<Category | ''>('');
+  const [price, setPrice] = useState('');
+  const [city, setCity] = useState('');
+  const [images, setImages] = useState<string[]>([]);
+
+  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (files && images.length < 5) {
+      const newImages = Array.from(files).slice(0, 5 - images.length).map(file => 
+        URL.createObjectURL(file)
+      );
+      setImages(prev => [...prev, ...newImages]);
+    }
+  };
+
+  const removeImage = (index: number) => {
+    setImages(prev => prev.filter((_, i) => i !== index));
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    
+    if (!title || !description || !category || !price || !city) {
+      toast({
+        title: 'Error',
+        description: 'Please fill in all required fields',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // In a real app, this would submit to the backend
+    toast({
+      title: t('success'),
+      description: 'Your listing has been created!',
+    });
+
+    navigate('/');
+  };
+
+  return (
+    <Layout>
+      <div className="container py-6 md:py-8 max-w-2xl">
+        {/* Back Button */}
+        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          {t('back')}
+        </Link>
+
+        <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+          <h1 className="font-display text-2xl md:text-3xl font-bold text-foreground mb-8">
+            {t('createListing')}
+          </h1>
+
+          <form onSubmit={handleSubmit} className="space-y-6">
+            {/* Images */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-3">
+                {t('images')} ({images.length}/5)
+              </label>
+              <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+                {images.map((img, index) => (
+                  <div key={index} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+                    <img src={img} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+                    <button
+                      type="button"
+                      onClick={() => removeImage(index)}
+                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+                
+                {images.length < 5 && (
+                  <label className="aspect-square rounded-xl border-2 border-dashed border-border hover:border-primary cursor-pointer flex flex-col items-center justify-center text-muted-foreground hover:text-primary transition-colors">
+                    <ImagePlus className="w-6 h-6 mb-1" />
+                    <span className="text-xs">Add</span>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
+            </div>
+
+            {/* Title */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('title')} *
+              </label>
+              <Input
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="e.g., iPhone 15 Pro Max - Like New"
+                maxLength={100}
+                className="h-12"
+              />
+              <p className="text-xs text-muted-foreground mt-1">{title.length}/100</p>
+            </div>
+
+            {/* Category */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('category')} *
+              </label>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                {categories.map(cat => (
+                  <button
+                    key={cat.id}
+                    type="button"
+                    onClick={() => setCategory(cat.id)}
+                    className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
+                      category === cat.id
+                        ? 'border-primary bg-primary/5 text-primary'
+                        : 'border-border hover:border-primary/50'
+                    }`}
+                  >
+                    <span className="mr-2">{cat.icon}</span>
+                    {t(cat.id as TranslationKey)}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Price */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('price')} (€) *
+              </label>
+              <Input
+                type="number"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                placeholder="0"
+                min="0"
+                className="h-12"
+              />
+            </div>
+
+            {/* City */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('city')} *
+              </label>
+              <Input
+                value={city}
+                onChange={(e) => setCity(e.target.value)}
+                placeholder="e.g., Berlin"
+                className="h-12"
+              />
+            </div>
+
+            {/* Description */}
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('description')} *
+              </label>
+              <Textarea
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                placeholder="Describe your item in detail..."
+                rows={5}
+                className="resize-none"
+              />
+            </div>
+
+            {/* Actions */}
+            <div className="flex gap-3 pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate(-1)}
+                className="flex-1"
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                type="submit"
+                className="flex-1 gradient-hero text-primary-foreground"
+              >
+                {t('publish')}
+              </Button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </Layout>
+  );
+};
+
+export default CreateListing;
