@@ -160,6 +160,8 @@ const SearchPage = () => {
     subcategory: selectedSubcategory || undefined,
     minPrice: minPrice ? Number(minPrice) : undefined,
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
+    country: selectedRegion.country || undefined,
+    city: selectedRegion.city || undefined,
   });
 
   const handleSearch = (e: React.FormEvent) => {
