@@ -111,27 +111,18 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
             {/* Right side - Subcategories */}
             <div className="flex-1 p-6 overflow-y-auto bg-background">
               {selectedCategory && (
-                <>
-                  <button
-                    onClick={() => handleSubcategorySelect(selectedCategory)}
-                    className="flex items-center gap-2 mb-6 text-xl font-bold hover:text-primary transition-colors"
-                  >
-                    {t(selectedCategory as TranslationKey)}
-                    <ChevronRight className="w-5 h-5" />
-                  </button>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                    {subcategories.map((subcategory) => (
+                <ul className="space-y-3">
+                  {subcategories.map((subcategory) => (
+                    <li key={subcategory.id}>
                       <button
-                        key={subcategory.id}
                         onClick={() => handleSubcategorySelect(selectedCategory, subcategory.id)}
-                        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors text-left py-1"
+                        className="text-base font-semibold text-foreground hover:text-primary transition-colors text-left"
                       >
-                        {subcategory.translationKey}
+                        {t(subcategory.id as TranslationKey)}
                       </button>
-                    ))}
-                  </div>
-                </>
+                    </li>
+                  ))}
+                </ul>
               )}
             </div>
           </div>
