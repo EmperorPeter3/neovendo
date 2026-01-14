@@ -252,14 +252,14 @@ const SearchPage = () => {
         {/* Search Header - Same as Index page */}
         <form onSubmit={handleSearch}>
           <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full mb-8">
-            {/* Left column: Filter Button + Region Selector (same width as filter card) */}
-            <div className="w-72 shrink-0 hidden md:flex flex-col gap-3">
+            {/* Left: Filter Button + Region Selector in row (same width as filter card) */}
+            <div className="w-72 shrink-0 hidden md:flex flex-row gap-2">
               {/* Filter Button */}
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => setShowFilters(!showFilters)}
-                className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary w-full justify-center"
+                className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary flex-1 justify-center"
               >
                 <SlidersHorizontal className="w-5 h-5" />
                 {t('filters')}
@@ -269,7 +269,7 @@ const SearchPage = () => {
               <RegionSelector 
                 value={selectedRegion}
                 onChange={setSelectedRegion}
-                className="w-full"
+                className="flex-1"
               />
             </div>
 
