@@ -84,6 +84,116 @@ export const translations = {
     allRegions: "All regions",
     selectRegion: "Select region",
     allCategories: "All categories",
+    
+    // Transport subcategories
+    cars: "Cars",
+    motorcycles: "Motorcycles & Motor Vehicles",
+    trucks: "Trucks & Special Vehicles",
+    watercraft: "Watercraft",
+    
+    // Real Estate subcategories
+    buy: "Buy Housing",
+    rent_daily: "Rent Daily",
+    rent_long: "Long-term Rent",
+    commercial: "Commercial Real Estate",
+    land: "Land Plots",
+    
+    // Jobs subcategories
+    looking_job: "Looking for a Job",
+    looking_employee: "Looking for an Employee",
+    
+    // Services subcategories
+    auto_service: "Auto Service, Rental",
+    transportation: "Transportation & Delivery",
+    movers: "Movers, Warehouse Services",
+    tow_truck: "Tow Truck Services",
+    repair_finishing: "Repair & Finishing",
+    construction: "Construction",
+    garden_landscaping: "Garden, Landscaping",
+    beauty: "Beauty",
+    health: "Health",
+    tech_repair: "Tech Repair & Maintenance",
+    computer_help: "Computer Help",
+    installation: "Tech Installation",
+    equipment_production: "Equipment, Production",
+    education_courses: "Education, Courses",
+    business_services: "Business Services",
+    insurance: "Insurance",
+    intermediary: "Intermediary Services",
+    printing_advertising: "Printing, Outdoor Advertising",
+    waste_removal: "Waste Removal",
+    cleaning: "Cleaning",
+    disinfection: "Disinfection, Special Cleaning",
+    household: "Household Services",
+    events: "Holidays, Events",
+    food_delivery: "Food Delivery, Catering",
+    photo_video: "Photo & Video",
+    nannies_caregivers: "Nannies, Caregivers",
+    pet_care: "Pet Care",
+    art: "Art",
+    security: "Security",
+    other: "Other",
+    
+    // Personal Items subcategories
+    clothing: "Clothing, Shoes, Accessories",
+    kids_clothing: "Kids Clothing & Shoes",
+    kids_goods: "Kids Goods & Toys",
+    beauty_health: "Beauty & Health",
+    watches_jewelry: "Watches & Jewelry",
+    
+    // Home & Garden subcategories
+    repair_construction: "Repair & Construction",
+    furniture_interior: "Furniture & Interior",
+    appliances: "Household Appliances",
+    food_products: "Food Products",
+    plants: "Plants",
+    kitchen_goods: "Kitchenware",
+    
+    // Auto Parts subcategories
+    parts: "Parts",
+    tires_wheels: "Tires, Rims & Wheels",
+    audio_video: "Audio & Video Equipment",
+    accessories: "Accessories",
+    roof_racks: "Roof Racks & Towbars",
+    tools: "Tools",
+    trailers: "Trailers",
+    equipment: "Equipment",
+    oils_chemicals: "Oils & Auto Chemicals",
+    anti_theft: "Anti-theft Devices",
+    gps: "GPS Navigators",
+    
+    // Electronics subcategories
+    phones: "Phones",
+    computer_goods: "Computer Goods",
+    games_consoles: "Games, Consoles & Software",
+    laptops: "Laptops",
+    desktops: "Desktop Computers",
+    photo_equipment: "Photo Equipment",
+    tablets_ebooks: "Tablets & E-books",
+    office_equipment: "Office Equipment & Supplies",
+    
+    // Hobbies subcategories
+    tickets_travel: "Tickets & Travel",
+    bicycles: "Bicycles",
+    books_magazines: "Books & Magazines",
+    collecting: "Collecting",
+    musical_instruments: "Musical Instruments",
+    hunting_fishing: "Hunting & Fishing",
+    sports_leisure: "Sports & Leisure",
+    
+    // Animals subcategories
+    dogs: "Dogs",
+    cats: "Cats",
+    birds: "Birds",
+    aquarium: "Aquarium",
+    other_animals: "Other Animals",
+    pet_supplies: "Pet Supplies",
+    
+    // Business subcategories
+    business_equipment: "Business Equipment",
+    franchise: "Franchises",
+    ready_business: "Ready Business",
+    business_software: "Business Software",
   },
   pt: {
     home: "Início",
@@ -153,6 +263,116 @@ export const translations = {
     allRegions: "Todas as regiões",
     selectRegion: "Selecionar região",
     allCategories: "Todas as categorias",
+    
+    // Transport subcategories
+    cars: "Carros",
+    motorcycles: "Motos e Veículos Motorizados",
+    trucks: "Caminhões e Veículos Especiais",
+    watercraft: "Embarcações",
+    
+    // Real Estate subcategories
+    buy: "Comprar Imóvel",
+    rent_daily: "Aluguel Diário",
+    rent_long: "Aluguel de Longo Prazo",
+    commercial: "Imóveis Comerciais",
+    land: "Terrenos",
+    
+    // Jobs subcategories
+    looking_job: "Procurando Emprego",
+    looking_employee: "Procurando Funcionário",
+    
+    // Services subcategories
+    auto_service: "Serviço Automotivo, Aluguel",
+    transportation: "Transporte e Entrega",
+    movers: "Mudanças, Serviços de Armazém",
+    tow_truck: "Serviços de Reboque",
+    repair_finishing: "Reparo e Acabamento",
+    construction: "Construção",
+    garden_landscaping: "Jardim, Paisagismo",
+    beauty: "Beleza",
+    health: "Saúde",
+    tech_repair: "Reparo e Manutenção de Técnica",
+    computer_help: "Ajuda com Computador",
+    installation: "Instalação de Técnica",
+    equipment_production: "Equipamentos, Produção",
+    education_courses: "Educação, Cursos",
+    business_services: "Serviços Empresariais",
+    insurance: "Seguros",
+    intermediary: "Serviços de Intermediação",
+    printing_advertising: "Impressão, Publicidade Exterior",
+    waste_removal: "Remoção de Resíduos",
+    cleaning: "Limpeza",
+    disinfection: "Desinfecção, Limpeza Especial",
+    household: "Serviços Domésticos",
+    events: "Festas, Eventos",
+    food_delivery: "Entrega de Comida, Catering",
+    photo_video: "Foto e Vídeo",
+    nannies_caregivers: "Babás, Cuidadores",
+    pet_care: "Cuidados com Animais",
+    art: "Arte",
+    security: "Segurança",
+    other: "Outros",
+    
+    // Personal Items subcategories
+    clothing: "Roupas, Sapatos, Acessórios",
+    kids_clothing: "Roupas e Sapatos Infantis",
+    kids_goods: "Produtos Infantis e Brinquedos",
+    beauty_health: "Beleza e Saúde",
+    watches_jewelry: "Relógios e Joias",
+    
+    // Home & Garden subcategories
+    repair_construction: "Reparo e Construção",
+    furniture_interior: "Móveis e Interior",
+    appliances: "Eletrodomésticos",
+    food_products: "Produtos Alimentícios",
+    plants: "Plantas",
+    kitchen_goods: "Utensílios de Cozinha",
+    
+    // Auto Parts subcategories
+    parts: "Peças",
+    tires_wheels: "Pneus, Aros e Rodas",
+    audio_video: "Equipamentos de Áudio e Vídeo",
+    accessories: "Acessórios",
+    roof_racks: "Bagageiros e Engate",
+    tools: "Ferramentas",
+    trailers: "Reboques",
+    equipment: "Equipamentos",
+    oils_chemicals: "Óleos e Químicos Automotivos",
+    anti_theft: "Dispositivos Antifurto",
+    gps: "Navegadores GPS",
+    
+    // Electronics subcategories
+    phones: "Telefones",
+    computer_goods: "Produtos de Computador",
+    games_consoles: "Jogos, Consoles e Software",
+    laptops: "Notebooks",
+    desktops: "Computadores Desktop",
+    photo_equipment: "Equipamentos Fotográficos",
+    tablets_ebooks: "Tablets e E-books",
+    office_equipment: "Equipamentos de Escritório",
+    
+    // Hobbies subcategories
+    tickets_travel: "Ingressos e Viagens",
+    bicycles: "Bicicletas",
+    books_magazines: "Livros e Revistas",
+    collecting: "Colecionismo",
+    musical_instruments: "Instrumentos Musicais",
+    hunting_fishing: "Caça e Pesca",
+    sports_leisure: "Esportes e Lazer",
+    
+    // Animals subcategories
+    dogs: "Cães",
+    cats: "Gatos",
+    birds: "Pássaros",
+    aquarium: "Aquário",
+    other_animals: "Outros Animais",
+    pet_supplies: "Produtos para Animais",
+    
+    // Business subcategories
+    business_equipment: "Equipamentos Empresariais",
+    franchise: "Franquias",
+    ready_business: "Negócio Pronto",
+    business_software: "Software Empresarial",
   },
   es: {
     home: "Inicio",
@@ -222,6 +442,116 @@ export const translations = {
     allRegions: "Todas las regiones",
     selectRegion: "Seleccionar región",
     allCategories: "Todas las categorías",
+    
+    // Transport subcategories
+    cars: "Coches",
+    motorcycles: "Motos y Vehículos Motorizados",
+    trucks: "Camiones y Vehículos Especiales",
+    watercraft: "Embarcaciones",
+    
+    // Real Estate subcategories
+    buy: "Comprar Vivienda",
+    rent_daily: "Alquiler Diario",
+    rent_long: "Alquiler a Largo Plazo",
+    commercial: "Inmuebles Comerciales",
+    land: "Terrenos",
+    
+    // Jobs subcategories
+    looking_job: "Busco Trabajo",
+    looking_employee: "Busco Empleado",
+    
+    // Services subcategories
+    auto_service: "Servicio de Auto, Alquiler",
+    transportation: "Transporte y Entrega",
+    movers: "Mudanzas, Servicios de Almacén",
+    tow_truck: "Servicios de Grúa",
+    repair_finishing: "Reparación y Acabado",
+    construction: "Construcción",
+    garden_landscaping: "Jardín, Paisajismo",
+    beauty: "Belleza",
+    health: "Salud",
+    tech_repair: "Reparación y Mantenimiento Técnico",
+    computer_help: "Ayuda Informática",
+    installation: "Instalación Técnica",
+    equipment_production: "Equipos, Producción",
+    education_courses: "Educación, Cursos",
+    business_services: "Servicios Empresariales",
+    insurance: "Seguros",
+    intermediary: "Servicios de Intermediación",
+    printing_advertising: "Imprenta, Publicidad Exterior",
+    waste_removal: "Eliminación de Residuos",
+    cleaning: "Limpieza",
+    disinfection: "Desinfección, Limpieza Especial",
+    household: "Servicios Domésticos",
+    events: "Fiestas, Eventos",
+    food_delivery: "Entrega de Comida, Catering",
+    photo_video: "Foto y Video",
+    nannies_caregivers: "Niñeras, Cuidadores",
+    pet_care: "Cuidado de Mascotas",
+    art: "Arte",
+    security: "Seguridad",
+    other: "Otros",
+    
+    // Personal Items subcategories
+    clothing: "Ropa, Zapatos, Accesorios",
+    kids_clothing: "Ropa y Zapatos Infantiles",
+    kids_goods: "Productos Infantiles y Juguetes",
+    beauty_health: "Belleza y Salud",
+    watches_jewelry: "Relojes y Joyas",
+    
+    // Home & Garden subcategories
+    repair_construction: "Reparación y Construcción",
+    furniture_interior: "Muebles e Interior",
+    appliances: "Electrodomésticos",
+    food_products: "Productos Alimenticios",
+    plants: "Plantas",
+    kitchen_goods: "Utensilios de Cocina",
+    
+    // Auto Parts subcategories
+    parts: "Piezas",
+    tires_wheels: "Neumáticos, Llantas y Ruedas",
+    audio_video: "Equipos de Audio y Video",
+    accessories: "Accesorios",
+    roof_racks: "Portaequipajes y Enganches",
+    tools: "Herramientas",
+    trailers: "Remolques",
+    equipment: "Equipamiento",
+    oils_chemicals: "Aceites y Químicos Automotrices",
+    anti_theft: "Dispositivos Antirrobo",
+    gps: "Navegadores GPS",
+    
+    // Electronics subcategories
+    phones: "Teléfonos",
+    computer_goods: "Productos de Computadora",
+    games_consoles: "Juegos, Consolas y Software",
+    laptops: "Portátiles",
+    desktops: "Ordenadores de Escritorio",
+    photo_equipment: "Equipos Fotográficos",
+    tablets_ebooks: "Tablets y E-books",
+    office_equipment: "Equipos de Oficina",
+    
+    // Hobbies subcategories
+    tickets_travel: "Entradas y Viajes",
+    bicycles: "Bicicletas",
+    books_magazines: "Libros y Revistas",
+    collecting: "Coleccionismo",
+    musical_instruments: "Instrumentos Musicales",
+    hunting_fishing: "Caza y Pesca",
+    sports_leisure: "Deportes y Ocio",
+    
+    // Animals subcategories
+    dogs: "Perros",
+    cats: "Gatos",
+    birds: "Pájaros",
+    aquarium: "Acuario",
+    other_animals: "Otros Animales",
+    pet_supplies: "Productos para Mascotas",
+    
+    // Business subcategories
+    business_equipment: "Equipos Empresariales",
+    franchise: "Franquicias",
+    ready_business: "Negocio Listo",
+    business_software: "Software Empresarial",
   },
   de: {
     home: "Startseite",
@@ -291,6 +621,116 @@ export const translations = {
     allRegions: "Alle Regionen",
     selectRegion: "Region auswählen",
     allCategories: "Alle Kategorien",
+    
+    // Transport subcategories
+    cars: "Autos",
+    motorcycles: "Motorräder und Motorfahrzeuge",
+    trucks: "LKWs und Spezialfahrzeuge",
+    watercraft: "Wasserfahrzeuge",
+    
+    // Real Estate subcategories
+    buy: "Wohnung kaufen",
+    rent_daily: "Tagesmiete",
+    rent_long: "Langzeitmiete",
+    commercial: "Gewerbeimmobilien",
+    land: "Grundstücke",
+    
+    // Jobs subcategories
+    looking_job: "Suche Arbeit",
+    looking_employee: "Suche Mitarbeiter",
+    
+    // Services subcategories
+    auto_service: "Autoservice, Vermietung",
+    transportation: "Transport und Lieferung",
+    movers: "Umzüge, Lagerservices",
+    tow_truck: "Abschleppdienst",
+    repair_finishing: "Reparatur und Ausbau",
+    construction: "Bau",
+    garden_landscaping: "Garten, Landschaftsbau",
+    beauty: "Schönheit",
+    health: "Gesundheit",
+    tech_repair: "Technik Reparatur und Wartung",
+    computer_help: "Computerhilfe",
+    installation: "Technik Installation",
+    equipment_production: "Ausrüstung, Produktion",
+    education_courses: "Bildung, Kurse",
+    business_services: "Geschäftsdienstleistungen",
+    insurance: "Versicherung",
+    intermediary: "Vermittlungsdienste",
+    printing_advertising: "Druck, Außenwerbung",
+    waste_removal: "Müllentsorgung",
+    cleaning: "Reinigung",
+    disinfection: "Desinfektion, Spezialreinigung",
+    household: "Haushaltsdienstleistungen",
+    events: "Feste, Veranstaltungen",
+    food_delivery: "Essenslieferung, Catering",
+    photo_video: "Foto und Video",
+    nannies_caregivers: "Kindermädchen, Betreuer",
+    pet_care: "Tierpflege",
+    art: "Kunst",
+    security: "Sicherheit",
+    other: "Andere",
+    
+    // Personal Items subcategories
+    clothing: "Kleidung, Schuhe, Accessoires",
+    kids_clothing: "Kinderkleidung und Schuhe",
+    kids_goods: "Kinderprodukte und Spielzeug",
+    beauty_health: "Schönheit und Gesundheit",
+    watches_jewelry: "Uhren und Schmuck",
+    
+    // Home & Garden subcategories
+    repair_construction: "Reparatur und Bau",
+    furniture_interior: "Möbel und Interieur",
+    appliances: "Haushaltsgeräte",
+    food_products: "Lebensmittel",
+    plants: "Pflanzen",
+    kitchen_goods: "Küchenwaren",
+    
+    // Auto Parts subcategories
+    parts: "Teile",
+    tires_wheels: "Reifen, Felgen und Räder",
+    audio_video: "Audio- und Videogeräte",
+    accessories: "Zubehör",
+    roof_racks: "Dachträger und Anhängerkupplungen",
+    tools: "Werkzeuge",
+    trailers: "Anhänger",
+    equipment: "Ausrüstung",
+    oils_chemicals: "Öle und Autochemie",
+    anti_theft: "Diebstahlsicherung",
+    gps: "GPS-Navigatoren",
+    
+    // Electronics subcategories
+    phones: "Telefone",
+    computer_goods: "Computerprodukte",
+    games_consoles: "Spiele, Konsolen und Software",
+    laptops: "Laptops",
+    desktops: "Desktop-Computer",
+    photo_equipment: "Fotoausrüstung",
+    tablets_ebooks: "Tablets und E-Books",
+    office_equipment: "Bürogeräte",
+    
+    // Hobbies subcategories
+    tickets_travel: "Tickets und Reisen",
+    bicycles: "Fahrräder",
+    books_magazines: "Bücher und Zeitschriften",
+    collecting: "Sammeln",
+    musical_instruments: "Musikinstrumente",
+    hunting_fishing: "Jagd und Angeln",
+    sports_leisure: "Sport und Freizeit",
+    
+    // Animals subcategories
+    dogs: "Hunde",
+    cats: "Katzen",
+    birds: "Vögel",
+    aquarium: "Aquarium",
+    other_animals: "Andere Tiere",
+    pet_supplies: "Tierbedarf",
+    
+    // Business subcategories
+    business_equipment: "Geschäftsausrüstung",
+    franchise: "Franchises",
+    ready_business: "Fertiges Geschäft",
+    business_software: "Geschäftssoftware",
   },
   fr: {
     home: "Accueil",
@@ -360,6 +800,116 @@ export const translations = {
     allRegions: "Toutes les régions",
     selectRegion: "Sélectionner une région",
     allCategories: "Toutes les catégories",
+    
+    // Transport subcategories
+    cars: "Voitures",
+    motorcycles: "Motos et Véhicules Motorisés",
+    trucks: "Camions et Véhicules Spéciaux",
+    watercraft: "Embarcations",
+    
+    // Real Estate subcategories
+    buy: "Acheter un Logement",
+    rent_daily: "Location Journalière",
+    rent_long: "Location Longue Durée",
+    commercial: "Immobilier Commercial",
+    land: "Terrains",
+    
+    // Jobs subcategories
+    looking_job: "Cherche un Emploi",
+    looking_employee: "Cherche un Employé",
+    
+    // Services subcategories
+    auto_service: "Service Auto, Location",
+    transportation: "Transport et Livraison",
+    movers: "Déménagement, Services d'Entrepôt",
+    tow_truck: "Services de Dépannage",
+    repair_finishing: "Réparation et Finition",
+    construction: "Construction",
+    garden_landscaping: "Jardin, Aménagement Paysager",
+    beauty: "Beauté",
+    health: "Santé",
+    tech_repair: "Réparation et Maintenance Technique",
+    computer_help: "Aide Informatique",
+    installation: "Installation Technique",
+    equipment_production: "Équipement, Production",
+    education_courses: "Éducation, Cours",
+    business_services: "Services Professionnels",
+    insurance: "Assurance",
+    intermediary: "Services d'Intermédiation",
+    printing_advertising: "Imprimerie, Publicité Extérieure",
+    waste_removal: "Enlèvement des Déchets",
+    cleaning: "Nettoyage",
+    disinfection: "Désinfection, Nettoyage Spécial",
+    household: "Services Domestiques",
+    events: "Fêtes, Événements",
+    food_delivery: "Livraison de Nourriture, Traiteur",
+    photo_video: "Photo et Vidéo",
+    nannies_caregivers: "Nounous, Aidants",
+    pet_care: "Soins des Animaux",
+    art: "Art",
+    security: "Sécurité",
+    other: "Autres",
+    
+    // Personal Items subcategories
+    clothing: "Vêtements, Chaussures, Accessoires",
+    kids_clothing: "Vêtements et Chaussures Enfants",
+    kids_goods: "Produits Enfants et Jouets",
+    beauty_health: "Beauté et Santé",
+    watches_jewelry: "Montres et Bijoux",
+    
+    // Home & Garden subcategories
+    repair_construction: "Réparation et Construction",
+    furniture_interior: "Meubles et Intérieur",
+    appliances: "Électroménager",
+    food_products: "Produits Alimentaires",
+    plants: "Plantes",
+    kitchen_goods: "Ustensiles de Cuisine",
+    
+    // Auto Parts subcategories
+    parts: "Pièces",
+    tires_wheels: "Pneus, Jantes et Roues",
+    audio_video: "Équipements Audio et Vidéo",
+    accessories: "Accessoires",
+    roof_racks: "Barres de Toit et Attelages",
+    tools: "Outils",
+    trailers: "Remorques",
+    equipment: "Équipement",
+    oils_chemicals: "Huiles et Produits Auto",
+    anti_theft: "Dispositifs Antivol",
+    gps: "Navigateurs GPS",
+    
+    // Electronics subcategories
+    phones: "Téléphones",
+    computer_goods: "Produits Informatiques",
+    games_consoles: "Jeux, Consoles et Logiciels",
+    laptops: "Ordinateurs Portables",
+    desktops: "Ordinateurs de Bureau",
+    photo_equipment: "Équipement Photo",
+    tablets_ebooks: "Tablettes et Liseuses",
+    office_equipment: "Équipement de Bureau",
+    
+    // Hobbies subcategories
+    tickets_travel: "Billets et Voyages",
+    bicycles: "Vélos",
+    books_magazines: "Livres et Magazines",
+    collecting: "Collection",
+    musical_instruments: "Instruments de Musique",
+    hunting_fishing: "Chasse et Pêche",
+    sports_leisure: "Sports et Loisirs",
+    
+    // Animals subcategories
+    dogs: "Chiens",
+    cats: "Chats",
+    birds: "Oiseaux",
+    aquarium: "Aquarium",
+    other_animals: "Autres Animaux",
+    pet_supplies: "Fournitures pour Animaux",
+    
+    // Business subcategories
+    business_equipment: "Équipement Professionnel",
+    franchise: "Franchises",
+    ready_business: "Affaire Clé en Main",
+    business_software: "Logiciels Professionnels",
   },
   it: {
     home: "Home",
@@ -429,6 +979,116 @@ export const translations = {
     allRegions: "Tutte le regioni",
     selectRegion: "Seleziona regione",
     allCategories: "Tutte le categorie",
+    
+    // Transport subcategories
+    cars: "Auto",
+    motorcycles: "Moto e Veicoli Motorizzati",
+    trucks: "Camion e Veicoli Speciali",
+    watercraft: "Imbarcazioni",
+    
+    // Real Estate subcategories
+    buy: "Comprare Casa",
+    rent_daily: "Affitto Giornaliero",
+    rent_long: "Affitto a Lungo Termine",
+    commercial: "Immobili Commerciali",
+    land: "Terreni",
+    
+    // Jobs subcategories
+    looking_job: "Cerco Lavoro",
+    looking_employee: "Cerco Dipendente",
+    
+    // Services subcategories
+    auto_service: "Servizio Auto, Noleggio",
+    transportation: "Trasporto e Consegna",
+    movers: "Traslochi, Servizi di Magazzino",
+    tow_truck: "Servizi di Carroattrezzi",
+    repair_finishing: "Riparazione e Finitura",
+    construction: "Costruzione",
+    garden_landscaping: "Giardino, Paesaggistica",
+    beauty: "Bellezza",
+    health: "Salute",
+    tech_repair: "Riparazione e Manutenzione Tecnica",
+    computer_help: "Assistenza Informatica",
+    installation: "Installazione Tecnica",
+    equipment_production: "Attrezzature, Produzione",
+    education_courses: "Istruzione, Corsi",
+    business_services: "Servizi Aziendali",
+    insurance: "Assicurazione",
+    intermediary: "Servizi di Intermediazione",
+    printing_advertising: "Stampa, Pubblicità Esterna",
+    waste_removal: "Smaltimento Rifiuti",
+    cleaning: "Pulizia",
+    disinfection: "Disinfezione, Pulizia Speciale",
+    household: "Servizi Domestici",
+    events: "Feste, Eventi",
+    food_delivery: "Consegna Cibo, Catering",
+    photo_video: "Foto e Video",
+    nannies_caregivers: "Babysitter, Badanti",
+    pet_care: "Cura degli Animali",
+    art: "Arte",
+    security: "Sicurezza",
+    other: "Altro",
+    
+    // Personal Items subcategories
+    clothing: "Abbigliamento, Scarpe, Accessori",
+    kids_clothing: "Abbigliamento e Scarpe Bambini",
+    kids_goods: "Prodotti Bambini e Giocattoli",
+    beauty_health: "Bellezza e Salute",
+    watches_jewelry: "Orologi e Gioielli",
+    
+    // Home & Garden subcategories
+    repair_construction: "Riparazione e Costruzione",
+    furniture_interior: "Mobili e Interni",
+    appliances: "Elettrodomestici",
+    food_products: "Prodotti Alimentari",
+    plants: "Piante",
+    kitchen_goods: "Articoli da Cucina",
+    
+    // Auto Parts subcategories
+    parts: "Ricambi",
+    tires_wheels: "Pneumatici, Cerchi e Ruote",
+    audio_video: "Apparecchiature Audio e Video",
+    accessories: "Accessori",
+    roof_racks: "Portapacchi e Ganci Traino",
+    tools: "Attrezzi",
+    trailers: "Rimorchi",
+    equipment: "Attrezzatura",
+    oils_chemicals: "Oli e Prodotti Auto",
+    anti_theft: "Dispositivi Antifurto",
+    gps: "Navigatori GPS",
+    
+    // Electronics subcategories
+    phones: "Telefoni",
+    computer_goods: "Prodotti Informatici",
+    games_consoles: "Giochi, Console e Software",
+    laptops: "Laptop",
+    desktops: "Computer Desktop",
+    photo_equipment: "Attrezzatura Fotografica",
+    tablets_ebooks: "Tablet ed E-book",
+    office_equipment: "Attrezzature da Ufficio",
+    
+    // Hobbies subcategories
+    tickets_travel: "Biglietti e Viaggi",
+    bicycles: "Biciclette",
+    books_magazines: "Libri e Riviste",
+    collecting: "Collezionismo",
+    musical_instruments: "Strumenti Musicali",
+    hunting_fishing: "Caccia e Pesca",
+    sports_leisure: "Sport e Tempo Libero",
+    
+    // Animals subcategories
+    dogs: "Cani",
+    cats: "Gatti",
+    birds: "Uccelli",
+    aquarium: "Acquario",
+    other_animals: "Altri Animali",
+    pet_supplies: "Forniture per Animali",
+    
+    // Business subcategories
+    business_equipment: "Attrezzature Aziendali",
+    franchise: "Franchising",
+    ready_business: "Attività Chiavi in Mano",
+    business_software: "Software Aziendale",
   },
   ru: {
     home: "Главная",
@@ -498,6 +1158,116 @@ export const translations = {
     allRegions: "Все регионы",
     selectRegion: "Выберите регион",
     allCategories: "Все категории",
+    
+    // Transport subcategories
+    cars: "Автомобили",
+    motorcycles: "Мотоциклы и мототехника",
+    trucks: "Грузовики и спецтехника",
+    watercraft: "Водный транспорт",
+    
+    // Real Estate subcategories
+    buy: "Купить жильё",
+    rent_daily: "Арендовать посуточно",
+    rent_long: "Арендовать долгосрочно",
+    commercial: "Коммерческая недвижимость",
+    land: "Земельные участки",
+    
+    // Jobs subcategories
+    looking_job: "Ищу работу",
+    looking_employee: "Ищу сотрудника",
+    
+    // Services subcategories
+    auto_service: "Автосервис, аренда",
+    transportation: "Перевозки и доставка",
+    movers: "Грузчики, складские услуги",
+    tow_truck: "Услуги эвакуатора",
+    repair_finishing: "Ремонт и отделка",
+    construction: "Строительство",
+    garden_landscaping: "Сад, благоустройство",
+    beauty: "Красота",
+    health: "Здоровье",
+    tech_repair: "Ремонт и обслуживание техники",
+    computer_help: "Компьютерная помощь",
+    installation: "Монтаж и установка техники",
+    equipment_production: "Оборудование, производство",
+    education_courses: "Обучение, курсы",
+    business_services: "Деловые услуги",
+    insurance: "Страхование",
+    intermediary: "Услуги посредников",
+    printing_advertising: "Полиграфия, наружная реклама",
+    waste_removal: "Вывоз мусора и вторсырья",
+    cleaning: "Уборка",
+    disinfection: "Дезинфекция, дезинсекция, спецуборка",
+    household: "Бытовые услуги",
+    events: "Праздники, мероприятия",
+    food_delivery: "Доставка продуктов, десертов, кейтеринг",
+    photo_video: "Фото- и видеосъёмка",
+    nannies_caregivers: "Няни, сиделки",
+    pet_care: "Уход за животными",
+    art: "Искусство",
+    security: "Охрана, безопасность",
+    other: "Другое",
+    
+    // Personal Items subcategories
+    clothing: "Одежда, обувь, аксессуары",
+    kids_clothing: "Детская одежда и обувь",
+    kids_goods: "Товары для детей и игрушки",
+    beauty_health: "Красота и здоровье",
+    watches_jewelry: "Часы и украшения",
+    
+    // Home & Garden subcategories
+    repair_construction: "Ремонт и строительство",
+    furniture_interior: "Мебель и интерьер",
+    appliances: "Бытовая техника",
+    food_products: "Продукты питания",
+    plants: "Растения",
+    kitchen_goods: "Посуда и товары для кухни",
+    
+    // Auto Parts subcategories
+    parts: "Запчасти",
+    tires_wheels: "Шины, диски и колёса",
+    audio_video: "Аудио- и видеотехника",
+    accessories: "Аксессуары",
+    roof_racks: "Багажники и фаркопы",
+    tools: "Инструменты",
+    trailers: "Прицепы",
+    equipment: "Экипировка",
+    oils_chemicals: "Масла и автохимия",
+    anti_theft: "Противоугонные устройства",
+    gps: "GPS-навигаторы",
+    
+    // Electronics subcategories
+    phones: "Телефоны",
+    computer_goods: "Товары для компьютера",
+    games_consoles: "Игры, приставки и программы",
+    laptops: "Ноутбуки",
+    desktops: "Настольные компьютеры",
+    photo_equipment: "Фототехника",
+    tablets_ebooks: "Планшеты и электронные книги",
+    office_equipment: "Оргтехника и расходники",
+    
+    // Hobbies subcategories
+    tickets_travel: "Билеты и путешествия",
+    bicycles: "Велосипеды",
+    books_magazines: "Книги и журналы",
+    collecting: "Коллекционирование",
+    musical_instruments: "Музыкальные инструменты",
+    hunting_fishing: "Охота и рыбалка",
+    sports_leisure: "Спорт и отдых",
+    
+    // Animals subcategories
+    dogs: "Собаки",
+    cats: "Кошки",
+    birds: "Птицы",
+    aquarium: "Аквариум",
+    other_animals: "Другие животные",
+    pet_supplies: "Товары для животных",
+    
+    // Business subcategories
+    business_equipment: "Оборудование для бизнеса",
+    franchise: "Франшизы",
+    ready_business: "Готовый бизнес",
+    business_software: "ПО для бизнеса",
   },
 } as const;
 
