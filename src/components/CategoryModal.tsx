@@ -111,7 +111,10 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
             {/* Right side - Subcategories */}
             <div className="flex-1 p-6 overflow-y-auto bg-background">
               {selectedCategory && (
-                <ul className="space-y-3">
+                <ul className={cn(
+                  "grid gap-3",
+                  subcategories.length > 10 ? "grid-cols-2" : "grid-cols-1"
+                )}>
                   {subcategories.map((subcategory) => (
                     <li key={subcategory.id}>
                       <button
