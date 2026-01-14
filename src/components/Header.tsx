@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Search, Plus, MessageCircle, User, Menu, X, Globe, LogOut, Heart } from 'lucide-react';
+import { Plus, MessageCircle, User, Menu, X, Globe, LogOut, Heart, List } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -54,20 +54,8 @@ export const Header = () => {
             <span className="font-display font-bold text-xl text-foreground">neovendo</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1">
-            <Link to="/">
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                {t('home')}
-              </Button>
-            </Link>
-            <Link to="/search">
-              <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-foreground">
-                <Search className="w-4 h-4 mr-2" />
-                {t('search')}
-              </Button>
-            </Link>
-          </nav>
+          {/* Desktop Navigation - Empty spacer */}
+          <div className="hidden md:flex items-center" />
 
           {/* Desktop Actions */}
           <div className="hidden md:flex items-center gap-2">
@@ -132,6 +120,7 @@ export const Header = () => {
                       Profile
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/my-listings')}>
+                      <List className="w-4 h-4 mr-2" />
                       My Listings
                     </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/favorites')}>
@@ -184,15 +173,6 @@ export const Header = () => {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border animate-fade-in">
             <nav className="flex flex-col gap-2">
-              <Link to="/" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start">{t('home')}</Button>
-              </Link>
-              <Link to="/search" onClick={() => setMobileMenuOpen(false)}>
-                <Button variant="ghost" className="w-full justify-start gap-2">
-                  <Search className="w-4 h-4" />
-                  {t('search')}
-                </Button>
-              </Link>
               <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
                 <Button variant="ghost" className="w-full justify-start gap-2">
                   <MessageCircle className="w-4 h-4" />
