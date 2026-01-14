@@ -2,38 +2,25 @@ import { Link } from 'react-router-dom';
 import { Category } from '@/types/listing';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TranslationKey } from '@/i18n/translations';
+import { categoryIcons } from '@/data/subcategories';
 
 interface CategoryCardProps {
   category: {
     id: Category;
-    icon: string;
   };
 }
 
-const categoryGradients: Record<Category, string> = {
-  transport: 'from-blue-500 to-cyan-400',
-  realEstate: 'from-rose-500 to-red-400',
-  jobs: 'from-purple-500 to-pink-400',
-  services: 'from-emerald-500 to-teal-400',
-  personalItems: 'from-amber-500 to-orange-400',
-  homeAndGarden: 'from-green-500 to-lime-400',
-  autoParts: 'from-slate-500 to-gray-400',
-  electronics: 'from-indigo-500 to-violet-400',
-  hobbies: 'from-pink-500 to-fuchsia-400',
-  animals: 'from-yellow-500 to-amber-400',
-  business: 'from-cyan-500 to-blue-400',
-};
-
 export const CategoryCard = ({ category }: CategoryCardProps) => {
   const { t } = useLanguage();
+  const Icon = categoryIcons[category.id];
 
   return (
     <Link
       to={`/search?category=${category.id}`}
       className="group flex flex-col items-center gap-3 p-4 rounded-xl bg-card shadow-card hover:shadow-card-hover transition-all duration-300 hover:-translate-y-1"
     >
-      <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${categoryGradients[category.id]} flex items-center justify-center text-2xl group-hover:scale-110 transition-transform duration-300`}>
-        {category.icon}
+      <div className="w-14 h-14 rounded-xl bg-emerald-50 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+        <Icon className="w-7 h-7 text-emerald-600" />
       </div>
       <span className="text-sm font-medium text-foreground text-center">
         {t(category.id as TranslationKey)}
