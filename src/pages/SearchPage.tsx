@@ -252,18 +252,46 @@ const SearchPage = () => {
         {/* Search Header - Same as Index page */}
         <form onSubmit={handleSearch}>
           <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full mb-8">
-            {/* Filter Button - Left of search */}
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => setShowFilters(!showFilters)}
-              className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary"
-            >
-              <SlidersHorizontal className="w-5 h-5" />
-              {t('filters')}
-            </Button>
+            {/* Left column: Filter Button + Region Selector (same width as filter card) */}
+            <div className="w-72 shrink-0 hidden md:flex flex-col gap-3">
+              {/* Filter Button */}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary w-full justify-center"
+              >
+                <SlidersHorizontal className="w-5 h-5" />
+                {t('filters')}
+              </Button>
 
-            {/* Search Input with Button inside - Same as Index */}
+              {/* Region Selector */}
+              <RegionSelector 
+                value={selectedRegion}
+                onChange={setSelectedRegion}
+                className="w-full"
+              />
+            </div>
+
+            {/* Mobile: Filter and Region buttons */}
+            <div className="flex gap-3 md:hidden">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowFilters(!showFilters)}
+                className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary flex-1"
+              >
+                <SlidersHorizontal className="w-5 h-5" />
+                {t('filters')}
+              </Button>
+              <RegionSelector 
+                value={selectedRegion}
+                onChange={setSelectedRegion}
+                className="flex-1"
+              />
+            </div>
+
+            {/* Search Input with Button inside */}
             <div className="flex-1 relative flex">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
                 <Search className="w-5 h-5" />
@@ -282,12 +310,6 @@ const SearchPage = () => {
                 {t('search')}
               </Button>
             </div>
-            
-            {/* Region Selector */}
-            <RegionSelector 
-              value={selectedRegion}
-              onChange={setSelectedRegion}
-            />
           </div>
         </form>
 
@@ -406,15 +428,6 @@ const SearchPage = () => {
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={handleResetFilters} className="flex-1">
-                    {t('reset')}
-                  </Button>
-                  <Button onClick={handleApplyFilters} className="flex-1 gradient-hero text-primary-foreground">
-                    {t('apply')}
-                  </Button>
-                </div>
               </div>
             </div>
           )}
@@ -532,15 +545,6 @@ const SearchPage = () => {
                   </div>
                 </div>
 
-                {/* Actions */}
-                <div className="flex gap-2">
-                  <Button variant="outline" onClick={handleResetFilters} className="flex-1">
-                    {t('reset')}
-                  </Button>
-                  <Button onClick={handleApplyFilters} className="flex-1 gradient-hero text-primary-foreground">
-                    {t('apply')}
-                  </Button>
-                </div>
               </div>
             </div>
           )}
