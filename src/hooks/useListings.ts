@@ -8,6 +8,7 @@ export interface ListingWithOwner {
   title: string;
   description: string | null;
   category: Category;
+  subcategory: string | null;
   price: number;
   city: string;
   country: string;
@@ -28,6 +29,7 @@ export interface ListingWithOwner {
 
 export const useListings = (filters?: {
   category?: string;
+  subcategory?: string;
   minPrice?: number;
   maxPrice?: number;
   city?: string;
@@ -46,6 +48,9 @@ export const useListings = (filters?: {
 
       if (filters?.category) {
         query = query.eq('category', filters.category as Category);
+      }
+      if (filters?.subcategory) {
+        query = query.eq('subcategory', filters.subcategory);
       }
       if (filters?.minPrice !== undefined) {
         query = query.gte('price', filters.minPrice);
