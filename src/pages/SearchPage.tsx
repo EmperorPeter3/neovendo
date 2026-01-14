@@ -1,24 +1,37 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams, Link, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
-import { SearchBar } from '@/components/SearchBar';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
-import { categories } from '@/data/mockListings';
-import { SlidersHorizontal, X, MapPin } from 'lucide-react';
+import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
+import { Category } from '@/types/listing';
+import { categoryIcons, subcategoriesData } from '@/data/subcategories';
+import { CategoryModal } from '@/components/CategoryModal';
+import { RegionSelector } from '@/components/RegionSelector';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion';
+import { cn } from '@/lib/utils';
 
-type CategoryType = 'electronics' | 'furniture' | 'jobs' | 'services' | 'realEstate';
-
-const categoryIcons: Record<string, string> = {
-  electronics: '📱',
-  furniture: '🛋️',
-  jobs: '💼',
-  services: '🔧',
-  realEstate: '🏠',
-};
+const categories: Category[] = [
+  'transport',
+  'realEstate',
+  'jobs',
+  'services',
+  'personalItems',
+  'homeAndGarden',
+  'autoParts',
+  'electronics',
+  'hobbies',
+  'animals',
+  'business',
+];
 
 const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
   const { t } = useLanguage();
@@ -34,9 +47,14 @@ const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-5xl bg-secondary/50">
-              {categoryIcons[listing.category]}
-            </div>
+            (() => {
+              const Icon = categoryIcons[listing.category as Category] || categoryIcons[''];
+              return (
+                <div className="w-full h-full flex items-center justify-center bg-secondary/50">
+                  <Icon className="w-12 h-12 text-emerald-600" />
+                </div>
+              );
+            })()
           )}
           <span className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium bg-card/90 backdrop-blur-sm text-foreground">
             {t(listing.category as TranslationKey)}
@@ -72,26 +90,37 @@ const ListingCardSkeleton = () => (
 
 const SearchPage = () => {
   const { t } = useLanguage();
+  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [showFilters, setShowFilters] = useState(false);
+  const [showFilters, setShowFilters] = useState(true); // Default open
 
   const query = searchParams.get('q') || '';
-  const categoryParam = searchParams.get('category') as CategoryType | null;
+  const categoryParam = searchParams.get('category') as Category | null;
   const subcategoryParam = searchParams.get('subcategory') || '';
+  const countryParam = searchParams.get('country') || '';
+  const cityParam = searchParams.get('city') || '';
   
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
-  const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(categoryParam);
+  const [selectedCategory, setSelectedCategory] = useState<Category | ''>(categoryParam || '');
   const [selectedSubcategory, setSelectedSubcategory] = useState(subcategoryParam);
   const [searchQuery, setSearchQuery] = useState(query);
+  const [selectedRegion, setSelectedRegion] = useState<{ country?: string; city?: string }>({
+    country: countryParam || undefined,
+    city: cityParam || undefined,
+  });
 
   // Update local state when URL params change
   useEffect(() => {
     setSearchQuery(query);
-    setSelectedCategory(categoryParam);
+    setSelectedCategory(categoryParam || '');
     setSelectedSubcategory(subcategoryParam);
     setMinPrice(searchParams.get('minPrice') || '');
     setMaxPrice(searchParams.get('maxPrice') || '');
+    setSelectedRegion({
+      country: searchParams.get('country') || undefined,
+      city: searchParams.get('city') || undefined,
+    });
   }, [query, categoryParam, subcategoryParam, searchParams]);
 
   const { data: listings, isLoading } = useListings({
@@ -102,15 +131,45 @@ const SearchPage = () => {
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
   });
 
-  const handleSearch = (newQuery: string) => {
-    setSearchParams(prev => {
-      if (newQuery) {
-        prev.set('q', newQuery);
-      } else {
-        prev.delete('q');
-      }
-      return prev;
-    });
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const params = new URLSearchParams();
+    if (searchQuery) params.set('q', searchQuery);
+    if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedSubcategory) params.set('subcategory', selectedSubcategory);
+    if (selectedRegion.country) params.set('country', selectedRegion.country);
+    if (selectedRegion.city) params.set('city', selectedRegion.city);
+    if (minPrice) params.set('minPrice', minPrice);
+    if (maxPrice) params.set('maxPrice', maxPrice);
+    navigate(`/search?${params.toString()}`);
+  };
+
+  const handleCategoryChange = (cat: Category | '', subcategory?: string) => {
+    setSelectedCategory(cat);
+    setSelectedSubcategory(subcategory || '');
+    
+    // If subcategory is selected, redirect immediately
+    if (subcategory) {
+      const params = new URLSearchParams();
+      if (searchQuery) params.set('q', searchQuery);
+      if (cat) params.set('category', cat);
+      params.set('subcategory', subcategory);
+      if (selectedRegion.country) params.set('country', selectedRegion.country);
+      if (selectedRegion.city) params.set('city', selectedRegion.city);
+      if (minPrice) params.set('minPrice', minPrice);
+      if (maxPrice) params.set('maxPrice', maxPrice);
+      navigate(`/search?${params.toString()}`);
+    }
+  };
+
+  const handleCategoryFilterSelect = (category: Category | '') => {
+    setSelectedCategory(category);
+    setSelectedSubcategory('');
+  };
+
+  const handleSubcategoryFilterSelect = (category: Category, subcategoryId: string) => {
+    setSelectedCategory(category);
+    setSelectedSubcategory(subcategoryId);
   };
 
   const handleApplyFilters = () => {
@@ -119,6 +178,11 @@ const SearchPage = () => {
         prev.set('category', selectedCategory);
       } else {
         prev.delete('category');
+      }
+      if (selectedSubcategory) {
+        prev.set('subcategory', selectedSubcategory);
+      } else {
+        prev.delete('subcategory');
       }
       if (minPrice) {
         prev.set('minPrice', minPrice);
@@ -132,38 +196,75 @@ const SearchPage = () => {
       }
       return prev;
     });
-    setShowFilters(false);
   };
 
   const handleResetFilters = () => {
-    setSelectedCategory(null);
+    setSelectedCategory('');
+    setSelectedSubcategory('');
     setMinPrice('');
     setMaxPrice('');
     setSearchParams(prev => {
       prev.delete('category');
+      prev.delete('subcategory');
       prev.delete('minPrice');
       prev.delete('maxPrice');
       return prev;
     });
   };
 
+  // Find current category for accordion default value
+  const defaultAccordionValue = selectedCategory || undefined;
+
   return (
     <Layout>
       <div className="container py-6 md:py-8">
-        {/* Search Header */}
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-          <div className="flex-1">
-            <SearchBar initialValue={searchQuery} onSearch={handleSearch} />
+        {/* Search Header - Same as Index page */}
+        <form onSubmit={handleSearch}>
+          <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full mb-8">
+            {/* Filter Button - Left of search */}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => setShowFilters(!showFilters)}
+              className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary"
+            >
+              <SlidersHorizontal className="w-5 h-5" />
+              {t('filters')}
+            </Button>
+
+            {/* Category Modal */}
+            <CategoryModal 
+              value={selectedCategory} 
+              onChange={handleCategoryChange} 
+            />
+            
+            {/* Search Input with Button inside - Same as Index */}
+            <div className="flex-1 relative flex">
+              <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
+                <Search className="w-5 h-5" />
+              </div>
+              <Input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={t('searchPlaceholder')}
+                className="h-12 pl-12 pr-4 text-base rounded-xl rounded-r-none border-2 border-r-0 border-border bg-card flex-1"
+              />
+              <Button
+                type="submit"
+                className="h-12 px-6 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity rounded-xl rounded-l-none"
+              >
+                {t('search')}
+              </Button>
+            </div>
+            
+            {/* Region Selector */}
+            <RegionSelector 
+              value={selectedRegion}
+              onChange={setSelectedRegion}
+            />
           </div>
-          <Button
-            variant="outline"
-            onClick={() => setShowFilters(!showFilters)}
-            className="gap-2"
-          >
-            <SlidersHorizontal className="w-4 h-4" />
-            {t('filters')}
-          </Button>
-        </div>
+        </form>
 
         <div className="flex gap-8">
           {/* Filters Sidebar */}
@@ -180,32 +281,81 @@ const SearchPage = () => {
                   </button>
                 </div>
 
-                {/* Category Filter */}
+                {/* Category Filter with Accordion */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-foreground mb-3">
                     {t('category')}
                   </label>
-                  <div className="space-y-2">
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                        !selectedCategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
-                      }`}
-                    >
-                      {t('all')}
-                    </button>
-                    {categories.map(cat => (
-                      <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategory(cat.id as CategoryType)}
-                        className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-colors ${
-                          selectedCategory === cat.id ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
-                        }`}
-                      >
-                        {cat.icon} {t(cat.id as TranslationKey)}
-                      </button>
-                    ))}
-                  </div>
+                  
+                  {/* All categories option */}
+                  <button
+                    onClick={() => handleCategoryFilterSelect('')}
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
+                      !selectedCategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                    )}
+                  >
+                    {(() => {
+                      const AllIcon = categoryIcons[''];
+                      return <AllIcon className="w-4 h-4" />;
+                    })()}
+                    {t('all')}
+                  </button>
+
+                  <Accordion 
+                    type="single" 
+                    collapsible 
+                    defaultValue={defaultAccordionValue}
+                    className="space-y-1"
+                  >
+                    {categories.map(category => {
+                      const Icon = categoryIcons[category];
+                      const subcategories = subcategoriesData[category];
+                      const isActive = selectedCategory === category;
+                      
+                      return (
+                        <AccordionItem 
+                          key={category} 
+                          value={category}
+                          className="border-none"
+                        >
+                          <AccordionTrigger 
+                            className={cn(
+                              "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
+                              isActive && !selectedSubcategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                            )}
+                            onClick={(e) => {
+                              // If clicking on the main category (not chevron), select it
+                              if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
+                                handleCategoryFilterSelect(category);
+                              }
+                            }}
+                          >
+                            <Icon className="w-4 h-4" />
+                            <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
+                          </AccordionTrigger>
+                          <AccordionContent className="pb-0 pt-1">
+                            <div className="pl-6 space-y-1">
+                              {subcategories.map(subcategory => (
+                                <button
+                                  key={subcategory.id}
+                                  onClick={() => handleSubcategoryFilterSelect(category, subcategory.id)}
+                                  className={cn(
+                                    "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                    selectedCategory === category && selectedSubcategory === subcategory.id
+                                      ? 'bg-primary/20 text-primary font-medium'
+                                      : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
+                                  )}
+                                >
+                                  {t(subcategory.id as TranslationKey)}
+                                </button>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
                 </div>
 
                 {/* Price Filter */}
@@ -258,32 +408,80 @@ const SearchPage = () => {
                   </button>
                 </div>
 
-                {/* Category Filter */}
+                {/* Category Filter with Accordion */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-foreground mb-3">
                     {t('category')}
                   </label>
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => setSelectedCategory(null)}
-                      className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                        !selectedCategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
-                      }`}
-                    >
-                      {t('all')}
-                    </button>
-                    {categories.map(cat => (
-                      <button
-                        key={cat.id}
-                        onClick={() => setSelectedCategory(cat.id as CategoryType)}
-                        className={`px-3 py-2 rounded-lg text-sm transition-colors ${
-                          selectedCategory === cat.id ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
-                        }`}
-                      >
-                        {cat.icon} {t(cat.id as TranslationKey)}
-                      </button>
-                    ))}
-                  </div>
+                  
+                  {/* All categories option */}
+                  <button
+                    onClick={() => handleCategoryFilterSelect('')}
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
+                      !selectedCategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
+                    )}
+                  >
+                    {(() => {
+                      const AllIcon = categoryIcons[''];
+                      return <AllIcon className="w-4 h-4" />;
+                    })()}
+                    {t('all')}
+                  </button>
+
+                  <Accordion 
+                    type="single" 
+                    collapsible 
+                    defaultValue={defaultAccordionValue}
+                    className="space-y-1"
+                  >
+                    {categories.map(category => {
+                      const Icon = categoryIcons[category];
+                      const subcategories = subcategoriesData[category];
+                      const isActive = selectedCategory === category;
+                      
+                      return (
+                        <AccordionItem 
+                          key={category} 
+                          value={category}
+                          className="border-none"
+                        >
+                          <AccordionTrigger 
+                            className={cn(
+                              "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
+                              isActive && !selectedSubcategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
+                            )}
+                            onClick={(e) => {
+                              if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
+                                handleCategoryFilterSelect(category);
+                              }
+                            }}
+                          >
+                            <Icon className="w-4 h-4" />
+                            <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
+                          </AccordionTrigger>
+                          <AccordionContent className="pb-0 pt-1">
+                            <div className="pl-6 space-y-1">
+                              {subcategories.map(subcategory => (
+                                <button
+                                  key={subcategory.id}
+                                  onClick={() => handleSubcategoryFilterSelect(category, subcategory.id)}
+                                  className={cn(
+                                    "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                    selectedCategory === category && selectedSubcategory === subcategory.id
+                                      ? 'bg-primary/20 text-primary font-medium'
+                                      : 'text-muted-foreground hover:text-foreground'
+                                  )}
+                                >
+                                  {t(subcategory.id as TranslationKey)}
+                                </button>
+                              ))}
+                            </div>
+                          </AccordionContent>
+                        </AccordionItem>
+                      );
+                    })}
+                  </Accordion>
                 </div>
 
                 {/* Price Filter */}
