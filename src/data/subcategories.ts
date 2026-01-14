@@ -1,7 +1,7 @@
 import { Category } from '@/types/listing';
 import {
   CarFront,
-  Home,
+  House,
   Briefcase,
   Wrench,
   Shirt,
@@ -143,7 +143,7 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
 export const categoryIcons: Record<Category | '', LucideIcon> = {
   '': Search,
   transport: CarFront,
-  realEstate: Home,
+  realEstate: House,
   jobs: Briefcase,
   services: Wrench,
   personalItems: Shirt,

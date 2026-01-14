@@ -11,7 +11,7 @@ import { Category } from '@/types/listing';
 import { subcategoriesData } from '@/data/subcategories';
 import { 
   Search as SearchIcon, 
-  Home, 
+  House, 
   Briefcase, 
   Wrench, 
   Shirt, 
@@ -48,11 +48,11 @@ const categories: Category[] = [
   'business',
 ];
 
-// Local category icons with correct car orientation
+// Local category icons with correct orientation
 const categoryIcons: Record<Category | '', LucideIcon> = {
   '': SearchIcon,
   transport: CarFront,
-  realEstate: Home,
+  realEstate: House,
   jobs: Briefcase,
   services: Wrench,
   personalItems: Shirt,
