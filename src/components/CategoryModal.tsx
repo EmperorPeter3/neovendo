@@ -61,6 +61,7 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
   return (
     <>
       <Button
+        type="button"
         variant="outline"
         onClick={() => setIsOpen(true)}
         className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[160px]"
