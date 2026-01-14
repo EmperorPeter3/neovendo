@@ -11,368 +11,117 @@ export interface SubcategoryGroup {
   items: Subcategory[];
 }
 
-export const subcategoriesData: Record<Category, SubcategoryGroup[]> = {
+export const subcategoriesData: Record<Category, Subcategory[]> = {
   transport: [
-    {
-      id: 'cars',
-      translationKey: 'subcategory_cars',
-      items: [
-        { id: 'sedan', translationKey: 'subcategory_sedan' },
-        { id: 'suv', translationKey: 'subcategory_suv' },
-        { id: 'hatchback', translationKey: 'subcategory_hatchback' },
-        { id: 'coupe', translationKey: 'subcategory_coupe' },
-        { id: 'minivan', translationKey: 'subcategory_minivan' },
-      ],
-    },
-    {
-      id: 'motorcycles',
-      translationKey: 'subcategory_motorcycles',
-      items: [
-        { id: 'sport', translationKey: 'subcategory_sport' },
-        { id: 'cruiser', translationKey: 'subcategory_cruiser' },
-        { id: 'scooter', translationKey: 'subcategory_scooter' },
-        { id: 'atv', translationKey: 'subcategory_atv' },
-      ],
-    },
-    {
-      id: 'trucks',
-      translationKey: 'subcategory_trucks',
-      items: [
-        { id: 'pickup', translationKey: 'subcategory_pickup' },
-        { id: 'cargo', translationKey: 'subcategory_cargo' },
-        { id: 'trailer', translationKey: 'subcategory_trailer' },
-      ],
-    },
-    {
-      id: 'watercraft',
-      translationKey: 'subcategory_watercraft',
-      items: [
-        { id: 'boats', translationKey: 'subcategory_boats' },
-        { id: 'jetski', translationKey: 'subcategory_jetski' },
-        { id: 'yachts', translationKey: 'subcategory_yachts' },
-      ],
-    },
+    { id: 'cars', translationKey: 'Автомобили' },
+    { id: 'motorcycles', translationKey: 'Мотоциклы и мототехника' },
+    { id: 'trucks', translationKey: 'Грузовики и спецтехника' },
+    { id: 'watercraft', translationKey: 'Водный транспорт' },
   ],
   realEstate: [
-    {
-      id: 'apartments',
-      translationKey: 'subcategory_apartments',
-      items: [
-        { id: 'studio', translationKey: 'subcategory_studio' },
-        { id: '1bedroom', translationKey: 'subcategory_1bedroom' },
-        { id: '2bedroom', translationKey: 'subcategory_2bedroom' },
-        { id: '3bedroom', translationKey: 'subcategory_3bedroom' },
-      ],
-    },
-    {
-      id: 'houses',
-      translationKey: 'subcategory_houses',
-      items: [
-        { id: 'cottage', translationKey: 'subcategory_cottage' },
-        { id: 'villa', translationKey: 'subcategory_villa' },
-        { id: 'townhouse', translationKey: 'subcategory_townhouse' },
-      ],
-    },
-    {
-      id: 'commercial',
-      translationKey: 'subcategory_commercial',
-      items: [
-        { id: 'office', translationKey: 'subcategory_office' },
-        { id: 'retail', translationKey: 'subcategory_retail' },
-        { id: 'warehouse', translationKey: 'subcategory_warehouse' },
-      ],
-    },
-    {
-      id: 'land',
-      translationKey: 'subcategory_land',
-      items: [
-        { id: 'residential_land', translationKey: 'subcategory_residential_land' },
-        { id: 'agricultural', translationKey: 'subcategory_agricultural' },
-      ],
-    },
+    { id: 'buy', translationKey: 'Купить жильё' },
+    { id: 'rent_daily', translationKey: 'Арендовать посуточно' },
+    { id: 'rent_long', translationKey: 'Арендовать долгосрочно' },
+    { id: 'commercial', translationKey: 'Коммерческая недвижимость' },
+    { id: 'land', translationKey: 'Земельные участки' },
   ],
   jobs: [
-    {
-      id: 'fulltime',
-      translationKey: 'subcategory_fulltime',
-      items: [
-        { id: 'it', translationKey: 'subcategory_it' },
-        { id: 'sales', translationKey: 'subcategory_sales' },
-        { id: 'marketing', translationKey: 'subcategory_marketing' },
-        { id: 'finance', translationKey: 'subcategory_finance' },
-      ],
-    },
-    {
-      id: 'parttime',
-      translationKey: 'subcategory_parttime',
-      items: [
-        { id: 'retail_job', translationKey: 'subcategory_retail_job' },
-        { id: 'hospitality', translationKey: 'subcategory_hospitality' },
-        { id: 'delivery', translationKey: 'subcategory_delivery' },
-      ],
-    },
-    {
-      id: 'freelance',
-      translationKey: 'subcategory_freelance',
-      items: [
-        { id: 'design', translationKey: 'subcategory_design' },
-        { id: 'writing', translationKey: 'subcategory_writing' },
-        { id: 'development', translationKey: 'subcategory_development' },
-      ],
-    },
+    { id: 'looking_job', translationKey: 'Ищу работу' },
+    { id: 'looking_employee', translationKey: 'Ищу сотрудника' },
   ],
   services: [
-    {
-      id: 'home_services',
-      translationKey: 'subcategory_home_services',
-      items: [
-        { id: 'cleaning', translationKey: 'subcategory_cleaning' },
-        { id: 'repair', translationKey: 'subcategory_repair' },
-        { id: 'plumbing', translationKey: 'subcategory_plumbing' },
-        { id: 'electrical', translationKey: 'subcategory_electrical' },
-      ],
-    },
-    {
-      id: 'beauty',
-      translationKey: 'subcategory_beauty',
-      items: [
-        { id: 'hairdressing', translationKey: 'subcategory_hairdressing' },
-        { id: 'makeup', translationKey: 'subcategory_makeup' },
-        { id: 'nails', translationKey: 'subcategory_nails' },
-      ],
-    },
-    {
-      id: 'education',
-      translationKey: 'subcategory_education',
-      items: [
-        { id: 'tutoring', translationKey: 'subcategory_tutoring' },
-        { id: 'languages', translationKey: 'subcategory_languages' },
-        { id: 'music_lessons', translationKey: 'subcategory_music_lessons' },
-      ],
-    },
+    { id: 'auto_service', translationKey: 'Автосервис, аренда' },
+    { id: 'transportation', translationKey: 'Перевозки и доставка' },
+    { id: 'movers', translationKey: 'Грузчики, складские услуги' },
+    { id: 'tow_truck', translationKey: 'Услуги эвакуатора' },
+    { id: 'repair_finishing', translationKey: 'Ремонт и отделка' },
+    { id: 'construction', translationKey: 'Строительство' },
+    { id: 'garden_landscaping', translationKey: 'Сад, благоустройство' },
+    { id: 'beauty', translationKey: 'Красота' },
+    { id: 'health', translationKey: 'Здоровье' },
+    { id: 'tech_repair', translationKey: 'Ремонт и обслуживание техники' },
+    { id: 'computer_help', translationKey: 'Компьютерная помощь' },
+    { id: 'installation', translationKey: 'Монтаж и установка техники' },
+    { id: 'equipment_production', translationKey: 'Оборудование, производство' },
+    { id: 'education_courses', translationKey: 'Обучение, курсы' },
+    { id: 'business_services', translationKey: 'Деловые услуги' },
+    { id: 'insurance', translationKey: 'Страхование' },
+    { id: 'intermediary', translationKey: 'Услуги посредников' },
+    { id: 'printing_advertising', translationKey: 'Полиграфия, наружная реклама' },
+    { id: 'waste_removal', translationKey: 'Вывоз мусора и вторсырья' },
+    { id: 'cleaning', translationKey: 'Уборка' },
+    { id: 'disinfection', translationKey: 'Дезинфекция, дезинсекция, спецуборка' },
+    { id: 'household', translationKey: 'Бытовые услуги' },
+    { id: 'events', translationKey: 'Праздники, мероприятия' },
+    { id: 'food_delivery', translationKey: 'Доставка продуктов, десертов, кейтеринг' },
+    { id: 'photo_video', translationKey: 'Фото- и видеосъёмка' },
+    { id: 'nannies_caregivers', translationKey: 'Няни, сиделки' },
+    { id: 'pet_care', translationKey: 'Уход за животными' },
+    { id: 'art', translationKey: 'Искусство' },
+    { id: 'security', translationKey: 'Охрана, безопасность' },
+    { id: 'other', translationKey: 'Другое' },
   ],
   personalItems: [
-    {
-      id: 'clothing',
-      translationKey: 'subcategory_clothing',
-      items: [
-        { id: 'mens', translationKey: 'subcategory_mens' },
-        { id: 'womens', translationKey: 'subcategory_womens' },
-        { id: 'kids', translationKey: 'subcategory_kids' },
-      ],
-    },
-    {
-      id: 'accessories',
-      translationKey: 'subcategory_accessories',
-      items: [
-        { id: 'watches', translationKey: 'subcategory_watches' },
-        { id: 'jewelry', translationKey: 'subcategory_jewelry' },
-        { id: 'bags', translationKey: 'subcategory_bags' },
-      ],
-    },
-    {
-      id: 'health',
-      translationKey: 'subcategory_health',
-      items: [
-        { id: 'cosmetics', translationKey: 'subcategory_cosmetics' },
-        { id: 'fitness', translationKey: 'subcategory_fitness' },
-      ],
-    },
+    { id: 'clothing', translationKey: 'Одежда, обувь, аксессуары' },
+    { id: 'kids_clothing', translationKey: 'Детская одежда и обувь' },
+    { id: 'kids_goods', translationKey: 'Товары для детей и игрушки' },
+    { id: 'beauty_health', translationKey: 'Красота и здоровье' },
+    { id: 'watches_jewelry', translationKey: 'Часы и украшения' },
   ],
   homeAndGarden: [
-    {
-      id: 'furniture',
-      translationKey: 'subcategory_furniture',
-      items: [
-        { id: 'living_room', translationKey: 'subcategory_living_room' },
-        { id: 'bedroom', translationKey: 'subcategory_bedroom' },
-        { id: 'kitchen_furniture', translationKey: 'subcategory_kitchen_furniture' },
-      ],
-    },
-    {
-      id: 'garden',
-      translationKey: 'subcategory_garden',
-      items: [
-        { id: 'plants', translationKey: 'subcategory_plants' },
-        { id: 'tools', translationKey: 'subcategory_tools' },
-        { id: 'outdoor_furniture', translationKey: 'subcategory_outdoor_furniture' },
-      ],
-    },
-    {
-      id: 'appliances',
-      translationKey: 'subcategory_appliances',
-      items: [
-        { id: 'kitchen_appliances', translationKey: 'subcategory_kitchen_appliances' },
-        { id: 'laundry', translationKey: 'subcategory_laundry' },
-      ],
-    },
+    { id: 'repair_construction', translationKey: 'Ремонт и строительство' },
+    { id: 'furniture_interior', translationKey: 'Мебель и интерьер' },
+    { id: 'appliances', translationKey: 'Бытовая техника' },
+    { id: 'food_products', translationKey: 'Продукты питания' },
+    { id: 'plants', translationKey: 'Растения' },
+    { id: 'kitchen_goods', translationKey: 'Посуда и товары для кухни' },
   ],
   autoParts: [
-    {
-      id: 'parts',
-      translationKey: 'subcategory_parts',
-      items: [
-        { id: 'engine', translationKey: 'subcategory_engine' },
-        { id: 'transmission', translationKey: 'subcategory_transmission' },
-        { id: 'brakes', translationKey: 'subcategory_brakes' },
-        { id: 'suspension', translationKey: 'subcategory_suspension' },
-      ],
-    },
-    {
-      id: 'tires_wheels',
-      translationKey: 'subcategory_tires_wheels',
-      items: [
-        { id: 'tires', translationKey: 'subcategory_tires' },
-        { id: 'rims', translationKey: 'subcategory_rims' },
-      ],
-    },
-    {
-      id: 'car_accessories',
-      translationKey: 'subcategory_car_accessories',
-      items: [
-        { id: 'audio', translationKey: 'subcategory_audio' },
-        { id: 'interior', translationKey: 'subcategory_interior' },
-        { id: 'exterior', translationKey: 'subcategory_exterior' },
-      ],
-    },
+    { id: 'parts', translationKey: 'Запчасти' },
+    { id: 'tires_wheels', translationKey: 'Шины, диски и колёса' },
+    { id: 'audio_video', translationKey: 'Аудио- и видеотехника' },
+    { id: 'accessories', translationKey: 'Аксессуары' },
+    { id: 'roof_racks', translationKey: 'Багажники и фаркопы' },
+    { id: 'tools', translationKey: 'Инструменты' },
+    { id: 'trailers', translationKey: 'Прицепы' },
+    { id: 'equipment', translationKey: 'Экипировка' },
+    { id: 'oils_chemicals', translationKey: 'Масла и автохимия' },
+    { id: 'anti_theft', translationKey: 'Противоугонные устройства' },
+    { id: 'gps', translationKey: 'GPS-навигаторы' },
   ],
   electronics: [
-    {
-      id: 'phones',
-      translationKey: 'subcategory_phones',
-      items: [
-        { id: 'smartphones', translationKey: 'subcategory_smartphones' },
-        { id: 'tablets', translationKey: 'subcategory_tablets' },
-        { id: 'phone_accessories', translationKey: 'subcategory_phone_accessories' },
-      ],
-    },
-    {
-      id: 'computers',
-      translationKey: 'subcategory_computers',
-      items: [
-        { id: 'laptops', translationKey: 'subcategory_laptops' },
-        { id: 'desktops', translationKey: 'subcategory_desktops' },
-        { id: 'components', translationKey: 'subcategory_components' },
-      ],
-    },
-    {
-      id: 'gaming',
-      translationKey: 'subcategory_gaming',
-      items: [
-        { id: 'consoles', translationKey: 'subcategory_consoles' },
-        { id: 'games', translationKey: 'subcategory_games' },
-        { id: 'gaming_accessories', translationKey: 'subcategory_gaming_accessories' },
-      ],
-    },
-    {
-      id: 'tv_audio',
-      translationKey: 'subcategory_tv_audio',
-      items: [
-        { id: 'tvs', translationKey: 'subcategory_tvs' },
-        { id: 'speakers', translationKey: 'subcategory_speakers' },
-        { id: 'headphones', translationKey: 'subcategory_headphones' },
-      ],
-    },
+    { id: 'phones', translationKey: 'Телефоны' },
+    { id: 'audio_video', translationKey: 'Аудио и видео' },
+    { id: 'computer_goods', translationKey: 'Товары для компьютера' },
+    { id: 'games_consoles', translationKey: 'Игры, приставки и программы' },
+    { id: 'laptops', translationKey: 'Ноутбуки' },
+    { id: 'desktops', translationKey: 'Настольные компьютеры' },
+    { id: 'photo_equipment', translationKey: 'Фототехника' },
+    { id: 'tablets_ebooks', translationKey: 'Планшеты и электронные книги' },
+    { id: 'office_equipment', translationKey: 'Оргтехника и расходники' },
   ],
   hobbies: [
-    {
-      id: 'sports',
-      translationKey: 'subcategory_sports',
-      items: [
-        { id: 'gym', translationKey: 'subcategory_gym' },
-        { id: 'cycling', translationKey: 'subcategory_cycling' },
-        { id: 'water_sports', translationKey: 'subcategory_water_sports' },
-      ],
-    },
-    {
-      id: 'music',
-      translationKey: 'subcategory_music',
-      items: [
-        { id: 'instruments', translationKey: 'subcategory_instruments' },
-        { id: 'dj_equipment', translationKey: 'subcategory_dj_equipment' },
-      ],
-    },
-    {
-      id: 'collectibles',
-      translationKey: 'subcategory_collectibles',
-      items: [
-        { id: 'coins', translationKey: 'subcategory_coins' },
-        { id: 'stamps', translationKey: 'subcategory_stamps' },
-        { id: 'antiques', translationKey: 'subcategory_antiques' },
-      ],
-    },
-    {
-      id: 'books',
-      translationKey: 'subcategory_books',
-      items: [
-        { id: 'fiction', translationKey: 'subcategory_fiction' },
-        { id: 'nonfiction', translationKey: 'subcategory_nonfiction' },
-        { id: 'textbooks', translationKey: 'subcategory_textbooks' },
-      ],
-    },
+    { id: 'tickets_travel', translationKey: 'Билеты и путешествия' },
+    { id: 'bicycles', translationKey: 'Велосипеды' },
+    { id: 'books_magazines', translationKey: 'Книги и журналы' },
+    { id: 'collecting', translationKey: 'Коллекционирование' },
+    { id: 'musical_instruments', translationKey: 'Музыкальные инструменты' },
+    { id: 'hunting_fishing', translationKey: 'Охота и рыбалка' },
+    { id: 'sports_leisure', translationKey: 'Спорт и отдых' },
   ],
   animals: [
-    {
-      id: 'dogs',
-      translationKey: 'subcategory_dogs',
-      items: [
-        { id: 'puppies', translationKey: 'subcategory_puppies' },
-        { id: 'adult_dogs', translationKey: 'subcategory_adult_dogs' },
-      ],
-    },
-    {
-      id: 'cats',
-      translationKey: 'subcategory_cats',
-      items: [
-        { id: 'kittens', translationKey: 'subcategory_kittens' },
-        { id: 'adult_cats', translationKey: 'subcategory_adult_cats' },
-      ],
-    },
-    {
-      id: 'other_pets',
-      translationKey: 'subcategory_other_pets',
-      items: [
-        { id: 'birds', translationKey: 'subcategory_birds' },
-        { id: 'fish', translationKey: 'subcategory_fish' },
-        { id: 'rodents', translationKey: 'subcategory_rodents' },
-      ],
-    },
-    {
-      id: 'pet_supplies',
-      translationKey: 'subcategory_pet_supplies',
-      items: [
-        { id: 'food', translationKey: 'subcategory_food' },
-        { id: 'toys', translationKey: 'subcategory_toys' },
-        { id: 'cages', translationKey: 'subcategory_cages' },
-      ],
-    },
+    { id: 'dogs', translationKey: 'Собаки' },
+    { id: 'cats', translationKey: 'Кошки' },
+    { id: 'birds', translationKey: 'Птицы' },
+    { id: 'aquarium', translationKey: 'Аквариум' },
+    { id: 'other_animals', translationKey: 'Другие животные' },
+    { id: 'pet_supplies', translationKey: 'Товары для животных' },
   ],
   business: [
-    {
-      id: 'office_equipment',
-      translationKey: 'subcategory_office_equipment',
-      items: [
-        { id: 'printers', translationKey: 'subcategory_printers' },
-        { id: 'office_furniture', translationKey: 'subcategory_office_furniture' },
-        { id: 'pos_systems', translationKey: 'subcategory_pos_systems' },
-      ],
-    },
-    {
-      id: 'industrial',
-      translationKey: 'subcategory_industrial',
-      items: [
-        { id: 'machinery', translationKey: 'subcategory_machinery' },
-        { id: 'tools_industrial', translationKey: 'subcategory_tools_industrial' },
-      ],
-    },
-    {
-      id: 'business_sale',
-      translationKey: 'subcategory_business_sale',
-      items: [
-        { id: 'ready_business', translationKey: 'subcategory_ready_business' },
-        { id: 'franchise', translationKey: 'subcategory_franchise' },
-      ],
-    },
+    { id: 'business_equipment', translationKey: 'Оборудование для бизнеса' },
+    { id: 'franchise', translationKey: 'Франшизы' },
+    { id: 'ready_business', translationKey: 'Готовый бизнес' },
+    { id: 'business_software', translationKey: 'ПО для бизнеса' },
   ],
 };
 
