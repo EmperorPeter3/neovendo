@@ -48,18 +48,18 @@ export const Footer = () => {
             <h4 className="font-display font-semibold text-foreground mb-4">{t('categories')}</h4>
             <ul className="space-y-2">
               <li>
+                <Link to="/search?category=transport" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  {t('transport')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/search?category=realEstate" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  {t('realEstate')}
+                </Link>
+              </li>
+              <li>
                 <Link to="/search?category=electronics" className="text-sm text-muted-foreground hover:text-primary transition-colors">
                   {t('electronics')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/search?category=furniture" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('furniture')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/search?category=jobs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('jobs')}
                 </Link>
               </li>
               <li>
@@ -68,8 +68,8 @@ export const Footer = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/search?category=realEstate" className="text-sm text-muted-foreground hover:text-primary transition-colors">
-                  {t('realEstate')}
+                <Link to="/search?category=jobs" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                  {t('jobs')}
                 </Link>
               </li>
             </ul>
