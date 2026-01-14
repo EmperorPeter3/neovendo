@@ -33,6 +33,8 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
+import { CarsFilters, CarsFiltersState, defaultCarsFilters } from '@/components/filters/CarsFilters';
+import { Separator } from '@/components/ui/separator';
 
 const categories: Category[] = [
   'transport',
@@ -140,6 +142,7 @@ const SearchPage = () => {
     country: countryParam || undefined,
     city: cityParam || undefined,
   });
+  const [carsFilters, setCarsFilters] = useState<CarsFiltersState>(defaultCarsFilters);
 
   // Update local state when URL params change
   useEffect(() => {
@@ -430,6 +433,14 @@ const SearchPage = () => {
                   </div>
                 </div>
 
+                {/* Subcategory-specific filters */}
+                {selectedSubcategory === 'cars' && (
+                  <>
+                    <Separator className="my-4" />
+                    <CarsFilters filters={carsFilters} onChange={setCarsFilters} />
+                  </>
+                )}
+
               </div>
             </div>
           )}
@@ -546,6 +557,14 @@ const SearchPage = () => {
                     />
                   </div>
                 </div>
+
+                {/* Subcategory-specific filters */}
+                {selectedSubcategory === 'cars' && (
+                  <>
+                    <Separator className="my-4" />
+                    <CarsFilters filters={carsFilters} onChange={setCarsFilters} />
+                  </>
+                )}
 
               </div>
             </div>
