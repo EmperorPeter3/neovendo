@@ -8,8 +8,23 @@ import { useListings, ListingWithOwner } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
-import { categoryIcons, subcategoriesData } from '@/data/subcategories';
-import { CategoryModal } from '@/components/CategoryModal';
+import { subcategoriesData } from '@/data/subcategories';
+import { 
+  Search as SearchIcon, 
+  Home, 
+  Briefcase, 
+  Wrench, 
+  Shirt, 
+  Sofa, 
+  Cog, 
+  Smartphone, 
+  Palette, 
+  PawPrint, 
+  Building2,
+  LucideIcon,
+  CarFront,
+} from 'lucide-react';
+
 import { RegionSelector } from '@/components/RegionSelector';
 import {
   Accordion,
@@ -32,6 +47,22 @@ const categories: Category[] = [
   'animals',
   'business',
 ];
+
+// Local category icons with correct car orientation
+const categoryIcons: Record<Category | '', LucideIcon> = {
+  '': SearchIcon,
+  transport: CarFront,
+  realEstate: Home,
+  jobs: Briefcase,
+  services: Wrench,
+  personalItems: Shirt,
+  homeAndGarden: Sofa,
+  autoParts: Cog,
+  electronics: Smartphone,
+  hobbies: Palette,
+  animals: PawPrint,
+  business: Building2,
+};
 
 const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
   const { t } = useLanguage();
@@ -232,12 +263,6 @@ const SearchPage = () => {
               {t('filters')}
             </Button>
 
-            {/* Category Modal */}
-            <CategoryModal 
-              value={selectedCategory} 
-              onChange={handleCategoryChange} 
-            />
-            
             {/* Search Input with Button inside - Same as Index */}
             <div className="flex-1 relative flex">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
