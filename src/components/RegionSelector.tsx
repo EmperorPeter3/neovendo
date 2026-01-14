@@ -54,9 +54,10 @@ const regions: Region[] = [
 interface RegionSelectorProps {
   value?: { country?: string; city?: string };
   onChange?: (value: { country?: string; city?: string }) => void;
+  className?: string;
 }
 
-export const RegionSelector = ({ value, onChange }: RegionSelectorProps) => {
+export const RegionSelector = ({ value, onChange, className }: RegionSelectorProps) => {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const [selectedCountry, setSelectedCountry] = useState<string | null>(null);
@@ -104,7 +105,7 @@ export const RegionSelector = ({ value, onChange }: RegionSelectorProps) => {
       <DialogTrigger asChild>
         <Button
           variant="outline"
-          className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[140px]"
+          className={`h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[140px] ${className || ''}`}
         >
           <MapPin className="w-4 h-4 text-muted-foreground flex-shrink-0" />
           <span className="truncate max-w-[120px]">{displayValue}</span>
