@@ -90,6 +90,7 @@ export type Database = {
           owner_id: string
           price: number
           status: Database["public"]["Enums"]["listing_status"]
+          subcategory: string | null
           title: string
           updated_at: string
         }
@@ -104,6 +105,7 @@ export type Database = {
           owner_id: string
           price: number
           status?: Database["public"]["Enums"]["listing_status"]
+          subcategory?: string | null
           title: string
           updated_at?: string
         }
@@ -118,6 +120,7 @@ export type Database = {
           owner_id?: string
           price?: number
           status?: Database["public"]["Enums"]["listing_status"]
+          subcategory?: string | null
           title?: string
           updated_at?: string
         }
