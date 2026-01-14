@@ -74,6 +74,7 @@ const Index = () => {
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
+  const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>();
   const [selectedRegion, setSelectedRegion] = useState<{ country?: string; city?: string }>({});
 
   const handleSearch = (e: React.FormEvent) => {
@@ -81,9 +82,25 @@ const Index = () => {
     const params = new URLSearchParams();
     if (searchQuery) params.set('q', searchQuery);
     if (selectedCategory) params.set('category', selectedCategory);
+    if (selectedSubcategory) params.set('subcategory', selectedSubcategory);
     if (selectedRegion.country) params.set('country', selectedRegion.country);
     if (selectedRegion.city) params.set('city', selectedRegion.city);
     navigate(`/search?${params.toString()}`);
+  };
+
+  const handleCategoryChange = (cat: Category | '', subcategory?: string) => {
+    setSelectedCategory(cat);
+    setSelectedSubcategory(subcategory);
+    
+    // If subcategory is selected, redirect to search immediately
+    if (subcategory) {
+      const params = new URLSearchParams();
+      if (cat) params.set('category', cat);
+      params.set('subcategory', subcategory);
+      if (selectedRegion.country) params.set('country', selectedRegion.country);
+      if (selectedRegion.city) params.set('city', selectedRegion.city);
+      navigate(`/search?${params.toString()}`);
+    }
   };
 
   return (
@@ -96,7 +113,7 @@ const Index = () => {
               {/* Category Modal */}
               <CategoryModal 
                 value={selectedCategory} 
-                onChange={(cat) => setSelectedCategory(cat)} 
+                onChange={handleCategoryChange} 
               />
               
               {/* Search Input with Button inside */}

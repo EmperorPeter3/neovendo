@@ -77,23 +77,27 @@ const SearchPage = () => {
 
   const query = searchParams.get('q') || '';
   const categoryParam = searchParams.get('category') as CategoryType | null;
+  const subcategoryParam = searchParams.get('subcategory') || '';
   
   const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
   const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
   const [selectedCategory, setSelectedCategory] = useState<CategoryType | null>(categoryParam);
+  const [selectedSubcategory, setSelectedSubcategory] = useState(subcategoryParam);
   const [searchQuery, setSearchQuery] = useState(query);
 
   // Update local state when URL params change
   useEffect(() => {
     setSearchQuery(query);
     setSelectedCategory(categoryParam);
+    setSelectedSubcategory(subcategoryParam);
     setMinPrice(searchParams.get('minPrice') || '');
     setMaxPrice(searchParams.get('maxPrice') || '');
-  }, [query, categoryParam, searchParams]);
+  }, [query, categoryParam, subcategoryParam, searchParams]);
 
   const { data: listings, isLoading } = useListings({
     search: query || undefined,
     category: selectedCategory || undefined,
+    subcategory: selectedSubcategory || undefined,
     minPrice: minPrice ? Number(minPrice) : undefined,
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
   });
