@@ -1,5 +1,5 @@
 import { Layout } from '@/components/Layout';
-import { CategoryDropdown } from '@/components/CategoryDropdown';
+import { CategoryModal } from '@/components/CategoryModal';
 import { RegionSelector } from '@/components/RegionSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
@@ -95,10 +95,10 @@ const Index = () => {
         <div className="container">
           <form onSubmit={handleSearch}>
             <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full">
-              {/* Category Dropdown */}
-              <CategoryDropdown 
+              {/* Category Modal */}
+              <CategoryModal 
                 value={selectedCategory} 
-                onChange={setSelectedCategory} 
+                onChange={(cat) => setSelectedCategory(cat)} 
               />
               
               {/* Search Input with Button inside */}
