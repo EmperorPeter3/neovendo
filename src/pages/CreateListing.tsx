@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { categories } from '@/data/mockListings';
+import { subcategoriesData, categoryIcons } from '@/data/subcategories';
 import { ImagePlus, X, ArrowLeft, Loader2 } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
@@ -25,12 +26,15 @@ const CreateListing = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState<Category | ''>('');
+  const [subcategory, setSubcategory] = useState('');
   const [price, setPrice] = useState('');
   const [city, setCity] = useState('');
   const [country, setCountry] = useState('');
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const subcategories = category ? subcategoriesData[category] : [];
 
   // Redirect to login if not authenticated
   if (!authLoading && !user) {
@@ -193,23 +197,54 @@ const CreateListing = () => {
                 {t('category')} *
               </label>
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                {categories.map(cat => (
-                  <button
-                    key={cat.id}
-                    type="button"
-                    onClick={() => setCategory(cat.id)}
-                    className={`p-3 rounded-xl border-2 text-sm font-medium transition-all ${
-                      category === cat.id
-                        ? 'border-primary bg-primary/5 text-primary'
-                        : 'border-border hover:border-primary/50'
-                    }`}
-                  >
-                    <span className="mr-2">{cat.icon}</span>
-                    {t(cat.id as TranslationKey)}
-                  </button>
-                ))}
+                {categories.map(cat => {
+                  const Icon = categoryIcons[cat.id];
+                  return (
+                    <button
+                      key={cat.id}
+                      type="button"
+                      onClick={() => {
+                        setCategory(cat.id);
+                        setSubcategory(''); // Reset subcategory when category changes
+                      }}
+                      className={`p-3 rounded-xl border-2 text-sm font-medium transition-all flex items-center gap-2 ${
+                        category === cat.id
+                          ? 'border-primary bg-primary/5 text-primary'
+                          : 'border-border hover:border-primary/50'
+                      }`}
+                    >
+                      <Icon className="w-5 h-5 text-emerald-600" />
+                      {t(cat.id as TranslationKey)}
+                    </button>
+                  );
+                })}
               </div>
             </div>
+
+            {/* Subcategory */}
+            {category && subcategories.length > 0 && (
+              <div>
+                <label className="block text-sm font-medium text-foreground mb-2">
+                  {t('subcategory')} *
+                </label>
+                <div className={`grid gap-2 ${subcategories.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
+                  {subcategories.map(sub => (
+                    <button
+                      key={sub.id}
+                      type="button"
+                      onClick={() => setSubcategory(sub.id)}
+                      className={`p-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
+                        subcategory === sub.id
+                          ? 'border-primary bg-primary/5 text-primary'
+                          : 'border-border hover:border-primary/50'
+                      }`}
+                    >
+                      {t(sub.id as TranslationKey)}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Price */}
             <div>
