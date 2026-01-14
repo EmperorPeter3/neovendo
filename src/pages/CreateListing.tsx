@@ -128,7 +128,7 @@ const CreateListing = () => {
 
   return (
     <Layout>
-      <div className="container py-6 md:py-8 max-w-2xl">
+      <div className="container py-6 md:py-8">
         {/* Back Button */}
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" />
@@ -196,7 +196,7 @@ const CreateListing = () => {
               <label className="block text-sm font-medium text-foreground mb-2">
                 {t('category')} *
               </label>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3">
                 {categories.map(cat => {
                   const Icon = categoryIcons[cat.id];
                   return (
@@ -207,14 +207,14 @@ const CreateListing = () => {
                         setCategory(cat.id);
                         setSubcategory(''); // Reset subcategory when category changes
                       }}
-                      className={`p-3 rounded-xl border-2 text-sm font-medium transition-all flex items-center gap-2 ${
+                      className={`aspect-square rounded-xl border-2 text-sm font-medium transition-all flex flex-col items-center justify-center gap-2 p-3 ${
                         category === cat.id
                           ? 'border-primary bg-primary/5 text-primary'
                           : 'border-border hover:border-primary/50'
                       }`}
                     >
-                      <Icon className="w-5 h-5 text-emerald-600" />
-                      {t(cat.id as TranslationKey)}
+                      <Icon className="w-6 h-6 text-emerald-600" />
+                      <span className="text-center text-xs leading-tight">{t(cat.id as TranslationKey)}</span>
                     </button>
                   );
                 })}
