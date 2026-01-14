@@ -9,31 +9,32 @@ import {
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
+import { categoryIcons } from '@/data/subcategories';
 
 interface CategoryDropdownProps {
   value?: Category | '';
   onChange?: (value: Category | '') => void;
 }
 
-const categories: { id: Category | ''; icon: string }[] = [
-  { id: '', icon: '🔍' },
-  { id: 'transport', icon: '🚗' },
-  { id: 'realEstate', icon: '🏠' },
-  { id: 'jobs', icon: '💼' },
-  { id: 'services', icon: '🔧' },
-  { id: 'personalItems', icon: '👕' },
-  { id: 'homeAndGarden', icon: '🏡' },
-  { id: 'autoParts', icon: '🔩' },
-  { id: 'electronics', icon: '📱' },
-  { id: 'hobbies', icon: '🎨' },
-  { id: 'animals', icon: '🐕' },
-  { id: 'business', icon: '🏢' },
+const categories: (Category | '')[] = [
+  '',
+  'transport',
+  'realEstate',
+  'jobs',
+  'services',
+  'personalItems',
+  'homeAndGarden',
+  'autoParts',
+  'electronics',
+  'hobbies',
+  'animals',
+  'business',
 ];
 
 export const CategoryDropdown = ({ value = '', onChange }: CategoryDropdownProps) => {
   const { t } = useLanguage();
 
-  const selectedCategory = categories.find(c => c.id === value) || categories[0];
+  const SelectedIcon = categoryIcons[value] || categoryIcons[''];
   const displayLabel = value ? t(value as TranslationKey) : t('allCategories');
 
   return (
@@ -43,25 +44,28 @@ export const CategoryDropdown = ({ value = '', onChange }: CategoryDropdownProps
           variant="outline"
           className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[160px]"
         >
-          <span className="text-lg">{selectedCategory.icon}</span>
+          <SelectedIcon className="w-5 h-5 text-emerald-600" />
           <span className="truncate">{displayLabel}</span>
           <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="start" className="w-[200px] bg-card border-border max-h-[400px] overflow-y-auto">
-        {categories.map((category) => (
-          <DropdownMenuItem
-            key={category.id || 'all'}
-            onClick={() => onChange?.(category.id)}
-            className="cursor-pointer gap-2"
-          >
-            <span className="text-lg">{category.icon}</span>
-            <span>{category.id ? t(category.id as TranslationKey) : t('allCategories')}</span>
-            {value === category.id && (
-              <span className="ml-auto text-primary">✓</span>
-            )}
-          </DropdownMenuItem>
-        ))}
+        {categories.map((category) => {
+          const Icon = categoryIcons[category];
+          return (
+            <DropdownMenuItem
+              key={category || 'all'}
+              onClick={() => onChange?.(category)}
+              className="cursor-pointer gap-2"
+            >
+              <Icon className="w-5 h-5 text-emerald-600" />
+              <span>{category ? t(category as TranslationKey) : t('allCategories')}</span>
+              {value === category && (
+                <span className="ml-auto text-primary">✓</span>
+              )}
+            </DropdownMenuItem>
+          );
+        })}
       </DropdownMenuContent>
     </DropdownMenu>
   );

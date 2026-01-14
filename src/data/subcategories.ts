@@ -1,4 +1,19 @@
 import { Category } from '@/types/listing';
+import {
+  Car,
+  Home,
+  Briefcase,
+  Wrench,
+  Shirt,
+  Sofa,
+  Cog,
+  Smartphone,
+  Palette,
+  PawPrint,
+  Building2,
+  Search,
+  LucideIcon,
+} from 'lucide-react';
 
 export interface Subcategory {
   id: string;
@@ -125,17 +140,17 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
   ],
 };
 
-export const categoryIcons: Record<Category | '', string> = {
-  '': '🔍',
-  transport: '🚗',
-  realEstate: '🏠',
-  jobs: '💼',
-  services: '🔧',
-  personalItems: '👕',
-  homeAndGarden: '🏡',
-  autoParts: '🔩',
-  electronics: '📱',
-  hobbies: '🎨',
-  animals: '🐕',
-  business: '🏢',
+export const categoryIcons: Record<Category | '', LucideIcon> = {
+  '': Search,
+  transport: Car,
+  realEstate: Home,
+  jobs: Briefcase,
+  services: Wrench,
+  personalItems: Shirt,
+  homeAndGarden: Sofa,
+  autoParts: Cog,
+  electronics: Smartphone,
+  hobbies: Palette,
+  animals: PawPrint,
+  business: Building2,
 };

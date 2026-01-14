@@ -40,7 +40,7 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
   const { t } = useLanguage();
 
   const displayLabel = value ? t(value as TranslationKey) : t('allCategories');
-  const selectedIcon = categoryIcons[value] || categoryIcons[''];
+  const SelectedIcon = categoryIcons[value] || categoryIcons[''];
 
   const handleCategorySelect = (category: Category | '') => {
     if (category === '') {
@@ -66,7 +66,7 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
         onClick={() => setIsOpen(true)}
         className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[160px]"
       >
-        <span className="text-lg">{selectedIcon}</span>
+        <SelectedIcon className="w-5 h-5 text-emerald-600" />
         <span className="truncate">{displayLabel}</span>
         <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
       </Button>
@@ -88,24 +88,30 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
                   value === '' && "bg-secondary"
                 )}
               >
-                <span className="text-xl">{categoryIcons['']}</span>
+                {(() => {
+                  const AllIcon = categoryIcons[''];
+                  return <AllIcon className="w-5 h-5 text-emerald-600" />;
+                })()}
                 <span className="flex-1 font-medium">{t('allCategories')}</span>
               </button>
               
-              {categories.map((category) => (
-                <button
-                  key={category}
-                  onClick={() => handleCategorySelect(category)}
-                  className={cn(
-                    "w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary transition-colors text-left",
-                    selectedCategory === category && "bg-secondary"
-                  )}
-                >
-                  <span className="text-xl">{categoryIcons[category]}</span>
-                  <span className="flex-1 font-medium">{t(category as TranslationKey)}</span>
-                  <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                </button>
-              ))}
+              {categories.map((category) => {
+                const Icon = categoryIcons[category];
+                return (
+                  <button
+                    key={category}
+                    onClick={() => handleCategorySelect(category)}
+                    className={cn(
+                      "w-full flex items-center gap-3 px-4 py-3 hover:bg-secondary transition-colors text-left",
+                      selectedCategory === category && "bg-secondary"
+                    )}
+                  >
+                    <Icon className="w-5 h-5 text-emerald-600" />
+                    <span className="flex-1 font-medium">{t(category as TranslationKey)}</span>
+                    <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                  </button>
+                );
+              })}
             </div>
 
             {/* Right side - Subcategories */}

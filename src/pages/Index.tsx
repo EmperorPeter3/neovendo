@@ -10,14 +10,7 @@ import { Input } from '@/components/ui/input';
 import { TranslationKey } from '@/i18n/translations';
 import { useState } from 'react';
 import { Category } from '@/types/listing';
-
-const categoryIcons: Record<string, string> = {
-  electronics: '📱',
-  furniture: '🛋️',
-  jobs: '💼',
-  services: '🔧',
-  realEstate: '🏠',
-};
+import { categoryIcons } from '@/data/subcategories';
 
 const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
   const { t } = useLanguage();
@@ -33,9 +26,14 @@ const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-5xl bg-secondary/50">
-              {categoryIcons[listing.category]}
-            </div>
+            (() => {
+              const Icon = categoryIcons[listing.category as Category] || categoryIcons[''];
+              return (
+                <div className="w-full h-full flex items-center justify-center bg-secondary/50">
+                  <Icon className="w-12 h-12 text-emerald-600" />
+                </div>
+              );
+            })()
           )}
           <span className="absolute top-3 left-3 px-2 py-1 rounded-full text-xs font-medium bg-card/90 backdrop-blur-sm text-foreground">
             {t(listing.category as TranslationKey)}
