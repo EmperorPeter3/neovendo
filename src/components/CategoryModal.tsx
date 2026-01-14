@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, X } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -120,29 +120,15 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
                     <ChevronRight className="w-5 h-5" />
                   </button>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {subcategories.map((group) => (
-                      <div key={group.id}>
-                        <button
-                          onClick={() => handleSubcategorySelect(selectedCategory, group.id)}
-                          className="flex items-center gap-1 font-semibold mb-2 hover:text-primary transition-colors"
-                        >
-                          {group.translationKey.replace('subcategory_', '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                          <ChevronRight className="w-4 h-4" />
-                        </button>
-                        <ul className="space-y-1">
-                          {group.items.map((item) => (
-                            <li key={item.id}>
-                              <button
-                                onClick={() => handleSubcategorySelect(selectedCategory, item.id)}
-                                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-                              >
-                                {item.translationKey.replace('subcategory_', '').replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
-                              </button>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                    {subcategories.map((subcategory) => (
+                      <button
+                        key={subcategory.id}
+                        onClick={() => handleSubcategorySelect(selectedCategory, subcategory.id)}
+                        className="flex items-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors text-left py-1"
+                      >
+                        {subcategory.translationKey}
+                      </button>
                     ))}
                   </div>
                 </>
