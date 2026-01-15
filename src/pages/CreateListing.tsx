@@ -78,13 +78,79 @@ const CreateListing = () => {
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
+  // Validation helper for numeric fields
+  const validateNumericFields = (): { valid: boolean; error?: string } => {
+    const priceNum = parseFloat(price);
+    if (isNaN(priceNum) || priceNum < 0 || priceNum > 999999999) {
+      return { valid: false, error: t('validation.priceRange') };
+    }
+
+    if (isCarListing) {
+      if (carFields.year) {
+        const yearNum = parseInt(carFields.year);
+        if (isNaN(yearNum) || yearNum < 1900 || yearNum > new Date().getFullYear() + 1) {
+          return { valid: false, error: t('validation.invalidYear') };
+        }
+      }
+      if (carFields.mileage) {
+        const mileageNum = parseInt(carFields.mileage);
+        if (isNaN(mileageNum) || mileageNum < 0 || mileageNum > 9999999) {
+          return { valid: false, error: t('validation.mileageRange') };
+        }
+      }
+      if (carFields.engineVolume) {
+        const engineVolumeNum = parseFloat(carFields.engineVolume);
+        if (isNaN(engineVolumeNum) || engineVolumeNum < 0 || engineVolumeNum > 20) {
+          return { valid: false, error: t('validation.engineVolumeRange') };
+        }
+      }
+      if (carFields.fuelConsumption) {
+        const fuelNum = parseFloat(carFields.fuelConsumption);
+        if (isNaN(fuelNum) || fuelNum < 0 || fuelNum > 100) {
+          return { valid: false, error: t('validation.fuelConsumptionRange') };
+        }
+      }
+      if (carFields.power) {
+        const powerNum = parseInt(carFields.power);
+        if (isNaN(powerNum) || powerNum < 0 || powerNum > 10000) {
+          return { valid: false, error: t('validation.powerRange') };
+        }
+      }
+      if (carFields.seats) {
+        const seatsNum = parseInt(carFields.seats);
+        if (isNaN(seatsNum) || seatsNum < 1 || seatsNum > 50) {
+          return { valid: false, error: t('validation.seatsRange') };
+        }
+      }
+      if (carFields.trunkVolume) {
+        const trunkNum = parseInt(carFields.trunkVolume);
+        if (isNaN(trunkNum) || trunkNum < 0 || trunkNum > 10000) {
+          return { valid: false, error: t('validation.trunkVolumeRange') };
+        }
+      }
+    }
+
+    return { valid: true };
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!title || !description || !category || !price || !city || !country) {
       toast({
-        title: 'Error',
-        description: 'Please fill in all required fields',
+        title: t('error'),
+        description: t('validation.requiredFields'),
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    // Validate numeric fields
+    const validation = validateNumericFields();
+    if (!validation.valid) {
+      toast({
+        title: t('error'),
+        description: validation.error,
         variant: 'destructive',
       });
       return;
@@ -100,7 +166,7 @@ const CreateListing = () => {
         uploadedUrls.push(url);
       }
 
-      // Build listing data
+      // Build listing data with validated numbers
       const listingData: Parameters<typeof createListing.mutateAsync>[0] = {
         title,
         description,
@@ -137,14 +203,22 @@ const CreateListing = () => {
 
       toast({
         title: t('success'),
-        description: 'Your listing has been created!',
+        description: t('listing.created'),
       });
 
       navigate('/');
     } catch (error: any) {
+      // Parse database errors for better user messages
+      let errorMessage = t('listing.createError');
+      if (error.message?.includes('numeric field overflow')) {
+        errorMessage = t('validation.numericOverflow');
+      } else if (error.message) {
+        errorMessage = error.message;
+      }
+      
       toast({
-        title: 'Error',
-        description: error.message || 'Failed to create listing',
+        title: t('error'),
+        description: errorMessage,
         variant: 'destructive',
       });
     } finally {
