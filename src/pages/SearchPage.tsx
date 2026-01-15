@@ -124,8 +124,9 @@ const ListingCardSkeleton = () => (
 const SearchPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
-  const [searchParams, setSearchParams] = useSearchParams();
+const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(true); // Default open
+  const [showCategoryList, setShowCategoryList] = useState(false); // Collapsed when category selected
 
   const query = searchParams.get('q') || '';
   const categoryParam = searchParams.get('category') as Category | null;
@@ -333,81 +334,108 @@ const SearchPage = () => {
                   </button>
                 </div>
 
-                {/* Category Filter with Accordion */}
+                {/* Category Filter */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-foreground mb-3">
                     {t('category')}
                   </label>
                   
-                  {/* All categories option */}
-                  <button
-                    onClick={() => handleCategoryFilterSelect('')}
-                    className={cn(
-                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
-                      !selectedCategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
-                    )}
-                  >
-                    {(() => {
-                      const AllIcon = categoryIcons[''];
-                      return <AllIcon className="w-4 h-4" />;
-                    })()}
-                    {t('all')}
-                  </button>
+                  {/* Collapsed category button when category is selected */}
+                  {selectedCategory && !showCategoryList ? (
+                    <button
+                      onClick={() => setShowCategoryList(true)}
+                      className="w-full text-left px-3 py-2 rounded-lg text-sm bg-primary text-primary-foreground flex items-center gap-2"
+                    >
+                      {(() => {
+                        const Icon = categoryIcons[selectedCategory];
+                        return <Icon className="w-4 h-4" />;
+                      })()}
+                      <span className="flex-1">{t(selectedCategory as TranslationKey)}</span>
+                      {selectedSubcategory && (
+                        <span className="text-xs opacity-80">/ {t(selectedSubcategory as TranslationKey)}</span>
+                      )}
+                      <ChevronDown className="w-4 h-4 ml-auto" />
+                    </button>
+                  ) : (
+                    <>
+                      {/* All categories option */}
+                      <button
+                        onClick={() => {
+                          handleCategoryFilterSelect('');
+                          setShowCategoryList(false);
+                        }}
+                        className={cn(
+                          "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
+                          !selectedCategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                        )}
+                      >
+                        {(() => {
+                          const AllIcon = categoryIcons[''];
+                          return <AllIcon className="w-4 h-4" />;
+                        })()}
+                        {t('all')}
+                      </button>
 
-                  <Accordion 
-                    type="single" 
-                    collapsible 
-                    defaultValue={defaultAccordionValue}
-                    className="space-y-1"
-                  >
-                    {categories.map(category => {
-                      const Icon = categoryIcons[category];
-                      const subcategories = subcategoriesData[category];
-                      const isActive = selectedCategory === category;
-                      
-                      return (
-                        <AccordionItem 
-                          key={category} 
-                          value={category}
-                          className="border-none"
-                        >
-                          <AccordionTrigger 
-                            className={cn(
-                              "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
-                              isActive && !selectedSubcategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
-                            )}
-                            onClick={(e) => {
-                              // If clicking on the main category (not chevron), select it
-                              if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
-                                handleCategoryFilterSelect(category);
-                              }
-                            }}
-                          >
-                            <Icon className="w-4 h-4" />
-                            <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
-                          </AccordionTrigger>
-                          <AccordionContent className="pb-0 pt-1">
-                            <div className="pl-6 space-y-1">
-                              {subcategories.map(subcategory => (
-                                <button
-                                  key={subcategory.id}
-                                  onClick={() => handleSubcategoryFilterSelect(category, subcategory.id)}
-                                  className={cn(
-                                    "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
-                                    selectedCategory === category && selectedSubcategory === subcategory.id
-                                      ? 'bg-primary/20 text-primary font-medium'
-                                      : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
-                                  )}
-                                >
-                                  {t(subcategory.id as TranslationKey)}
-                                </button>
-                              ))}
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      );
-                    })}
-                  </Accordion>
+                      <Accordion 
+                        type="single" 
+                        collapsible 
+                        defaultValue={defaultAccordionValue}
+                        className="space-y-1"
+                      >
+                        {categories.map(category => {
+                          const Icon = categoryIcons[category];
+                          const subcategories = subcategoriesData[category];
+                          const isActive = selectedCategory === category;
+                          
+                          return (
+                            <AccordionItem 
+                              key={category} 
+                              value={category}
+                              className="border-none"
+                            >
+                              <AccordionTrigger 
+                                className={cn(
+                                  "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
+                                  isActive && !selectedSubcategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                                )}
+                                onClick={(e) => {
+                                  // If clicking on the main category (not chevron), select it
+                                  if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
+                                    handleCategoryFilterSelect(category);
+                                    setShowCategoryList(false);
+                                  }
+                                }}
+                              >
+                                <Icon className="w-4 h-4" />
+                                <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
+                              </AccordionTrigger>
+                              <AccordionContent className="pb-0 pt-1">
+                                <div className="pl-6 space-y-1">
+                                  {subcategories.map(subcategory => (
+                                    <button
+                                      key={subcategory.id}
+                                      onClick={() => {
+                                        handleSubcategoryFilterSelect(category, subcategory.id);
+                                        setShowCategoryList(false);
+                                      }}
+                                      className={cn(
+                                        "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                        selectedCategory === category && selectedSubcategory === subcategory.id
+                                          ? 'bg-primary/20 text-primary font-medium'
+                                          : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
+                                      )}
+                                    >
+                                      {t(subcategory.id as TranslationKey)}
+                                    </button>
+                                  ))}
+                                </div>
+                              </AccordionContent>
+                            </AccordionItem>
+                          );
+                        })}
+                      </Accordion>
+                    </>
+                  )}
                 </div>
 
                 {/* Price Filter */}
