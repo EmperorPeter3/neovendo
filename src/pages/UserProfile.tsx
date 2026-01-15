@@ -1,4 +1,4 @@
-import { useParams, Link } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -15,6 +15,7 @@ const UserProfile = () => {
   const { id } = useParams();
   const { t } = useLanguage();
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   // Fetch public profile
   const { data: profile, isLoading } = useQuery({
@@ -99,9 +100,7 @@ const UserProfile = () => {
           <h1 className="text-2xl font-bold text-foreground mb-4">
             {t('userNotFound' as any) || 'User not found'}
           </h1>
-          <Link to="/">
-            <Button>{t('back')}</Button>
-          </Link>
+          <Button onClick={() => navigate(-1)}>{t('back')}</Button>
         </div>
       </Layout>
     );
@@ -111,83 +110,92 @@ const UserProfile = () => {
 
   return (
     <Layout>
-      <div className="container py-6 md:py-8 max-w-2xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
+      <div className="container py-6 md:py-8">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4" />
           {t('back')}
-        </Link>
+        </button>
 
-        <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
-          {/* User Info */}
-          <div className="flex flex-col items-center mb-8">
-            <Avatar className="h-24 w-24 mb-4">
-              <AvatarImage src={profile.avatar_url || undefined} />
-              <AvatarFallback className="bg-primary/10 text-primary text-2xl">
-                {getInitials(profile.name)}
-              </AvatarFallback>
-            </Avatar>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          {/* User Info Sidebar */}
+          <div className="lg:col-span-1">
+            <div className="bg-card rounded-2xl shadow-card p-6 md:p-8 sticky top-6">
+              <div className="flex flex-col items-center">
+                <Avatar className="h-24 w-24 mb-4">
+                  <AvatarImage src={profile.avatar_url || undefined} />
+                  <AvatarFallback className="bg-primary/10 text-primary text-2xl">
+                    {getInitials(profile.name)}
+                  </AvatarFallback>
+                </Avatar>
 
-            <h1 className="font-display text-2xl font-bold text-foreground mb-2">
-              {profile.name}
-            </h1>
+                <h1 className="font-display text-2xl font-bold text-foreground mb-2 text-center">
+                  {profile.name}
+                </h1>
 
-            {/* Rating */}
-            {profile.rating_count > 0 && (
-              <div className="flex items-center gap-1 mb-2">
-                <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
-                <span className="font-medium">{Number(profile.rating).toFixed(1)}</span>
-                <span className="text-muted-foreground">
-                  ({profile.rating_count} {t('reviews' as any) || 'reviews'})
-                </span>
+                {/* Rating */}
+                {profile.rating_count > 0 && (
+                  <div className="flex items-center gap-1 mb-3">
+                    <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
+                    <span className="font-medium">{Number(profile.rating).toFixed(1)}</span>
+                    <span className="text-muted-foreground text-sm">
+                      ({profile.rating_count})
+                    </span>
+                  </div>
+                )}
+
+                {/* Member since */}
+                <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                  <Calendar className="w-4 h-4" />
+                  <span>
+                    {t('memberSince' as any) || 'Member since'}{' '}
+                    {new Date(profile.created_at).toLocaleDateString()}
+                  </span>
+                </div>
               </div>
-            )}
-
-            {/* Member since */}
-            <div className="flex items-center gap-1 text-sm text-muted-foreground">
-              <Calendar className="w-4 h-4" />
-              <span>
-                {t('memberSince' as any) || 'Member since'}{' '}
-                {new Date(profile.created_at).toLocaleDateString()}
-              </span>
             </div>
           </div>
 
-          {/* Review Form - only show if user can review */}
-          {!isOwnProfile && canReviewData?.canReview && !canReviewData?.hasReviewed && canReviewData.chatListingId && (
-            <div className="mb-6 p-4 bg-secondary/50 rounded-xl">
-              <h3 className="font-semibold text-foreground mb-3">
-                {t('leaveReview' as any) || 'Leave a review'}
-              </h3>
-              <ReviewForm 
-                listingId={canReviewData.chatListingId} 
-                sellerId={id || ''}
-              />
-            </div>
-          )}
-
-          {canReviewData?.hasReviewed && (
-            <p className="text-sm text-muted-foreground mb-4 bg-secondary/50 rounded-lg p-3 text-center">
-              ✓ {t('alreadyReviewed' as any) || 'You have already reviewed this user'}
-            </p>
-          )}
-
           {/* Reviews Section */}
-          <div className="border-t border-border pt-6">
-            <h2 className="font-display text-xl font-bold text-foreground mb-4">
-              {t('reviews' as any) || 'Reviews'} {reviews.length > 0 && `(${reviews.length})`}
-            </h2>
-            
-            {reviews.length > 0 ? (
-              <ReviewsList 
-                reviews={reviews}
-                averageRating={profile.rating ? Number(profile.rating) : undefined}
-                totalCount={profile.rating_count || undefined}
-              />
-            ) : (
-              <p className="text-muted-foreground text-center py-8">
-                {t('noReviews' as any) || 'No reviews yet'}
-              </p>
-            )}
+          <div className="lg:col-span-2">
+            <div className="bg-card rounded-2xl shadow-card p-6 md:p-8">
+              {/* Review Form */}
+              {!isOwnProfile && canReviewData?.canReview && !canReviewData?.hasReviewed && canReviewData.chatListingId && (
+                <div className="mb-6 p-4 bg-secondary/50 rounded-xl">
+                  <h3 className="font-semibold text-foreground mb-3">
+                    {t('leaveReview' as any) || 'Leave a review'}
+                  </h3>
+                  <ReviewForm 
+                    listingId={canReviewData.chatListingId} 
+                    sellerId={id || ''}
+                  />
+                </div>
+              )}
+
+              {canReviewData?.hasReviewed && (
+                <p className="text-sm text-muted-foreground mb-4 bg-secondary/50 rounded-lg p-3 text-center">
+                  ✓ {t('alreadyReviewed' as any) || 'You have already reviewed this user'}
+                </p>
+              )}
+
+              <h2 className="font-display text-xl font-bold text-foreground mb-4">
+                {t('reviews' as any) || 'Reviews'} {reviews.length > 0 && `(${reviews.length})`}
+              </h2>
+              
+              {reviews.length > 0 ? (
+                <ReviewsList 
+                  reviews={reviews}
+                  averageRating={profile.rating ? Number(profile.rating) : undefined}
+                  totalCount={profile.rating_count || undefined}
+                />
+              ) : (
+                <p className="text-muted-foreground text-center py-8">
+                  {t('noReviews' as any) || 'No reviews yet'}
+                </p>
+              )}
+            </div>
           </div>
         </div>
       </div>
