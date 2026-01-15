@@ -17,6 +17,23 @@ export interface ListingWithOwner {
   status: 'active' | 'deleted';
   created_at: string;
   updated_at: string;
+  // Car-specific fields
+  car_condition: string | null;
+  car_brand: string | null;
+  car_model: string | null;
+  car_year: number | null;
+  car_mileage: number | null;
+  car_transmission: string | null;
+  car_drive_type: string | null;
+  car_engine_type: string | null;
+  car_engine_volume: number | null;
+  car_fuel_consumption: number | null;
+  car_power: number | null;
+  car_body_condition: string | null;
+  car_body_type: string | null;
+  car_seats: number | null;
+  car_trunk_volume: number | null;
+  car_steering_position: string | null;
   owner: {
     id: string;
     name: string;
