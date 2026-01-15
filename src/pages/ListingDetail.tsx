@@ -6,9 +6,6 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { useListing } from '@/hooks/useListings';
 import { useCreateChat } from '@/hooks/useChats';
-import { useListingReviews, useCanReview } from '@/hooks/useReviews';
-import { ReviewForm } from '@/components/ReviewForm';
-import { ReviewsList } from '@/components/ReviewsList';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
 import { CarSpecifications } from '@/components/CarSpecifications';
@@ -46,9 +43,6 @@ const ListingDetail = () => {
   const { data: listing, isLoading, error } = useListing(id || '');
   const createChat = useCreateChat();
   
-  const sellerId = listing?.owner?.user_id || '';
-  const { data: reviews = [] } = useListingReviews(id || '');
-  const { data: canReviewData } = useCanReview(id || '', sellerId);
 
   const handleContact = async () => {
     if (!user) {
@@ -218,35 +212,6 @@ const ListingDetail = () => {
             {/* Car Specifications */}
             <CarSpecifications listing={listing} />
 
-            {/* Reviews Section */}
-            <div className="mt-8">
-              <h2 className="font-display text-xl font-bold text-foreground mb-4">
-                Reviews {reviews.length > 0 && `(${reviews.length})`}
-              </h2>
-              
-              {/* Review Form - only show if user can review */}
-              {canReviewData?.canReview && !canReviewData?.hasReviewed && sellerId && (
-                <div className="mb-6">
-                  <ReviewForm 
-                    listingId={id || ''} 
-                    sellerId={sellerId}
-                  />
-                </div>
-              )}
-
-              {canReviewData?.hasReviewed && (
-                <p className="text-sm text-muted-foreground mb-4 bg-secondary/50 rounded-lg p-3">
-                  ✓ You have already reviewed this seller
-                </p>
-              )}
-
-              <ReviewsList 
-                reviews={reviews} 
-                averageRating={listing.owner?.rating ? Number(listing.owner.rating) : undefined}
-                totalCount={listing.owner?.rating_count || undefined}
-                showHeader={reviews.length > 0}
-              />
-            </div>
           </div>
 
           {/* Sidebar */}
@@ -302,7 +267,10 @@ const ListingDetail = () => {
             <div className="bg-card rounded-2xl shadow-card p-6">
               <h3 className="font-display font-semibold text-foreground mb-4">{t('postedBy')}</h3>
               
-              <div className="flex items-center gap-4">
+              <Link 
+                to={`/user/${listing.owner?.user_id}`}
+                className="flex items-center gap-4 hover:opacity-80 transition-opacity"
+              >
                 <Avatar className="h-14 w-14">
                   <AvatarImage src={listing.owner?.avatar_url || undefined} />
                   <AvatarFallback className="bg-primary/10 text-primary text-xl">
@@ -310,7 +278,9 @@ const ListingDetail = () => {
                   </AvatarFallback>
                 </Avatar>
                 <div>
-                  <p className="font-semibold text-foreground">{listing.owner?.name || 'Unknown'}</p>
+                  <p className="font-semibold text-foreground hover:text-primary transition-colors">
+                    {listing.owner?.name || 'Unknown'}
+                  </p>
                   {listing.owner?.rating !== undefined && Number(listing.owner.rating) > 0 && (
                     <div className="flex items-center gap-1 text-sm text-muted-foreground">
                       <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -318,7 +288,7 @@ const ListingDetail = () => {
                     </div>
                   )}
                 </div>
-              </div>
+              </Link>
             </div>
           </div>
         </div>

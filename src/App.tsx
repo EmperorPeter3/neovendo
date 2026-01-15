@@ -16,6 +16,7 @@ import ResetPassword from "./pages/ResetPassword";
 import Messages from "./pages/Messages";
 import ChatPage from "./pages/ChatPage";
 import Profile from "./pages/Profile";
+import UserProfile from "./pages/UserProfile";
 import MyListings from "./pages/MyListings";
 import Favorites from "./pages/Favorites";
 import NotFound from "./pages/NotFound";
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/messages" element={<Messages />} />
               <Route path="/chat/:id" element={<ChatPage />} />
               <Route path="/profile" element={<Profile />} />
+              <Route path="/user/:id" element={<UserProfile />} />
               <Route path="/my-listings" element={<MyListings />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="*" element={<NotFound />} />
