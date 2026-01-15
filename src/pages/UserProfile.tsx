@@ -43,8 +43,7 @@ const UserProfile = () => {
         .select('*')
         .eq('owner_id', id)
         .eq('status', 'active')
-        .order('created_at', { ascending: false })
-        .limit(6);
+        .order('created_at', { ascending: false });
 
       if (error) throw error;
       return data || [];
