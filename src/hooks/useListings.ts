@@ -44,6 +44,32 @@ export interface ListingWithOwner {
   } | null;
 }
 
+export interface CarsQueryFilters {
+  condition?: 'new' | 'used';
+  brands?: string[];
+  models?: string[];
+  yearFrom?: number;
+  yearTo?: number;
+  mileageFrom?: number;
+  mileageTo?: number;
+  transmissions?: string[];
+  driveTypes?: string[];
+  engineTypes?: string[];
+  engineVolumeFrom?: number;
+  engineVolumeTo?: number;
+  fuelConsumptionFrom?: number;
+  fuelConsumptionTo?: number;
+  powerFrom?: number;
+  powerTo?: number;
+  bodyCondition?: 'not-damaged' | 'damaged';
+  bodyTypes?: string[];
+  seatsFrom?: number;
+  seatsTo?: number;
+  trunkVolumeFrom?: number;
+  trunkVolumeTo?: number;
+  steeringPosition?: 'left' | 'right';
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -53,6 +79,7 @@ export const useListings = (filters?: {
   country?: string;
   search?: string;
   limit?: number;
+  cars?: CarsQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -86,6 +113,80 @@ export const useListings = (filters?: {
       }
       if (filters?.limit) {
         query = query.limit(filters.limit);
+      }
+
+      // Car-specific filters
+      const cars = filters?.cars;
+      if (cars) {
+        if (cars.condition) {
+          query = query.eq('car_condition', cars.condition);
+        }
+        if (cars.brands && cars.brands.length > 0) {
+          query = query.in('car_brand', cars.brands);
+        }
+        if (cars.models && cars.models.length > 0) {
+          query = query.in('car_model', cars.models);
+        }
+        if (cars.yearFrom !== undefined) {
+          query = query.gte('car_year', cars.yearFrom);
+        }
+        if (cars.yearTo !== undefined) {
+          query = query.lte('car_year', cars.yearTo);
+        }
+        if (cars.mileageFrom !== undefined) {
+          query = query.gte('car_mileage', cars.mileageFrom);
+        }
+        if (cars.mileageTo !== undefined) {
+          query = query.lte('car_mileage', cars.mileageTo);
+        }
+        if (cars.transmissions && cars.transmissions.length > 0) {
+          query = query.in('car_transmission', cars.transmissions);
+        }
+        if (cars.driveTypes && cars.driveTypes.length > 0) {
+          query = query.in('car_drive_type', cars.driveTypes);
+        }
+        if (cars.engineTypes && cars.engineTypes.length > 0) {
+          query = query.in('car_engine_type', cars.engineTypes);
+        }
+        if (cars.engineVolumeFrom !== undefined) {
+          query = query.gte('car_engine_volume', cars.engineVolumeFrom);
+        }
+        if (cars.engineVolumeTo !== undefined) {
+          query = query.lte('car_engine_volume', cars.engineVolumeTo);
+        }
+        if (cars.fuelConsumptionFrom !== undefined) {
+          query = query.gte('car_fuel_consumption', cars.fuelConsumptionFrom);
+        }
+        if (cars.fuelConsumptionTo !== undefined) {
+          query = query.lte('car_fuel_consumption', cars.fuelConsumptionTo);
+        }
+        if (cars.powerFrom !== undefined) {
+          query = query.gte('car_power', cars.powerFrom);
+        }
+        if (cars.powerTo !== undefined) {
+          query = query.lte('car_power', cars.powerTo);
+        }
+        if (cars.bodyCondition) {
+          query = query.eq('car_body_condition', cars.bodyCondition);
+        }
+        if (cars.bodyTypes && cars.bodyTypes.length > 0) {
+          query = query.in('car_body_type', cars.bodyTypes);
+        }
+        if (cars.seatsFrom !== undefined) {
+          query = query.gte('car_seats', cars.seatsFrom);
+        }
+        if (cars.seatsTo !== undefined) {
+          query = query.lte('car_seats', cars.seatsTo);
+        }
+        if (cars.trunkVolumeFrom !== undefined) {
+          query = query.gte('car_trunk_volume', cars.trunkVolumeFrom);
+        }
+        if (cars.trunkVolumeTo !== undefined) {
+          query = query.lte('car_trunk_volume', cars.trunkVolumeTo);
+        }
+        if (cars.steeringPosition) {
+          query = query.eq('car_steering_position', cars.steeringPosition);
+        }
       }
 
       const { data: listings, error } = await query;

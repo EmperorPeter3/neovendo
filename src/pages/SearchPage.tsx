@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -151,6 +151,130 @@ const [searchParams, setSearchParams] = useSearchParams();
     city: cityParam || undefined,
   };
 
+  // Convert CarsFiltersState to CarsQueryFilters for the query
+  const convertCarsFilters = (filters: CarsFiltersState): CarsQueryFilters | undefined => {
+    if (selectedSubcategory !== 'cars') return undefined;
+
+    const result: CarsQueryFilters = {};
+
+    // Condition
+    if (filters.condition !== 'all') {
+      result.condition = filters.condition;
+    }
+
+    // Brands and models
+    if (filters.brands.length > 0) {
+      result.brands = filters.brands;
+    }
+    if (filters.models.length > 0) {
+      result.models = filters.models;
+    }
+
+    // Year range
+    if (filters.yearFrom) {
+      result.yearFrom = Number(filters.yearFrom);
+    }
+    if (filters.yearTo) {
+      result.yearTo = Number(filters.yearTo);
+    }
+
+    // Mileage range
+    if (filters.mileageFrom) {
+      result.mileageFrom = Number(filters.mileageFrom);
+    }
+    if (filters.mileageTo) {
+      result.mileageTo = Number(filters.mileageTo);
+    }
+
+    // Transmissions
+    const transmissions: string[] = [];
+    if (filters.transmissionManual) transmissions.push('manual');
+    if (filters.transmissionAutomatic === 'checked') transmissions.push('automatic');
+    if (filters.transmissionRobot) transmissions.push('robot');
+    if (filters.transmissionVariator) transmissions.push('variator');
+    if (filters.transmissionClassic) transmissions.push('classic');
+    if (transmissions.length > 0) {
+      result.transmissions = transmissions;
+    }
+
+    // Drive types
+    const driveTypes: string[] = [];
+    if (filters.driveRear) driveTypes.push('rear');
+    if (filters.driveFront) driveTypes.push('front');
+    if (filters.driveAll) driveTypes.push('all');
+    if (driveTypes.length > 0) {
+      result.driveTypes = driveTypes;
+    }
+
+    // Engine types
+    const engineTypes: string[] = [];
+    if (filters.enginePetrol) engineTypes.push('petrol');
+    if (filters.engineGas) engineTypes.push('gas');
+    if (filters.engineDiesel) engineTypes.push('diesel');
+    if (filters.engineElectric) engineTypes.push('electric');
+    if (filters.engineHybrid) engineTypes.push('hybrid');
+    if (engineTypes.length > 0) {
+      result.engineTypes = engineTypes;
+    }
+
+    // Engine volume range
+    if (filters.engineVolumeFrom) {
+      result.engineVolumeFrom = Number(filters.engineVolumeFrom) / 1000; // Convert cc to L
+    }
+    if (filters.engineVolumeTo) {
+      result.engineVolumeTo = Number(filters.engineVolumeTo) / 1000;
+    }
+
+    // Fuel consumption range
+    if (filters.fuelConsumptionFrom) {
+      result.fuelConsumptionFrom = Number(filters.fuelConsumptionFrom);
+    }
+    if (filters.fuelConsumptionTo) {
+      result.fuelConsumptionTo = Number(filters.fuelConsumptionTo);
+    }
+
+    // Power range
+    if (filters.powerFrom) {
+      result.powerFrom = Number(filters.powerFrom);
+    }
+    if (filters.powerTo) {
+      result.powerTo = Number(filters.powerTo);
+    }
+
+    // Body condition
+    if (filters.bodyCondition !== 'all') {
+      result.bodyCondition = filters.bodyCondition;
+    }
+
+    // Body types
+    if (filters.bodyTypes.length > 0) {
+      result.bodyTypes = filters.bodyTypes;
+    }
+
+    // Seats range
+    if (filters.seatsFrom) {
+      result.seatsFrom = Number(filters.seatsFrom);
+    }
+    if (filters.seatsTo) {
+      result.seatsTo = Number(filters.seatsTo);
+    }
+
+    // Trunk volume range
+    if (filters.trunkVolumeFrom) {
+      result.trunkVolumeFrom = Number(filters.trunkVolumeFrom);
+    }
+    if (filters.trunkVolumeTo) {
+      result.trunkVolumeTo = Number(filters.trunkVolumeTo);
+    }
+
+    // Steering position
+    if (filters.steeringPosition !== 'any') {
+      result.steeringPosition = filters.steeringPosition;
+    }
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -203,6 +327,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
     country: selectedRegion.country || undefined,
     city: selectedRegion.city || undefined,
+    cars: convertCarsFilters(carsFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
