@@ -273,6 +273,15 @@ export const translations = {
     "validation.numericOverflow": "One of the numeric values is too large. Please check your input.",
     "listing.created": "Your listing has been created!",
     "listing.createError": "Failed to create listing. Please try again.",
+    // Profile page
+    "profile.memberSince": "On the platform since",
+    "profile.userListings": "Listings",
+    "profile.noListings": "No active listings",
+    "profile.reviews": "Reviews",
+    "profile.noReviews": "No reviews yet",
+    "profile.leaveReview": "Leave a review",
+    "profile.alreadyReviewed": "You have already reviewed this user",
+    "userNotFound": "User not found",
   },
   pt: {
     home: "Início",
@@ -531,6 +540,15 @@ export const translations = {
     "validation.numericOverflow": "Um dos valores numéricos é muito grande. Verifique sua entrada.",
     "listing.created": "Seu anúncio foi criado!",
     "listing.createError": "Falha ao criar anúncio. Por favor, tente novamente.",
+    // Profile page
+    "profile.memberSince": "Na plataforma desde",
+    "profile.userListings": "Anúncios",
+    "profile.noListings": "Sem anúncios ativos",
+    "profile.reviews": "Avaliações",
+    "profile.noReviews": "Ainda não há avaliações",
+    "profile.leaveReview": "Deixar uma avaliação",
+    "profile.alreadyReviewed": "Você já avaliou este usuário",
+    "userNotFound": "Usuário não encontrado",
   },
   es: {
     home: "Inicio",
@@ -789,6 +807,15 @@ export const translations = {
     "validation.numericOverflow": "Uno de los valores numéricos es demasiado grande. Verifique su entrada.",
     "listing.created": "¡Tu anuncio ha sido creado!",
     "listing.createError": "Error al crear el anuncio. Por favor, inténtelo de nuevo.",
+    // Profile page
+    "profile.memberSince": "En la plataforma desde",
+    "profile.userListings": "Anuncios",
+    "profile.noListings": "Sin anuncios activos",
+    "profile.reviews": "Reseñas",
+    "profile.noReviews": "Aún no hay reseñas",
+    "profile.leaveReview": "Dejar una reseña",
+    "profile.alreadyReviewed": "Ya has evaluado a este usuario",
+    "userNotFound": "Usuario no encontrado",
   },
   de: {
     home: "Startseite",
@@ -1047,6 +1074,15 @@ export const translations = {
     "validation.numericOverflow": "Einer der numerischen Werte ist zu groß. Bitte überprüfen Sie Ihre Eingabe.",
     "listing.created": "Ihre Anzeige wurde erstellt!",
     "listing.createError": "Fehler beim Erstellen der Anzeige. Bitte versuchen Sie es erneut.",
+    // Profile page
+    "profile.memberSince": "Auf der Plattform seit",
+    "profile.userListings": "Anzeigen",
+    "profile.noListings": "Keine aktiven Anzeigen",
+    "profile.reviews": "Bewertungen",
+    "profile.noReviews": "Noch keine Bewertungen",
+    "profile.leaveReview": "Bewertung hinterlassen",
+    "profile.alreadyReviewed": "Sie haben diesen Benutzer bereits bewertet",
+    "userNotFound": "Benutzer nicht gefunden",
   },
   fr: {
     home: "Accueil",
@@ -1305,6 +1341,15 @@ export const translations = {
     "validation.numericOverflow": "L'une des valeurs numériques est trop grande. Veuillez vérifier votre saisie.",
     "listing.created": "Votre annonce a été créée !",
     "listing.createError": "Échec de la création de l'annonce. Veuillez réessayer.",
+    // Profile page
+    "profile.memberSince": "Sur la plateforme depuis",
+    "profile.userListings": "Annonces",
+    "profile.noListings": "Aucune annonce active",
+    "profile.reviews": "Avis",
+    "profile.noReviews": "Pas encore d'avis",
+    "profile.leaveReview": "Laisser un avis",
+    "profile.alreadyReviewed": "Vous avez déjà évalué cet utilisateur",
+    "userNotFound": "Utilisateur non trouvé",
   },
   it: {
     home: "Home",
@@ -1563,6 +1608,15 @@ export const translations = {
     "validation.numericOverflow": "Uno dei valori numerici è troppo grande. Controlla il tuo input.",
     "listing.created": "Il tuo annuncio è stato creato!",
     "listing.createError": "Impossibile creare l'annuncio. Per favore riprova.",
+    // Profile page
+    "profile.memberSince": "Sulla piattaforma dal",
+    "profile.userListings": "Annunci",
+    "profile.noListings": "Nessun annuncio attivo",
+    "profile.reviews": "Recensioni",
+    "profile.noReviews": "Ancora nessuna recensione",
+    "profile.leaveReview": "Lascia una recensione",
+    "profile.alreadyReviewed": "Hai già valutato questo utente",
+    "userNotFound": "Utente non trovato",
   },
   ru: {
     home: "Главная",
@@ -1821,6 +1875,15 @@ export const translations = {
     "validation.numericOverflow": "Одно из числовых значений слишком большое. Проверьте введённые данные.",
     "listing.created": "Ваше объявление создано!",
     "listing.createError": "Не удалось создать объявление. Пожалуйста, попробуйте ещё раз.",
+    // Profile page
+    "profile.memberSince": "На платформе с",
+    "profile.userListings": "Объявления",
+    "profile.noListings": "Нет активных объявлений",
+    "profile.reviews": "Отзывы",
+    "profile.noReviews": "Пока нет отзывов",
+    "profile.leaveReview": "Оставить отзыв",
+    "profile.alreadyReviewed": "Вы уже оставили отзыв об этом пользователе",
+    "userNotFound": "Пользователь не найден",
   },
 } as const;
 
