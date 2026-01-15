@@ -80,6 +80,22 @@ export type Database = {
       }
       listings: {
         Row: {
+          car_body_condition: string | null
+          car_body_type: string | null
+          car_brand: string | null
+          car_condition: string | null
+          car_drive_type: string | null
+          car_engine_type: string | null
+          car_engine_volume: number | null
+          car_fuel_consumption: number | null
+          car_mileage: number | null
+          car_model: string | null
+          car_power: number | null
+          car_seats: number | null
+          car_steering_position: string | null
+          car_transmission: string | null
+          car_trunk_volume: number | null
+          car_year: number | null
           category: Database["public"]["Enums"]["listing_category"]
           city: string
           country: string
@@ -95,6 +111,22 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          car_body_condition?: string | null
+          car_body_type?: string | null
+          car_brand?: string | null
+          car_condition?: string | null
+          car_drive_type?: string | null
+          car_engine_type?: string | null
+          car_engine_volume?: number | null
+          car_fuel_consumption?: number | null
+          car_mileage?: number | null
+          car_model?: string | null
+          car_power?: number | null
+          car_seats?: number | null
+          car_steering_position?: string | null
+          car_transmission?: string | null
+          car_trunk_volume?: number | null
+          car_year?: number | null
           category: Database["public"]["Enums"]["listing_category"]
           city: string
           country: string
@@ -110,6 +142,22 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          car_body_condition?: string | null
+          car_body_type?: string | null
+          car_brand?: string | null
+          car_condition?: string | null
+          car_drive_type?: string | null
+          car_engine_type?: string | null
+          car_engine_volume?: number | null
+          car_fuel_consumption?: number | null
+          car_mileage?: number | null
+          car_model?: string | null
+          car_power?: number | null
+          car_seats?: number | null
+          car_steering_position?: string | null
+          car_transmission?: string | null
+          car_trunk_volume?: number | null
+          car_year?: number | null
           category?: Database["public"]["Enums"]["listing_category"]
           city?: string
           country?: string
