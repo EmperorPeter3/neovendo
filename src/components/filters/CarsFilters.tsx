@@ -185,8 +185,7 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
     fromValue: string,
     toValue: string,
     fromKey: keyof CarsFiltersState,
-    toKey: keyof CarsFiltersState,
-    unit?: string
+    toKey: keyof CarsFiltersState
   ) => (
     <div className="space-y-2">
       <Label className="text-sm font-medium">{safeT(t, labelKey)}</Label>
@@ -206,7 +205,6 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
           onChange={(e) => onChange({ ...filters, [toKey]: e.target.value })}
           className="h-9"
         />
-        {unit && <span className="text-sm text-muted-foreground whitespace-nowrap">{unit}</span>}
       </div>
     </div>
   );
@@ -366,7 +364,7 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
         </div>
       </div>
 
-      {renderRangeInputs('carFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo', safeT(t, 'carFilters.km'))}
+      {renderRangeInputs('carFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo')}
 
       <Separator />
 
@@ -380,7 +378,11 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
           </div>
           <div className="space-y-1">
             <div className="flex items-center space-x-2">
-              <Checkbox id="transmission-automatic" checked={filters.transmissionAutomatic === 'checked'} onCheckedChange={handleAutomaticToggle} />
+              <Checkbox 
+                id="transmission-automatic" 
+                checked={filters.transmissionAutomatic === 'checked' ? true : filters.transmissionAutomatic === 'indeterminate' ? 'indeterminate' : false} 
+                onCheckedChange={handleAutomaticToggle} 
+              />
               <Label htmlFor="transmission-automatic" className="font-normal cursor-pointer">{safeT(t, 'carFilters.transmissionAutomatic')}</Label>
             </div>
             <div className="ml-6 space-y-1">
@@ -451,9 +453,9 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
         </div>
       </div>
 
-      {renderRangeInputs('carFilters.engineVolume', filters.engineVolumeFrom, filters.engineVolumeTo, 'engineVolumeFrom', 'engineVolumeTo', safeT(t, 'carFilters.liters'))}
-      {renderRangeInputs('carFilters.fuelConsumption', filters.fuelConsumptionFrom, filters.fuelConsumptionTo, 'fuelConsumptionFrom', 'fuelConsumptionTo', safeT(t, 'carFilters.litersPer100km'))}
-      {renderRangeInputs('carFilters.power', filters.powerFrom, filters.powerTo, 'powerFrom', 'powerTo', safeT(t, 'carFilters.hp'))}
+      {renderRangeInputs('carFilters.engineVolume', filters.engineVolumeFrom, filters.engineVolumeTo, 'engineVolumeFrom', 'engineVolumeTo')}
+      {renderRangeInputs('carFilters.fuelConsumption', filters.fuelConsumptionFrom, filters.fuelConsumptionTo, 'fuelConsumptionFrom', 'fuelConsumptionTo')}
+      {renderRangeInputs('carFilters.power', filters.powerFrom, filters.powerTo, 'powerFrom', 'powerTo')}
 
       <Separator />
 
@@ -463,7 +465,7 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
         <RadioGroup
           value={filters.bodyCondition}
           onValueChange={(value) => onChange({ ...filters, bodyCondition: value as CarsFiltersState['bodyCondition'] })}
-          className="flex flex-wrap gap-4"
+          className="flex flex-col gap-2"
         >
           <div className="flex items-center space-x-2">
             <RadioGroupItem value="all" id="body-all" />
@@ -483,21 +485,21 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
       {/* Body type */}
       <div className="space-y-2">
         <Label className="text-sm font-medium">{safeT(t, 'carFilters.bodyType')}</Label>
-        <div className="grid grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {bodyTypes.map(bodyType => (
             <button
               key={bodyType.id}
               type="button"
               onClick={() => toggleBodyType(bodyType.id)}
               className={cn(
-                "flex flex-col items-center justify-center p-2 rounded-lg border transition-colors",
+                "flex flex-col items-center justify-center p-2 rounded-lg border transition-colors min-w-0",
                 filters.bodyTypes.includes(bodyType.id)
                   ? "border-primary bg-primary/10 text-primary"
                   : "border-border hover:border-primary/50"
               )}
             >
               <BodyTypeIcon type={bodyType.id} />
-              <span className="text-xs mt-1 text-center">{safeT(t, bodyType.translationKey)}</span>
+              <span className="text-xs mt-1 text-center truncate w-full">{safeT(t, bodyType.translationKey)}</span>
             </button>
           ))}
         </div>
@@ -506,7 +508,7 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
       <Separator />
 
       {renderRangeInputs('carFilters.seats', filters.seatsFrom, filters.seatsTo, 'seatsFrom', 'seatsTo')}
-      {renderRangeInputs('carFilters.trunkVolume', filters.trunkVolumeFrom, filters.trunkVolumeTo, 'trunkVolumeFrom', 'trunkVolumeTo', safeT(t, 'carFilters.liters'))}
+      {renderRangeInputs('carFilters.trunkVolume', filters.trunkVolumeFrom, filters.trunkVolumeTo, 'trunkVolumeFrom', 'trunkVolumeTo')}
 
       <Separator />
 
