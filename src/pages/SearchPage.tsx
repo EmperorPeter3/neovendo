@@ -158,6 +158,82 @@ const [searchParams, setSearchParams] = useSearchParams();
     });
   }, [query, categoryParam, subcategoryParam, searchParams]);
 
+  // Auto-apply filters when any filter changes
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams);
+    let changed = false;
+
+    // Category
+    if (selectedCategory) {
+      if (params.get('category') !== selectedCategory) {
+        params.set('category', selectedCategory);
+        changed = true;
+      }
+    } else if (params.has('category')) {
+      params.delete('category');
+      changed = true;
+    }
+
+    // Subcategory
+    if (selectedSubcategory) {
+      if (params.get('subcategory') !== selectedSubcategory) {
+        params.set('subcategory', selectedSubcategory);
+        changed = true;
+      }
+    } else if (params.has('subcategory')) {
+      params.delete('subcategory');
+      changed = true;
+    }
+
+    // Min price
+    if (minPrice) {
+      if (params.get('minPrice') !== minPrice) {
+        params.set('minPrice', minPrice);
+        changed = true;
+      }
+    } else if (params.has('minPrice')) {
+      params.delete('minPrice');
+      changed = true;
+    }
+
+    // Max price
+    if (maxPrice) {
+      if (params.get('maxPrice') !== maxPrice) {
+        params.set('maxPrice', maxPrice);
+        changed = true;
+      }
+    } else if (params.has('maxPrice')) {
+      params.delete('maxPrice');
+      changed = true;
+    }
+
+    // Country
+    if (selectedRegion.country) {
+      if (params.get('country') !== selectedRegion.country) {
+        params.set('country', selectedRegion.country);
+        changed = true;
+      }
+    } else if (params.has('country')) {
+      params.delete('country');
+      changed = true;
+    }
+
+    // City
+    if (selectedRegion.city) {
+      if (params.get('city') !== selectedRegion.city) {
+        params.set('city', selectedRegion.city);
+        changed = true;
+      }
+    } else if (params.has('city')) {
+      params.delete('city');
+      changed = true;
+    }
+
+    if (changed) {
+      setSearchParams(params, { replace: true });
+    }
+  }, [selectedCategory, selectedSubcategory, minPrice, maxPrice, selectedRegion]);
+
   const { data: listings, isLoading } = useListings({
     search: query || undefined,
     category: selectedCategory || undefined,
