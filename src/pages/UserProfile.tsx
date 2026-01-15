@@ -18,12 +18,12 @@ const UserProfile = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
 
-  // Fetch public profile
+  // Fetch public profile (using view that excludes email for privacy)
   const { data: profile, isLoading } = useQuery({
     queryKey: ['publicProfile', id],
     queryFn: async () => {
       const { data, error } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('*')
         .eq('user_id', id)
         .maybeSingle();
