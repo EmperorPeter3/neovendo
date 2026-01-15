@@ -121,6 +121,25 @@ export const useListing = (id: string) => {
   });
 };
 
+export interface CarListingData {
+  car_condition?: string;
+  car_brand?: string;
+  car_model?: string;
+  car_year?: number;
+  car_mileage?: number;
+  car_transmission?: string;
+  car_drive_type?: string;
+  car_engine_type?: string;
+  car_engine_volume?: number;
+  car_fuel_consumption?: number;
+  car_power?: number;
+  car_body_condition?: string;
+  car_body_type?: string;
+  car_seats?: number;
+  car_trunk_volume?: number;
+  car_steering_position?: string;
+}
+
 export const useCreateListing = () => {
   const queryClient = useQueryClient();
   const { user } = useAuth();
@@ -130,11 +149,12 @@ export const useCreateListing = () => {
       title: string;
       description: string;
       category: Category;
+      subcategory?: string;
       price: number;
       city: string;
       country: string;
       images: string[];
-    }) => {
+    } & CarListingData) => {
       if (!user) throw new Error('Not authenticated');
 
       const { data, error } = await supabase

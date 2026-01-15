@@ -13,6 +13,7 @@ import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateListing, useUploadListingImage } from '@/hooks/useListings';
 import { Category } from '@/types/listing';
+import { CarFieldsForm, CarFieldsData, defaultCarFields } from '@/components/CarFieldsForm';
 
 const CreateListing = () => {
   const { t } = useLanguage();
@@ -33,9 +34,10 @@ const CreateListing = () => {
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [carFields, setCarFields] = useState<CarFieldsData>(defaultCarFields);
 
   const subcategories = category ? subcategoriesData[category] : [];
-
+  const isCarListing = subcategory === 'cars';
   // Redirect to login if not authenticated
   if (!authLoading && !user) {
     return (
@@ -98,16 +100,40 @@ const CreateListing = () => {
         uploadedUrls.push(url);
       }
 
-      // Create listing
-      await createListing.mutateAsync({
+      // Build listing data
+      const listingData: Parameters<typeof createListing.mutateAsync>[0] = {
         title,
         description,
         category,
+        subcategory: subcategory || undefined,
         price: parseFloat(price),
         city,
         country,
         images: uploadedUrls,
-      });
+      };
+
+      // Add car-specific fields if it's a car listing
+      if (isCarListing) {
+        if (carFields.condition) listingData.car_condition = carFields.condition;
+        if (carFields.brand) listingData.car_brand = carFields.brand;
+        if (carFields.model) listingData.car_model = carFields.model;
+        if (carFields.year) listingData.car_year = parseInt(carFields.year);
+        if (carFields.mileage) listingData.car_mileage = parseInt(carFields.mileage);
+        if (carFields.transmission) listingData.car_transmission = carFields.transmission;
+        if (carFields.driveType) listingData.car_drive_type = carFields.driveType;
+        if (carFields.engineType) listingData.car_engine_type = carFields.engineType;
+        if (carFields.engineVolume) listingData.car_engine_volume = parseFloat(carFields.engineVolume);
+        if (carFields.fuelConsumption) listingData.car_fuel_consumption = parseFloat(carFields.fuelConsumption);
+        if (carFields.power) listingData.car_power = parseInt(carFields.power);
+        if (carFields.bodyCondition) listingData.car_body_condition = carFields.bodyCondition;
+        if (carFields.bodyType) listingData.car_body_type = carFields.bodyType;
+        if (carFields.seats) listingData.car_seats = parseInt(carFields.seats);
+        if (carFields.trunkVolume) listingData.car_trunk_volume = parseInt(carFields.trunkVolume);
+        if (carFields.steeringPosition) listingData.car_steering_position = carFields.steeringPosition;
+      }
+
+      // Create listing
+      await createListing.mutateAsync(listingData);
 
       toast({
         title: t('success'),
@@ -244,6 +270,11 @@ const CreateListing = () => {
                   ))}
                 </div>
               </div>
+            )}
+
+            {/* Car-specific fields */}
+            {isCarListing && (
+              <CarFieldsForm data={carFields} onChange={setCarFields} />
             )}
 
             {/* Price */}
