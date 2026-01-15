@@ -117,9 +117,7 @@ const ListingDetail = () => {
       <Layout>
         <div className="container py-16 text-center">
           <h1 className="text-2xl font-bold text-foreground mb-4">Listing not found</h1>
-          <Link to="/">
-            <Button>{t('back')}</Button>
-          </Link>
+          <Button onClick={() => navigate(-1)}>{t('back')}</Button>
         </div>
       </Layout>
     );
@@ -132,10 +130,13 @@ const ListingDetail = () => {
     <Layout>
       <div className="container py-6 md:py-8">
         {/* Back Button */}
-        <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
+        <button 
+          onClick={() => navigate(-1)} 
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
+        >
           <ArrowLeft className="w-4 h-4" />
           {t('back')}
-        </Link>
+        </button>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Images Section */}
