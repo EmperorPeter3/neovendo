@@ -11,13 +11,12 @@ import { ReviewForm } from '@/components/ReviewForm';
 import { ReviewsList } from '@/components/ReviewsList';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
+import { CarSpecifications } from '@/components/CarSpecifications';
 import { 
   ArrowLeft, 
   MapPin, 
   Clock, 
   MessageCircle, 
-  Heart, 
-  Share2, 
   ChevronLeft, 
   ChevronRight,
   Star,
@@ -215,6 +214,9 @@ const ListingDetail = () => {
                 {listing.description || 'No description provided.'}
               </p>
             </div>
+
+            {/* Car Specifications */}
+            <CarSpecifications listing={listing} />
 
             {/* Reviews Section */}
             <div className="mt-8">
