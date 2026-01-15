@@ -134,105 +134,66 @@ const [searchParams, setSearchParams] = useSearchParams();
   const countryParam = searchParams.get('country') || '';
   const cityParam = searchParams.get('city') || '';
   
-  const [minPrice, setMinPrice] = useState(searchParams.get('minPrice') || '');
-  const [maxPrice, setMaxPrice] = useState(searchParams.get('maxPrice') || '');
-  const [selectedCategory, setSelectedCategory] = useState<Category | ''>(categoryParam || '');
-  const [selectedSubcategory, setSelectedSubcategory] = useState(subcategoryParam);
   const [searchQuery, setSearchQuery] = useState(query);
-  const [selectedRegion, setSelectedRegion] = useState<{ country?: string; city?: string }>({
+  const [carsFilters, setCarsFilters] = useState<CarsFiltersState>(defaultCarsFilters);
+  
+  // Local state for price inputs with debounce
+  const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
+  const [localMaxPrice, setLocalMaxPrice] = useState(searchParams.get('maxPrice') || '');
+
+  // Derived state from URL params
+  const selectedCategory = categoryParam || '';
+  const selectedSubcategory = subcategoryParam;
+  const minPrice = searchParams.get('minPrice') || '';
+  const maxPrice = searchParams.get('maxPrice') || '';
+  const selectedRegion = {
     country: countryParam || undefined,
     city: cityParam || undefined,
-  });
-  const [carsFilters, setCarsFilters] = useState<CarsFiltersState>(defaultCarsFilters);
+  };
 
-  // Update local state when URL params change
+  // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
-    setSelectedCategory(categoryParam || '');
-    setSelectedSubcategory(subcategoryParam);
-    setMinPrice(searchParams.get('minPrice') || '');
-    setMaxPrice(searchParams.get('maxPrice') || '');
-    setSelectedRegion({
-      country: searchParams.get('country') || undefined,
-      city: searchParams.get('city') || undefined,
-    });
-  }, [query, categoryParam, subcategoryParam, searchParams]);
+  }, [query]);
 
-  // Auto-apply filters when any filter changes
   useEffect(() => {
+    setLocalMinPrice(minPrice);
+    setLocalMaxPrice(maxPrice);
+  }, [minPrice, maxPrice]);
+
+  // Debounce price filter updates
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (localMinPrice !== minPrice || localMaxPrice !== maxPrice) {
+        const params = new URLSearchParams(searchParams);
+        if (localMinPrice) {
+          params.set('minPrice', localMinPrice);
+        } else {
+          params.delete('minPrice');
+        }
+        if (localMaxPrice) {
+          params.set('maxPrice', localMaxPrice);
+        } else {
+          params.delete('maxPrice');
+        }
+        setSearchParams(params, { replace: true });
+      }
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [localMinPrice, localMaxPrice]);
+
+  // Helper to update URL params
+  const updateFilters = (updates: Record<string, string | undefined>) => {
     const params = new URLSearchParams(searchParams);
-    let changed = false;
-
-    // Category
-    if (selectedCategory) {
-      if (params.get('category') !== selectedCategory) {
-        params.set('category', selectedCategory);
-        changed = true;
+    Object.entries(updates).forEach(([key, value]) => {
+      if (value) {
+        params.set(key, value);
+      } else {
+        params.delete(key);
       }
-    } else if (params.has('category')) {
-      params.delete('category');
-      changed = true;
-    }
-
-    // Subcategory
-    if (selectedSubcategory) {
-      if (params.get('subcategory') !== selectedSubcategory) {
-        params.set('subcategory', selectedSubcategory);
-        changed = true;
-      }
-    } else if (params.has('subcategory')) {
-      params.delete('subcategory');
-      changed = true;
-    }
-
-    // Min price
-    if (minPrice) {
-      if (params.get('minPrice') !== minPrice) {
-        params.set('minPrice', minPrice);
-        changed = true;
-      }
-    } else if (params.has('minPrice')) {
-      params.delete('minPrice');
-      changed = true;
-    }
-
-    // Max price
-    if (maxPrice) {
-      if (params.get('maxPrice') !== maxPrice) {
-        params.set('maxPrice', maxPrice);
-        changed = true;
-      }
-    } else if (params.has('maxPrice')) {
-      params.delete('maxPrice');
-      changed = true;
-    }
-
-    // Country
-    if (selectedRegion.country) {
-      if (params.get('country') !== selectedRegion.country) {
-        params.set('country', selectedRegion.country);
-        changed = true;
-      }
-    } else if (params.has('country')) {
-      params.delete('country');
-      changed = true;
-    }
-
-    // City
-    if (selectedRegion.city) {
-      if (params.get('city') !== selectedRegion.city) {
-        params.set('city', selectedRegion.city);
-        changed = true;
-      }
-    } else if (params.has('city')) {
-      params.delete('city');
-      changed = true;
-    }
-
-    if (changed) {
-      setSearchParams(params, { replace: true });
-    }
-  }, [selectedCategory, selectedSubcategory, minPrice, maxPrice, selectedRegion]);
+    });
+    setSearchParams(params, { replace: true });
+  };
 
   const { data: listings, isLoading } = useListings({
     search: query || undefined,
@@ -246,82 +207,51 @@ const [searchParams, setSearchParams] = useSearchParams();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    const params = new URLSearchParams();
-    if (searchQuery) params.set('q', searchQuery);
-    if (selectedCategory) params.set('category', selectedCategory);
-    if (selectedSubcategory) params.set('subcategory', selectedSubcategory);
-    if (selectedRegion.country) params.set('country', selectedRegion.country);
-    if (selectedRegion.city) params.set('city', selectedRegion.city);
-    if (minPrice) params.set('minPrice', minPrice);
-    if (maxPrice) params.set('maxPrice', maxPrice);
-    navigate(`/search?${params.toString()}`);
+    updateFilters({ q: searchQuery || undefined });
   };
 
   const handleCategoryChange = (cat: Category | '', subcategory?: string) => {
-    setSelectedCategory(cat);
-    setSelectedSubcategory(subcategory || '');
-    
-    // If subcategory is selected, redirect immediately
-    if (subcategory) {
-      const params = new URLSearchParams();
-      if (searchQuery) params.set('q', searchQuery);
-      if (cat) params.set('category', cat);
-      params.set('subcategory', subcategory);
-      if (selectedRegion.country) params.set('country', selectedRegion.country);
-      if (selectedRegion.city) params.set('city', selectedRegion.city);
-      if (minPrice) params.set('minPrice', minPrice);
-      if (maxPrice) params.set('maxPrice', maxPrice);
-      navigate(`/search?${params.toString()}`);
-    }
-  };
-
-  const handleCategoryFilterSelect = (category: Category | '') => {
-    setSelectedCategory(category);
-    setSelectedSubcategory('');
-  };
-
-  const handleSubcategoryFilterSelect = (category: Category, subcategoryId: string) => {
-    setSelectedCategory(category);
-    setSelectedSubcategory(subcategoryId);
-  };
-
-  const handleApplyFilters = () => {
-    setSearchParams(prev => {
-      if (selectedCategory) {
-        prev.set('category', selectedCategory);
-      } else {
-        prev.delete('category');
-      }
-      if (selectedSubcategory) {
-        prev.set('subcategory', selectedSubcategory);
-      } else {
-        prev.delete('subcategory');
-      }
-      if (minPrice) {
-        prev.set('minPrice', minPrice);
-      } else {
-        prev.delete('minPrice');
-      }
-      if (maxPrice) {
-        prev.set('maxPrice', maxPrice);
-      } else {
-        prev.delete('maxPrice');
-      }
-      return prev;
+    updateFilters({
+      category: cat || undefined,
+      subcategory: subcategory || undefined,
     });
   };
 
+  const handleCategoryFilterSelect = (category: Category | '') => {
+    updateFilters({
+      category: category || undefined,
+      subcategory: undefined,
+    });
+  };
+
+  const handleSubcategoryFilterSelect = (category: Category, subcategoryId: string) => {
+    updateFilters({
+      category: category,
+      subcategory: subcategoryId,
+    });
+  };
+
+  const handleRegionChange = (region: { country?: string; city?: string }) => {
+    updateFilters({
+      country: region.country || undefined,
+      city: region.city || undefined,
+    });
+  };
+
+  const handlePriceChange = (type: 'min' | 'max', value: string) => {
+    if (type === 'min') {
+      setLocalMinPrice(value);
+    } else {
+      setLocalMaxPrice(value);
+    }
+  };
+
   const handleResetFilters = () => {
-    setSelectedCategory('');
-    setSelectedSubcategory('');
-    setMinPrice('');
-    setMaxPrice('');
-    setSearchParams(prev => {
-      prev.delete('category');
-      prev.delete('subcategory');
-      prev.delete('minPrice');
-      prev.delete('maxPrice');
-      return prev;
+    updateFilters({
+      category: undefined,
+      subcategory: undefined,
+      minPrice: undefined,
+      maxPrice: undefined,
     });
   };
 
@@ -350,7 +280,7 @@ const [searchParams, setSearchParams] = useSearchParams();
               {/* Region Selector */}
               <RegionSelector 
                 value={selectedRegion}
-                onChange={setSelectedRegion}
+                onChange={handleRegionChange}
                 className="flex-1"
               />
             </div>
@@ -368,7 +298,7 @@ const [searchParams, setSearchParams] = useSearchParams();
               </Button>
               <RegionSelector 
                 value={selectedRegion}
-                onChange={setSelectedRegion}
+                onChange={handleRegionChange}
                 className="flex-1"
               />
             </div>
@@ -523,15 +453,15 @@ const [searchParams, setSearchParams] = useSearchParams();
                     <Input
                       type="number"
                       placeholder={t('minPrice')}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
+                      value={localMinPrice}
+                      onChange={(e) => handlePriceChange('min', e.target.value)}
                       className="flex-1"
                     />
                     <Input
                       type="number"
                       placeholder={t('maxPrice')}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
+                      value={localMaxPrice}
+                      onChange={(e) => handlePriceChange('max', e.target.value)}
                       className="flex-1"
                     />
                   </div>
@@ -648,15 +578,15 @@ const [searchParams, setSearchParams] = useSearchParams();
                     <Input
                       type="number"
                       placeholder={t('minPrice')}
-                      value={minPrice}
-                      onChange={(e) => setMinPrice(e.target.value)}
+                      value={localMinPrice}
+                      onChange={(e) => handlePriceChange('min', e.target.value)}
                       className="flex-1"
                     />
                     <Input
                       type="number"
                       placeholder={t('maxPrice')}
-                      value={maxPrice}
-                      onChange={(e) => setMaxPrice(e.target.value)}
+                      value={localMaxPrice}
+                      onChange={(e) => handlePriceChange('max', e.target.value)}
                       className="flex-1"
                     />
                   </div>
