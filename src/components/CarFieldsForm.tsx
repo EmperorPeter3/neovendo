@@ -55,13 +55,15 @@ export const defaultCarFields: CarFieldsData = {
 interface CarFieldsFormProps {
   data: CarFieldsData;
   onChange: (data: CarFieldsData) => void;
+  fieldErrors?: Record<string, boolean>;
+  onClearError?: (field: string) => void;
 }
 
 const safeT = (t: (key: TranslationKey) => string, key: string): string => {
   return t(key as TranslationKey);
 };
 
-export function CarFieldsForm({ data, onChange }: CarFieldsFormProps) {
+export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }: CarFieldsFormProps) {
   const { t } = useLanguage();
   const yearOptions = useMemo(() => getYearOptions(), []);
 
@@ -76,7 +78,10 @@ export function CarFieldsForm({ data, onChange }: CarFieldsFormProps) {
       newData.model = '';
     }
     onChange(newData);
+    onClearError?.(key);
   };
+
+  const getInputClass = (field: string) => fieldErrors[field] ? 'border-destructive ring-destructive' : '';
 
   return (
     <div className="space-y-6 border-t pt-6 mt-6">
@@ -160,6 +165,7 @@ export function CarFieldsForm({ data, onChange }: CarFieldsFormProps) {
             value={data.mileage}
             onChange={(e) => handleChange('mileage', e.target.value)}
             min="0"
+            className={getInputClass('mileage')}
           />
         </div>
       </div>
@@ -218,11 +224,12 @@ export function CarFieldsForm({ data, onChange }: CarFieldsFormProps) {
           <Label className="text-sm font-medium">{safeT(t, 'carFilters.engineVolume')}</Label>
           <Input
             type="number"
-            placeholder="0.0"
+            placeholder="0"
             value={data.engineVolume}
             onChange={(e) => handleChange('engineVolume', e.target.value)}
             min="0"
-            step="0.1"
+            step="1"
+            className={getInputClass('engineVolume')}
           />
         </div>
 
@@ -234,6 +241,7 @@ export function CarFieldsForm({ data, onChange }: CarFieldsFormProps) {
             value={data.power}
             onChange={(e) => handleChange('power', e.target.value)}
             min="0"
+            className={getInputClass('power')}
           />
         </div>
 
@@ -246,6 +254,7 @@ export function CarFieldsForm({ data, onChange }: CarFieldsFormProps) {
             onChange={(e) => handleChange('fuelConsumption', e.target.value)}
             min="0"
             step="0.1"
+            className={getInputClass('fuelConsumption')}
           />
         </div>
       </div>
