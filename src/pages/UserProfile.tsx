@@ -125,7 +125,7 @@ const UserProfile = () => {
 
   return (
     <Layout>
-      <div className="container py-6 md:py-8 max-w-4xl mx-auto">
+      <div className="container py-6 md:py-8">
         <button 
           onClick={() => navigate(-1)} 
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors"
@@ -178,32 +178,34 @@ const UserProfile = () => {
             </div>
 
             {userListings.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                {userListings.map((listing) => (
-                  <Link key={listing.id} to={`/listing/${listing.id}`}>
-                    <div className="bg-secondary/30 rounded-xl p-3 hover:bg-secondary/50 transition-colors">
-                      <div className="aspect-[4/3] rounded-lg overflow-hidden mb-2 bg-muted">
-                        {listing.images && listing.images.length > 0 ? (
-                          <img 
-                            src={listing.images[0]} 
-                            alt={listing.title}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <div className="w-full h-full flex items-center justify-center text-4xl">
-                            📦
-                          </div>
-                        )}
+              <div className="max-h-[600px] overflow-y-auto pr-2">
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  {userListings.map((listing) => (
+                    <Link key={listing.id} to={`/listing/${listing.id}`}>
+                      <div className="bg-secondary/30 rounded-xl p-2 hover:bg-secondary/50 transition-colors">
+                        <div className="aspect-[4/3] rounded-lg overflow-hidden mb-2 bg-muted">
+                          {listing.images && listing.images.length > 0 ? (
+                            <img 
+                              src={listing.images[0]} 
+                              alt={listing.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-3xl">
+                              📦
+                            </div>
+                          )}
+                        </div>
+                        <h3 className="font-medium text-foreground text-xs truncate">
+                          {listing.title}
+                        </h3>
+                        <p className="text-primary font-semibold text-xs">
+                          €{Number(listing.price).toLocaleString()}
+                        </p>
                       </div>
-                      <h3 className="font-medium text-foreground text-sm truncate">
-                        {listing.title}
-                      </h3>
-                      <p className="text-primary font-semibold text-sm">
-                        €{Number(listing.price).toLocaleString()}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
+                    </Link>
+                  ))}
+                </div>
               </div>
             ) : (
               <p className="text-muted-foreground text-center py-6">
