@@ -35,9 +35,17 @@ const CreateListing = () => {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [carFields, setCarFields] = useState<CarFieldsData>(defaultCarFields);
+  const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   const subcategories = category ? subcategoriesData[category] : [];
   const isCarListing = subcategory === 'cars';
+
+  // Clear field error when user starts typing
+  const clearFieldError = (field: string) => {
+    if (fieldErrors[field]) {
+      setFieldErrors(prev => ({ ...prev, [field]: false }));
+    }
+  };
   // Redirect to login if not authenticated
   if (!authLoading && !user) {
     return (
@@ -78,65 +86,86 @@ const CreateListing = () => {
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Validation helper for numeric fields
-  const validateNumericFields = (): { valid: boolean; error?: string } => {
+  // Validation helper for numeric fields - returns list of invalid fields
+  const validateNumericFields = (): { valid: boolean; errors: Record<string, boolean>; message?: string } => {
+    const errors: Record<string, boolean> = {};
+    let message: string | undefined;
+
     const priceNum = parseFloat(price);
     if (isNaN(priceNum) || priceNum < 0 || priceNum > 999999999) {
-      return { valid: false, error: t('validation.priceRange') };
+      errors.price = true;
+      message = t('validation.priceRange');
     }
 
     if (isCarListing) {
       if (carFields.year) {
         const yearNum = parseInt(carFields.year);
         if (isNaN(yearNum) || yearNum < 1900 || yearNum > new Date().getFullYear() + 1) {
-          return { valid: false, error: t('validation.invalidYear') };
+          errors.year = true;
+          if (!message) message = t('validation.invalidYear');
         }
       }
       if (carFields.mileage) {
         const mileageNum = parseInt(carFields.mileage);
         if (isNaN(mileageNum) || mileageNum < 0 || mileageNum > 9999999) {
-          return { valid: false, error: t('validation.mileageRange') };
+          errors.mileage = true;
+          if (!message) message = t('validation.mileageRange');
         }
       }
       if (carFields.engineVolume) {
-        const engineVolumeNum = parseFloat(carFields.engineVolume);
-        if (isNaN(engineVolumeNum) || engineVolumeNum < 0 || engineVolumeNum > 20) {
-          return { valid: false, error: t('validation.engineVolumeRange') };
+        const engineVolumeNum = parseInt(carFields.engineVolume);
+        if (isNaN(engineVolumeNum) || engineVolumeNum < 0 || engineVolumeNum > 20000) {
+          errors.engineVolume = true;
+          if (!message) message = t('validation.engineVolumeRange');
         }
       }
       if (carFields.fuelConsumption) {
         const fuelNum = parseFloat(carFields.fuelConsumption);
         if (isNaN(fuelNum) || fuelNum < 0 || fuelNum > 100) {
-          return { valid: false, error: t('validation.fuelConsumptionRange') };
+          errors.fuelConsumption = true;
+          if (!message) message = t('validation.fuelConsumptionRange');
         }
       }
       if (carFields.power) {
         const powerNum = parseInt(carFields.power);
         if (isNaN(powerNum) || powerNum < 0 || powerNum > 10000) {
-          return { valid: false, error: t('validation.powerRange') };
+          errors.power = true;
+          if (!message) message = t('validation.powerRange');
         }
       }
       if (carFields.seats) {
         const seatsNum = parseInt(carFields.seats);
         if (isNaN(seatsNum) || seatsNum < 1 || seatsNum > 50) {
-          return { valid: false, error: t('validation.seatsRange') };
+          errors.seats = true;
+          if (!message) message = t('validation.seatsRange');
         }
       }
       if (carFields.trunkVolume) {
         const trunkNum = parseInt(carFields.trunkVolume);
         if (isNaN(trunkNum) || trunkNum < 0 || trunkNum > 10000) {
-          return { valid: false, error: t('validation.trunkVolumeRange') };
+          errors.trunkVolume = true;
+          if (!message) message = t('validation.trunkVolumeRange');
         }
       }
     }
 
-    return { valid: true };
+    return { valid: Object.keys(errors).length === 0, errors, message };
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!title || !description || !category || !price || !city || !country) {
+    // Check required fields and collect errors
+    const requiredErrors: Record<string, boolean> = {};
+    if (!title) requiredErrors.title = true;
+    if (!description) requiredErrors.description = true;
+    if (!category) requiredErrors.category = true;
+    if (!price) requiredErrors.price = true;
+    if (!city) requiredErrors.city = true;
+    if (!country) requiredErrors.country = true;
+
+    if (Object.keys(requiredErrors).length > 0) {
+      setFieldErrors(requiredErrors);
       toast({
         title: t('error'),
         description: t('validation.requiredFields'),
@@ -148,14 +177,16 @@ const CreateListing = () => {
     // Validate numeric fields
     const validation = validateNumericFields();
     if (!validation.valid) {
+      setFieldErrors(validation.errors);
       toast({
         title: t('error'),
-        description: validation.error,
+        description: validation.message,
         variant: 'destructive',
       });
       return;
     }
 
+    setFieldErrors({});
     setIsSubmitting(true);
 
     try {
@@ -170,7 +201,7 @@ const CreateListing = () => {
       const listingData: Parameters<typeof createListing.mutateAsync>[0] = {
         title,
         description,
-        category,
+        category: category as Category,
         subcategory: subcategory || undefined,
         price: parseFloat(price),
         city,
@@ -283,10 +314,10 @@ const CreateListing = () => {
               </label>
               <Input
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(e) => { setTitle(e.target.value); clearFieldError('title'); }}
                 placeholder="e.g., iPhone 15 Pro Max - Like New"
                 maxLength={100}
-                className="h-12"
+                className={`h-12 ${fieldErrors.title ? 'border-destructive ring-destructive' : ''}`}
               />
               <p className="text-xs text-muted-foreground mt-1">{title.length}/100</p>
             </div>
@@ -348,7 +379,7 @@ const CreateListing = () => {
 
             {/* Car-specific fields */}
             {isCarListing && (
-              <CarFieldsForm data={carFields} onChange={setCarFields} />
+              <CarFieldsForm data={carFields} onChange={setCarFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}
@@ -359,11 +390,11 @@ const CreateListing = () => {
               <Input
                 type="number"
                 value={price}
-                onChange={(e) => setPrice(e.target.value)}
+                onChange={(e) => { setPrice(e.target.value); clearFieldError('price'); }}
                 placeholder="0"
                 min="0"
                 step="0.01"
-                className="h-12"
+                className={`h-12 ${fieldErrors.price ? 'border-destructive ring-destructive' : ''}`}
               />
             </div>
 
