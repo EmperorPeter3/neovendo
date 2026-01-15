@@ -35,6 +35,7 @@ import {
 import { cn } from '@/lib/utils';
 import { CarsFilters, CarsFiltersState, defaultCarsFilters } from '@/components/filters/CarsFilters';
 import { Separator } from '@/components/ui/separator';
+import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 
 const categories: Category[] = [
   'transport',
@@ -738,20 +739,20 @@ const [searchParams, setSearchParams] = useSearchParams();
             </div>
 
             {isLoading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-                {[1, 2, 3, 4, 5, 6].map(i => (
-                  <ListingCardSkeleton key={i} />
+              <div className="flex flex-col gap-4">
+                {[1, 2, 3, 4].map(i => (
+                  <ListingCardLargeSkeleton key={i} />
                 ))}
               </div>
             ) : listings && listings.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="flex flex-col gap-4">
                 {listings.map((listing, index) => (
                   <div
                     key={listing.id}
                     className="animate-slide-up"
                     style={{ animationDelay: `${index * 50}ms` }}
                   >
-                    <ListingCardDB listing={listing} />
+                    <ListingCardLarge listing={listing} />
                   </div>
                 ))}
               </div>
