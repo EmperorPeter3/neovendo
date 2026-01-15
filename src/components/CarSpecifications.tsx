@@ -61,27 +61,27 @@ export const CarSpecifications = ({ listing }: CarSpecificationsProps) => {
       automatic: t('carFilters.transmissionAutomatic' as any),
       robot: t('carFilters.transmissionRobot' as any),
       variator: t('carFilters.transmissionVariator' as any),
+      'classic-automatic': t('carFilters.transmissionClassicAuto' as any),
     };
     return transmissionMap[transmission] || transmission;
   };
 
   const getDriveTypeName = (driveType: string) => {
     const driveTypeMap: Record<string, string> = {
-      fwd: t('carFilters.driveTypeFWD' as any),
-      rwd: t('carFilters.driveTypeRWD' as any),
-      awd: t('carFilters.driveTypeAWD' as any),
-      '4wd': t('carFilters.driveType4WD' as any),
+      rear: t('carFilters.driveRear' as any),
+      front: t('carFilters.driveFront' as any),
+      all: t('carFilters.driveAll' as any),
     };
     return driveTypeMap[driveType] || driveType;
   };
 
   const getEngineTypeName = (engineType: string) => {
     const engineTypeMap: Record<string, string> = {
-      petrol: t('carFilters.engineTypePetrol' as any),
-      diesel: t('carFilters.engineTypeDiesel' as any),
-      electric: t('carFilters.engineTypeElectric' as any),
-      hybrid: t('carFilters.engineTypeHybrid' as any),
-      lpg: t('carFilters.engineTypeLPG' as any),
+      petrol: t('carFilters.enginePetrol' as any),
+      diesel: t('carFilters.engineDiesel' as any),
+      electric: t('carFilters.engineElectric' as any),
+      hybrid: t('carFilters.engineHybrid' as any),
+      gas: t('carFilters.engineGas' as any),
     };
     return engineTypeMap[engineType] || engineType;
   };
@@ -96,7 +96,7 @@ export const CarSpecifications = ({ listing }: CarSpecificationsProps) => {
 
   const getBodyConditionName = (bodyCondition: string) => {
     const bodyConditionMap: Record<string, string> = {
-      not_damaged: t('carFilters.bodyConditionNotDamaged' as any),
+      'not-damaged': t('carFilters.bodyConditionNotDamaged' as any),
       damaged: t('carFilters.bodyConditionDamaged' as any),
     };
     return bodyConditionMap[bodyCondition] || bodyCondition;
