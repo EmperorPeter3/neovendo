@@ -509,14 +509,8 @@ const [searchParams, setSearchParams] = useSearchParams();
                               <AccordionTrigger 
                                 className={cn(
                                   "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
-                                  isActive && !selectedSubcategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                                  'hover:bg-secondary'
                                 )}
-                                onClick={(e) => {
-                                  // If clicking on the main category (not chevron), select it
-                                  if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
-                                    handleCategoryFilterSelect(category);
-                                  }
-                                }}
                               >
                                 <Icon className="w-4 h-4" />
                                 <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
