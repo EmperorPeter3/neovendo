@@ -7,6 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -179,26 +180,28 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
 
             {/* Middle - Subcategories (2nd level) */}
             {selectedCategory && (
-              <div className="w-64 border-r border-border p-4 overflow-y-auto bg-background flex-shrink-0">
-                <ul className="flex flex-col gap-2">
-                  {subcategories.map((subcategory) => (
-                    <li key={subcategory.id}>
-                      <button
-                        onClick={() => handleSubcategorySelect(selectedCategory, subcategory)}
-                        className={cn(
-                          "flex items-center gap-2 text-base font-medium text-foreground hover:text-primary transition-colors text-left w-full py-1",
-                          expandedSubcategory === subcategory.id && "text-primary"
-                        )}
-                      >
-                        <span>{t(subcategory.id as TranslationKey)}</span>
-                        {subcategory.children && subcategory.children.length > 0 && (
-                          <ChevronRight className="w-4 h-4 text-muted-foreground" />
-                        )}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ScrollArea className="w-64 border-r border-border bg-background flex-shrink-0 h-[500px]">
+                <div className="p-4">
+                  <ul className="flex flex-col gap-2">
+                    {subcategories.map((subcategory) => (
+                      <li key={subcategory.id}>
+                        <button
+                          onClick={() => handleSubcategorySelect(selectedCategory, subcategory)}
+                          className={cn(
+                            "flex items-center gap-2 text-base font-medium text-foreground hover:text-primary transition-colors text-left w-full py-1",
+                            expandedSubcategory === subcategory.id && "text-primary"
+                          )}
+                        >
+                          <span>{t(subcategory.id as TranslationKey)}</span>
+                          {subcategory.children && subcategory.children.length > 0 && (
+                            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+                          )}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollArea>
             )}
 
             {/* Right side - Child subcategories (3rd level) */}
