@@ -108,6 +108,10 @@ export const translations = {
     trucks_construction: "Construction Machinery",
     trucks_other: "Other",
     watercraft: "Watercraft",
+    watercraft_rowboats: "Rowboats",
+    watercraft_jetski: "Jet Skis",
+    watercraft_yachts: "Boats & Yachts",
+    watercraft_motorboats: "Motorboats & Engines",
     
     // Real Estate subcategories
     buy: "Buy Housing",
@@ -392,6 +396,10 @@ export const translations = {
     trucks_construction: "Máquinas de Construção",
     trucks_other: "Outros",
     watercraft: "Embarcações",
+    watercraft_rowboats: "Barcos a Remo",
+    watercraft_jetski: "Jet Skis",
+    watercraft_yachts: "Lanchas e Iates",
+    watercraft_motorboats: "Barcos a Motor e Motores",
     
     // Real Estate subcategories
     buy: "Comprar Imóvel",
@@ -676,6 +684,10 @@ export const translations = {
     trucks_construction: "Maquinaria de Construcción",
     trucks_other: "Otros",
     watercraft: "Embarcaciones",
+    watercraft_rowboats: "Botes de Remos",
+    watercraft_jetski: "Motos Acuáticas",
+    watercraft_yachts: "Lanchas y Yates",
+    watercraft_motorboats: "Lanchas a Motor y Motores",
     
     // Real Estate subcategories
     buy: "Comprar Vivienda",
@@ -960,6 +972,10 @@ export const translations = {
     trucks_construction: "Baumaschinen",
     trucks_other: "Andere",
     watercraft: "Wasserfahrzeuge",
+    watercraft_rowboats: "Ruderboote",
+    watercraft_jetski: "Jetskis",
+    watercraft_yachts: "Boote und Yachten",
+    watercraft_motorboats: "Motorboote und Motoren",
     
     // Real Estate subcategories
     buy: "Wohnung kaufen",
@@ -1244,6 +1260,10 @@ export const translations = {
     trucks_construction: "Engins de Chantier",
     trucks_other: "Autres",
     watercraft: "Embarcations",
+    watercraft_rowboats: "Bateaux à Rames",
+    watercraft_jetski: "Jets Ski",
+    watercraft_yachts: "Bateaux et Yachts",
+    watercraft_motorboats: "Bateaux à Moteur et Moteurs",
     
     // Real Estate subcategories
     buy: "Acheter un Logement",
@@ -1528,6 +1548,10 @@ export const translations = {
     trucks_construction: "Macchine da Cantiere",
     trucks_other: "Altro",
     watercraft: "Imbarcazioni",
+    watercraft_rowboats: "Barche a Remi",
+    watercraft_jetski: "Moto d'Acqua",
+    watercraft_yachts: "Barche e Yacht",
+    watercraft_motorboats: "Barche a Motore e Motori",
     
     // Real Estate subcategories
     buy: "Comprare Casa",
@@ -1812,6 +1836,10 @@ export const translations = {
     trucks_construction: "Строительная техника",
     trucks_other: "Другое",
     watercraft: "Водный транспорт",
+    watercraft_rowboats: "Вёсельные лодки",
+    watercraft_jetski: "Гидроциклы",
+    watercraft_yachts: "Катера и яхты",
+    watercraft_motorboats: "Моторные лодки и моторы",
     
     // Real Estate subcategories
     buy: "Купить жильё",

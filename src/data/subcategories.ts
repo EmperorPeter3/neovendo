@@ -89,7 +89,16 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
         { id: 'trucks_other', translationKey: 'Другое' },
       ]
     },
-    { id: 'watercraft', translationKey: 'Водный транспорт' },
+    { 
+      id: 'watercraft', 
+      translationKey: 'Водный транспорт',
+      children: [
+        { id: 'watercraft_rowboats', translationKey: 'Вёсельные лодки' },
+        { id: 'watercraft_jetski', translationKey: 'Гидроциклы' },
+        { id: 'watercraft_yachts', translationKey: 'Катера и яхты' },
+        { id: 'watercraft_motorboats', translationKey: 'Моторные лодки и моторы' },
+      ]
+    },
   ],
   realEstate: [
     { id: 'buy', translationKey: 'Купить жильё' },
