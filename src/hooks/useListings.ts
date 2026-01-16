@@ -230,8 +230,6 @@ export const useListing = (id: string) => {
         .eq('user_id', listing.owner_id)
         .maybeSingle();
 
-      console.log('Listing owner data:', owner);
-
       return {
         ...listing,
         owner,
