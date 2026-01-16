@@ -139,7 +139,7 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
                       <button
                         onClick={() => handleSubcategorySelect(selectedCategory, subcategory)}
                         className={cn(
-                          "flex items-center gap-2 text-base font-semibold text-foreground hover:text-primary transition-colors text-left w-full py-1",
+                          "flex items-center gap-2 text-base font-medium text-foreground hover:text-primary transition-colors text-left w-full py-1",
                           expandedSubcategory === subcategory.id && "text-primary"
                         )}
                       >
@@ -157,15 +157,12 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
             {/* Right side - Child subcategories (3rd level) */}
             {selectedCategory && expandedParent && expandedParent.children && (
               <div className="flex-1 p-4 overflow-y-auto bg-background">
-                <h3 className="text-sm font-medium text-muted-foreground mb-3">
-                  {t(expandedParent.id as TranslationKey)}
-                </h3>
                 <ul className="flex flex-col gap-2">
                   {expandedParent.children.map((child) => (
                     <li key={child.id}>
                       <button
                         onClick={() => handleChildSubcategorySelect(selectedCategory, child.id)}
-                        className="text-base font-semibold text-foreground hover:text-primary transition-colors text-left py-1"
+                        className="text-base font-normal text-foreground hover:text-primary transition-colors text-left py-1"
                       >
                         {t(child.id as TranslationKey)}
                       </button>
