@@ -127,7 +127,6 @@ const SearchPage = () => {
   const navigate = useNavigate();
 const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(true); // Default open
-  const [showCategoryList, setShowCategoryList] = useState(false); // Collapsed when category selected
   const [expandedSubcategories, setExpandedSubcategories] = useState<Record<string, boolean>>({}); // Track expanded subcategories
 
   const query = searchParams.get('q') || '';
@@ -473,41 +472,22 @@ const [searchParams, setSearchParams] = useSearchParams();
                     {t('category')}
                   </label>
                   
-                  {/* Collapsed category button when category is selected */}
-                  {selectedCategory && !showCategoryList ? (
-                    <button
-                      onClick={() => setShowCategoryList(true)}
-                      className="w-full text-left px-3 py-2 rounded-lg text-sm bg-primary text-primary-foreground flex items-center gap-2"
-                    >
-                      {(() => {
-                        const Icon = categoryIcons[selectedCategory];
-                        return <Icon className="w-4 h-4" />;
-                      })()}
-                      <span className="flex-1">{t(selectedCategory as TranslationKey)}</span>
-                      {selectedSubcategory && (
-                        <span className="text-xs opacity-80">/ {t(selectedSubcategory as TranslationKey)}</span>
-                      )}
-                      <ChevronDown className="w-4 h-4 ml-auto" />
-                    </button>
-                  ) : (
-                    <>
-                      {/* All categories option */}
-                      <button
-                        onClick={() => {
-                          handleCategoryFilterSelect('');
-                          setShowCategoryList(false);
-                        }}
-                        className={cn(
-                          "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
-                          !selectedCategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
-                        )}
-                      >
-                        {(() => {
-                          const AllIcon = categoryIcons[''];
-                          return <AllIcon className="w-4 h-4" />;
-                        })()}
-                        {t('all')}
-                      </button>
+                  {/* All categories option */}
+                  <button
+                    onClick={() => {
+                      handleCategoryFilterSelect('');
+                    }}
+                    className={cn(
+                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
+                      !selectedCategory ? 'bg-primary text-primary-foreground' : 'hover:bg-secondary'
+                    )}
+                  >
+                    {(() => {
+                      const AllIcon = categoryIcons[''];
+                      return <AllIcon className="w-4 h-4" />;
+                    })()}
+                    {t('all')}
+                  </button>
 
                       <Accordion 
                         type="single" 
@@ -535,7 +515,6 @@ const [searchParams, setSearchParams] = useSearchParams();
                                   // If clicking on the main category (not chevron), select it
                                   if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
                                     handleCategoryFilterSelect(category);
-                                    setShowCategoryList(false);
                                   }
                                 }}
                               >
@@ -551,7 +530,7 @@ const [searchParams, setSearchParams] = useSearchParams();
                                     return (
                                       <div key={subcategory.id}>
                                         <button
-                                          onClick={() => {
+                                        onClick={() => {
                                             if (hasChildren) {
                                               setExpandedSubcategories(prev => ({
                                                 ...prev,
@@ -559,7 +538,6 @@ const [searchParams, setSearchParams] = useSearchParams();
                                               }));
                                             } else {
                                               handleSubcategoryFilterSelect(category, subcategory.id);
-                                              setShowCategoryList(false);
                                             }
                                           }}
                                           className={cn(
@@ -585,7 +563,6 @@ const [searchParams, setSearchParams] = useSearchParams();
                                                 key={child.id}
                                                 onClick={() => {
                                                   handleSubcategoryFilterSelect(category, child.id);
-                                                  setShowCategoryList(false);
                                                 }}
                                                 className={cn(
                                                   "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
@@ -608,8 +585,6 @@ const [searchParams, setSearchParams] = useSearchParams();
                           );
                         })}
                       </Accordion>
-                    </>
-                  )}
                 </div>
 
                 {/* Price Filter */}
