@@ -141,7 +141,7 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
             <DialogTitle>{t('categories')}</DialogTitle>
           </DialogHeader>
           
-          <div className="flex min-h-[500px]">
+          <div className="flex h-[700px]">
             {/* Left side - Main categories */}
             <div className="w-64 border-r border-border overflow-y-auto bg-card flex-shrink-0">
               {/* All categories option */}
@@ -180,7 +180,7 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
 
             {/* Middle - Subcategories (2nd level) */}
             {selectedCategory && (
-              <ScrollArea className="w-64 border-r border-border bg-background flex-shrink-0 h-[500px]">
+              <ScrollArea className="w-64 border-r border-border bg-background flex-shrink-0 h-full">
                 <div className="p-4">
                   <ul className="flex flex-col gap-2">
                     {subcategories.map((subcategory) => (
@@ -206,20 +206,22 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
 
             {/* Right side - Child subcategories (3rd level) */}
             {selectedCategory && expandedParent && expandedParent.children && (
-              <div className="flex-1 p-4 overflow-y-auto bg-background">
-                <ul className="flex flex-col gap-2">
-                  {expandedParent.children.map((child) => (
-                    <li key={child.id}>
-                      <button
-                        onClick={() => handleChildSubcategorySelect(selectedCategory, child.id)}
-                        className="text-base font-normal text-foreground hover:text-primary transition-colors text-left py-1"
-                      >
-                        {t(child.id as TranslationKey)}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              <ScrollArea className="flex-1 bg-background h-full">
+                <div className="p-4">
+                  <ul className="flex flex-col gap-2">
+                    {expandedParent.children.map((child) => (
+                      <li key={child.id}>
+                        <button
+                          onClick={() => handleChildSubcategorySelect(selectedCategory, child.id)}
+                          className="text-base font-normal text-foreground hover:text-primary transition-colors text-left py-1"
+                        >
+                          {t(child.id as TranslationKey)}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </ScrollArea>
             )}
           </div>
         </DialogContent>
