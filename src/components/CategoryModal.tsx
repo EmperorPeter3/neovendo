@@ -136,7 +136,7 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
       )}
 
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) setExpandedSubcategory(null); }}>
-        <DialogContent className="max-w-4xl max-h-[80vh] p-0 gap-0 overflow-hidden">
+        <DialogContent className="max-w-5xl max-h-[90vh] p-0 gap-0 overflow-hidden">
           <DialogHeader className="p-4 border-b border-border">
             <DialogTitle>{t('categories')}</DialogTitle>
           </DialogHeader>
