@@ -390,11 +390,36 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
         { id: 'events_leisure', translationKey: 'Организация досуга и отдыха' },
       ]
     },
-    { id: 'food_delivery', translationKey: 'Доставка продуктов, десертов, кейтеринг' },
-    { id: 'photo_video', translationKey: 'Фото- и видеосъёмка' },
+    { 
+      id: 'food_delivery', 
+      translationKey: 'Доставка продуктов, десертов, кейтеринг',
+      children: [
+        { id: 'food_ready', translationKey: 'Доставка готовой еды' },
+        { id: 'food_cakes', translationKey: 'Торты и десерты на заказ' },
+        { id: 'food_catering', translationKey: 'Кейтеринг, официанты, повара, бармены' },
+      ]
+    },
+    { 
+      id: 'photo_video', 
+      translationKey: 'Фото- и видеосъёмка',
+      children: [
+        { id: 'photo_shooting', translationKey: 'Фотосъёмка' },
+        { id: 'video_shooting', translationKey: 'Видеосъёмка' },
+        { id: 'photo_studio', translationKey: 'Аренда фотостудии' },
+      ]
+    },
     { id: 'nannies_caregivers', translationKey: 'Няни, сиделки' },
     { id: 'pet_care', translationKey: 'Уход за животными' },
-    { id: 'art', translationKey: 'Искусство' },
+    { 
+      id: 'art', 
+      translationKey: 'Искусство',
+      children: [
+        { id: 'art_music', translationKey: 'Музыка, стихи, песни на заказ' },
+        { id: 'art_artists', translationKey: 'Услуги художников' },
+        { id: 'art_customization', translationKey: 'Кастомизация' },
+        { id: 'art_handmade', translationKey: 'Рукоделие на заказ' },
+      ]
+    },
     { id: 'security', translationKey: 'Охрана, безопасность' },
     { id: 'other', translationKey: 'Другое' },
   ],
