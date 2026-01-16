@@ -180,7 +180,7 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
 
             {/* Middle - Subcategories (2nd level) */}
             {selectedCategory && (
-              <ScrollArea className="w-64 border-r border-border bg-background flex-shrink-0 h-full">
+              <ScrollArea className="w-80 border-r border-border bg-background flex-shrink-0 h-full">
                 <div className="p-4">
                   <ul className="flex flex-col gap-2">
                     {subcategories.map((subcategory) => (
