@@ -342,6 +342,7 @@ export const translations = {
     jewelry_gold: "Jewelry",
     jewelry_watches: "Watches",
     jewelry_bijouterie: "Bijouterie",
+    personal_other: "Other",
     
     // Home & Garden subcategories
     repair_construction: "Repair & Construction",
@@ -810,6 +811,7 @@ export const translations = {
     jewelry_gold: "Joias",
     jewelry_watches: "Relógios",
     jewelry_bijouterie: "Bijuteria",
+    personal_other: "Outros",
     
     // Home & Garden subcategories
     repair_construction: "Reparo e Construção",
@@ -1278,6 +1280,7 @@ export const translations = {
     jewelry_gold: "Joyería",
     jewelry_watches: "Relojes",
     jewelry_bijouterie: "Bisutería",
+    personal_other: "Otros",
     
     // Home & Garden subcategories
     repair_construction: "Reparación y Construcción",
@@ -1746,6 +1749,7 @@ export const translations = {
     jewelry_gold: "Schmuck",
     jewelry_watches: "Uhren",
     jewelry_bijouterie: "Modeschmuck",
+    personal_other: "Sonstiges",
     
     // Home & Garden subcategories
     repair_construction: "Reparatur und Bau",
@@ -2214,6 +2218,7 @@ export const translations = {
     jewelry_gold: "Bijoux",
     jewelry_watches: "Montres",
     jewelry_bijouterie: "Bijoux Fantaisie",
+    personal_other: "Autres",
     
     // Home & Garden subcategories
     repair_construction: "Réparation et Construction",
@@ -2682,6 +2687,7 @@ export const translations = {
     jewelry_gold: "Gioielli",
     jewelry_watches: "Orologi",
     jewelry_bijouterie: "Bigiotteria",
+    personal_other: "Altro",
     
     // Home & Garden subcategories
     repair_construction: "Riparazione e Costruzione",
@@ -3150,6 +3156,7 @@ export const translations = {
     jewelry_gold: "Ювелирные изделия",
     jewelry_watches: "Часы",
     jewelry_bijouterie: "Бижутерия",
+    personal_other: "Другое",
     
     // Home & Garden subcategories
     repair_construction: "Ремонт и строительство",

@@ -479,6 +479,7 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
         { id: 'jewelry_bijouterie', translationKey: 'Бижутерия' },
       ]
     },
+    { id: 'personal_other', translationKey: 'Другое' },
   ],
   homeAndGarden: [
     { id: 'repair_construction', translationKey: 'Ремонт и строительство' },
