@@ -15,7 +15,9 @@ import { cn } from '@/lib/utils';
 
 interface CategoryModalProps {
   value?: Category | '';
+  subcategoryValue?: string;
   onChange?: (value: Category | '', subcategory?: string) => void;
+  showPath?: boolean;
 }
 
 const categories: Category[] = [
@@ -32,7 +34,25 @@ const categories: Category[] = [
   'business',
 ];
 
-export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
+// Helper to find subcategory path
+const findSubcategoryPath = (
+  subcategories: Subcategory[],
+  targetId: string,
+  currentPath: string[] = []
+): string[] | null => {
+  for (const sub of subcategories) {
+    if (sub.id === targetId) {
+      return [...currentPath, sub.id];
+    }
+    if (sub.children) {
+      const found = findSubcategoryPath(sub.children, targetId, [...currentPath, sub.id]);
+      if (found) return found;
+    }
+  }
+  return null;
+};
+
+export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, showPath = false }: CategoryModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     value ? (value as Category) : 'transport'
@@ -40,7 +60,31 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
   const [expandedSubcategory, setExpandedSubcategory] = useState<string | null>(null);
   const { t } = useLanguage();
 
-  const displayLabel = value ? t(value as TranslationKey) : t('allCategories');
+  // Calculate display label and path
+  const getDisplayInfo = () => {
+    if (!value || !subcategoryValue) {
+      return { label: t('allCategories'), path: null };
+    }
+    
+    const categorySubcategories = subcategoriesData[value as Category];
+    if (!categorySubcategories) {
+      return { label: t(value as TranslationKey), path: null };
+    }
+    
+    const subcategoryPath = findSubcategoryPath(categorySubcategories, subcategoryValue);
+    if (subcategoryPath && subcategoryPath.length > 0) {
+      const leafId = subcategoryPath[subcategoryPath.length - 1];
+      const fullPath = [value as string, ...subcategoryPath];
+      return { 
+        label: t(leafId as TranslationKey), 
+        path: fullPath.map(id => t(id as TranslationKey)).join(' → ')
+      };
+    }
+    
+    return { label: t(subcategoryValue as TranslationKey), path: `${t(value as TranslationKey)} → ${t(subcategoryValue as TranslationKey)}` };
+  };
+
+  const { label: displayLabel, path: categoryPath } = getDisplayInfo();
   const SelectedIcon = categoryIcons[value] || categoryIcons[''];
 
   const handleCategorySelect = (category: Category | '') => {
@@ -75,17 +119,20 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
   const expandedParent = subcategories.find(sub => sub.id === expandedSubcategory);
 
   return (
-    <>
+    <div className="flex flex-col gap-1">
       <Button
         type="button"
         variant="outline"
         onClick={() => setIsOpen(true)}
-        className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[160px]"
+        className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap min-w-[160px] w-fit"
       >
         <SelectedIcon className="w-5 h-5 text-emerald-600" />
         <span className="truncate">{displayLabel}</span>
         <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
       </Button>
+      {showPath && categoryPath && (
+        <p className="text-sm text-muted-foreground">{categoryPath}</p>
+      )}
 
       <Dialog open={isOpen} onOpenChange={(open) => { setIsOpen(open); if (!open) setExpandedSubcategory(null); }}>
         <DialogContent className="max-w-4xl max-h-[80vh] p-0 gap-0 overflow-hidden">
@@ -174,6 +221,6 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
           </div>
         </DialogContent>
       </Dialog>
-    </>
+    </div>
   );
 };

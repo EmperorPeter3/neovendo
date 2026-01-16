@@ -333,13 +333,10 @@ const CreateListing = () => {
               </label>
               <CategoryModal 
                 value={category} 
+                subcategoryValue={subcategory}
                 onChange={handleCategoryChange}
+                showPath={true}
               />
-              {subcategory && (
-                <p className="text-sm text-muted-foreground mt-2">
-                  {t('subcategory')}: {t(subcategory as TranslationKey)}
-                </p>
-              )}
             </div>
 
             {/* Car-specific fields */}
