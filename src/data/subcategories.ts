@@ -30,6 +30,12 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
   transport: [
     { id: 'cars', translationKey: 'Автомобили' },
     { id: 'motorcycles', translationKey: 'Мотоциклы и мототехника' },
+    { id: 'atvs', translationKey: 'Вездеходы' },
+    { id: 'karting', translationKey: 'Картинг' },
+    { id: 'quads_buggies', translationKey: 'Квадроциклы и багги' },
+    { id: 'mopeds_scooters', translationKey: 'Мопеды и скутеры' },
+    { id: 'motorbikes', translationKey: 'Мотоциклы' },
+    { id: 'snowmobiles', translationKey: 'Снегоходы' },
     { id: 'trucks', translationKey: 'Грузовики и спецтехника' },
     { id: 'watercraft', translationKey: 'Водный транспорт' },
   ],

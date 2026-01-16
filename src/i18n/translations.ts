@@ -89,6 +89,12 @@ export const translations = {
     // Transport subcategories
     cars: "Cars",
     motorcycles: "Motorcycles & Motor Vehicles",
+    atvs: "All-Terrain Vehicles",
+    karting: "Karting",
+    quads_buggies: "Quads & Buggies",
+    mopeds_scooters: "Mopeds & Scooters",
+    motorbikes: "Motorcycles",
+    snowmobiles: "Snowmobiles",
     trucks: "Trucks & Special Vehicles",
     watercraft: "Watercraft",
     
@@ -356,6 +362,12 @@ export const translations = {
     // Transport subcategories
     cars: "Carros",
     motorcycles: "Motos e Veículos Motorizados",
+    atvs: "Veículos Todo-Terreno",
+    karting: "Kart",
+    quads_buggies: "Quadriciclos e Buggies",
+    mopeds_scooters: "Ciclomotores e Scooters",
+    motorbikes: "Motocicletas",
+    snowmobiles: "Motos de Neve",
     trucks: "Caminhões e Veículos Especiais",
     watercraft: "Embarcações",
     
@@ -623,6 +635,12 @@ export const translations = {
     // Transport subcategories
     cars: "Coches",
     motorcycles: "Motos y Vehículos Motorizados",
+    atvs: "Vehículos Todo Terreno",
+    karting: "Karting",
+    quads_buggies: "Quads y Buggies",
+    mopeds_scooters: "Ciclomotores y Scooters",
+    motorbikes: "Motocicletas",
+    snowmobiles: "Motos de Nieve",
     trucks: "Camiones y Vehículos Especiales",
     watercraft: "Embarcaciones",
     
@@ -890,6 +908,12 @@ export const translations = {
     // Transport subcategories
     cars: "Autos",
     motorcycles: "Motorräder und Motorfahrzeuge",
+    atvs: "Geländefahrzeuge",
+    karting: "Karting",
+    quads_buggies: "Quads und Buggys",
+    mopeds_scooters: "Mopeds und Roller",
+    motorbikes: "Motorräder",
+    snowmobiles: "Schneemobile",
     trucks: "LKWs und Spezialfahrzeuge",
     watercraft: "Wasserfahrzeuge",
     
@@ -1157,6 +1181,12 @@ export const translations = {
     // Transport subcategories
     cars: "Voitures",
     motorcycles: "Motos et Véhicules Motorisés",
+    atvs: "Véhicules Tout-Terrain",
+    karting: "Karting",
+    quads_buggies: "Quads et Buggys",
+    mopeds_scooters: "Cyclomoteurs et Scooters",
+    motorbikes: "Motos",
+    snowmobiles: "Motoneiges",
     trucks: "Camions et Véhicules Spéciaux",
     watercraft: "Embarcations",
     
@@ -1424,6 +1454,12 @@ export const translations = {
     // Transport subcategories
     cars: "Auto",
     motorcycles: "Moto e Veicoli Motorizzati",
+    atvs: "Veicoli Fuoristrada",
+    karting: "Karting",
+    quads_buggies: "Quad e Buggy",
+    mopeds_scooters: "Ciclomotori e Scooter",
+    motorbikes: "Motociclette",
+    snowmobiles: "Motoslitte",
     trucks: "Camion e Veicoli Speciali",
     watercraft: "Imbarcazioni",
     
@@ -1691,6 +1727,12 @@ export const translations = {
     // Transport subcategories
     cars: "Автомобили",
     motorcycles: "Мотоциклы и мототехника",
+    atvs: "Вездеходы",
+    karting: "Картинг",
+    quads_buggies: "Квадроциклы и багги",
+    mopeds_scooters: "Мопеды и скутеры",
+    motorbikes: "Мотоциклы",
+    snowmobiles: "Снегоходы",
     trucks: "Грузовики и спецтехника",
     watercraft: "Водный транспорт",
     
