@@ -248,6 +248,36 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles_public_cache: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          name: string | null
+          rating: number | null
+          rating_count: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          name?: string | null
+          rating?: number | null
+          rating_count?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          name?: string | null
+          rating?: number | null
+          rating_count?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       reviews: {
         Row: {
           comment: string | null
@@ -323,7 +353,7 @@ export type Database = {
         Insert: {
           avatar_url?: string | null
           created_at?: string | null
-          id?: string | null
+          id?: never
           name?: string | null
           rating?: number | null
           rating_count?: number | null
@@ -333,7 +363,7 @@ export type Database = {
         Update: {
           avatar_url?: string | null
           created_at?: string | null
-          id?: string | null
+          id?: never
           name?: string | null
           rating?: number | null
           rating_count?: number | null
