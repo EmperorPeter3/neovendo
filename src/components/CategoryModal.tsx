@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ChevronDown, ChevronRight, ChevronLeft } from 'lucide-react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -95,7 +95,7 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
           
           <div className="flex min-h-[500px]">
             {/* Left side - Main categories */}
-            <div className="w-64 border-r border-border overflow-y-auto bg-card">
+            <div className="w-64 border-r border-border overflow-y-auto bg-card flex-shrink-0">
               {/* All categories option */}
               <button
                 onClick={() => handleCategorySelect('')}
@@ -130,18 +130,18 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
               })}
             </div>
 
-            {/* Right side - Subcategories */}
-            <div className="flex-1 p-6 overflow-y-auto bg-background">
-              {selectedCategory && !expandedSubcategory && (
-                <ul className={cn(
-                  "grid gap-3",
-                  subcategories.length > 10 ? "grid-cols-2" : "grid-cols-1"
-                )}>
+            {/* Middle - Subcategories (2nd level) */}
+            {selectedCategory && (
+              <div className="w-64 border-r border-border p-4 overflow-y-auto bg-background flex-shrink-0">
+                <ul className="flex flex-col gap-2">
                   {subcategories.map((subcategory) => (
                     <li key={subcategory.id}>
                       <button
                         onClick={() => handleSubcategorySelect(selectedCategory, subcategory)}
-                        className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-primary transition-colors text-left w-full"
+                        className={cn(
+                          "flex items-center gap-2 text-base font-semibold text-foreground hover:text-primary transition-colors text-left w-full py-1",
+                          expandedSubcategory === subcategory.id && "text-primary"
+                        )}
                       >
                         <span>{t(subcategory.id as TranslationKey)}</span>
                         {subcategory.children && subcategory.children.length > 0 && (
@@ -151,36 +151,29 @@ export const CategoryModal = ({ value = '', onChange }: CategoryModalProps) => {
                     </li>
                   ))}
                 </ul>
-              )}
+              </div>
+            )}
 
-              {/* Show children when parent is expanded */}
-              {selectedCategory && expandedParent && expandedParent.children && (
-                <div>
-                  <button
-                    onClick={() => setExpandedSubcategory(null)}
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-4 transition-colors"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                    <span>{t('back')}</span>
-                  </button>
-                  <h3 className="text-lg font-semibold text-foreground mb-4">
-                    {t(expandedParent.id as TranslationKey)}
-                  </h3>
-                  <ul className="grid gap-3 grid-cols-1">
-                    {expandedParent.children.map((child) => (
-                      <li key={child.id}>
-                        <button
-                          onClick={() => handleChildSubcategorySelect(selectedCategory, child.id)}
-                          className="text-base font-semibold text-foreground hover:text-primary transition-colors text-left"
-                        >
-                          {t(child.id as TranslationKey)}
-                        </button>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
-            </div>
+            {/* Right side - Child subcategories (3rd level) */}
+            {selectedCategory && expandedParent && expandedParent.children && (
+              <div className="flex-1 p-4 overflow-y-auto bg-background">
+                <h3 className="text-sm font-medium text-muted-foreground mb-3">
+                  {t(expandedParent.id as TranslationKey)}
+                </h3>
+                <ul className="flex flex-col gap-2">
+                  {expandedParent.children.map((child) => (
+                    <li key={child.id}>
+                      <button
+                        onClick={() => handleChildSubcategorySelect(selectedCategory, child.id)}
+                        className="text-base font-semibold text-foreground hover:text-primary transition-colors text-left py-1"
+                      >
+                        {t(child.id as TranslationKey)}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </DialogContent>
       </Dialog>
