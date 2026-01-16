@@ -456,8 +456,8 @@ const [searchParams, setSearchParams] = useSearchParams();
           {/* Filters Sidebar */}
           {showFilters && (
             <div className="w-72 shrink-0 hidden md:block">
-              <div className="bg-card rounded-2xl shadow-card p-6 sticky top-24">
-                <div className="flex items-center justify-between mb-6">
+              <div className="bg-card rounded-2xl shadow-card p-4 sticky top-24">
+                <div className="flex items-center justify-between mb-4">
                   <h3 className="font-display font-semibold text-foreground">{t('filters')}</h3>
                   <button
                     onClick={() => setShowFilters(false)}
@@ -468,7 +468,7 @@ const [searchParams, setSearchParams] = useSearchParams();
                 </div>
 
                 {/* Category Filter */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-foreground mb-3">
                     {t('category')}
                   </label>
@@ -563,19 +563,19 @@ const [searchParams, setSearchParams] = useSearchParams();
                                             }
                                           }}
                                           className={cn(
-                                            "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-1",
+                                            "w-full text-left px-2 py-1 rounded-lg text-xs transition-colors flex items-center justify-between",
                                             selectedCategory === category && selectedSubcategory === subcategory.id
                                               ? 'bg-primary/20 text-primary font-medium'
                                               : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
                                             hasChildren && 'font-medium text-foreground'
                                           )}
                                         >
+                                          <span>{t(subcategory.id as TranslationKey)}</span>
                                           {hasChildren && (
                                             isExpanded 
                                               ? <ChevronDown className="w-3 h-3 shrink-0" />
                                               : <ChevronRight className="w-3 h-3 shrink-0" />
                                           )}
-                                          <span>{t(subcategory.id as TranslationKey)}</span>
                                         </button>
                                         {/* Render nested children - collapsible */}
                                         {hasChildren && isExpanded && (
@@ -613,7 +613,7 @@ const [searchParams, setSearchParams] = useSearchParams();
                 </div>
 
                 {/* Price Filter */}
-                <div className="mb-6">
+                <div className="mb-4">
                   <label className="block text-sm font-medium text-foreground mb-3">
                     {t('priceRange')}
                   </label>
