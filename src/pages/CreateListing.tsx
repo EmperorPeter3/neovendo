@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { categories } from '@/data/mockListings';
-import { subcategoriesData, categoryIcons } from '@/data/subcategories';
+import { subcategoriesData, categoryIcons, Subcategory } from '@/data/subcategories';
 import { ImagePlus, X, ArrowLeft, Loader2 } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
@@ -359,20 +359,49 @@ const CreateListing = () => {
                   {t('subcategory')} *
                 </label>
                 <div className={`grid gap-2 ${subcategories.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
-                  {subcategories.map(sub => (
-                    <button
-                      key={sub.id}
-                      type="button"
-                      onClick={() => setSubcategory(sub.id)}
-                      className={`p-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
-                        subcategory === sub.id
-                          ? 'border-primary bg-primary/5 text-primary'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      {t(sub.id as TranslationKey)}
-                    </button>
-                  ))}
+                  {subcategories.map(sub => {
+                    // If subcategory has children, render them as nested buttons
+                    if (sub.children && sub.children.length > 0) {
+                      return (
+                        <div key={sub.id} className="col-span-full">
+                          <div className="text-sm font-medium text-muted-foreground mb-2 mt-2">
+                            {t(sub.id as TranslationKey)}
+                          </div>
+                          <div className="grid gap-2 grid-cols-2 md:grid-cols-3">
+                            {sub.children.map(child => (
+                              <button
+                                key={child.id}
+                                type="button"
+                                onClick={() => setSubcategory(child.id)}
+                                className={`p-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
+                                  subcategory === child.id
+                                    ? 'border-primary bg-primary/5 text-primary'
+                                    : 'border-border hover:border-primary/50'
+                                }`}
+                              >
+                                {t(child.id as TranslationKey)}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      );
+                    }
+                    
+                    return (
+                      <button
+                        key={sub.id}
+                        type="button"
+                        onClick={() => setSubcategory(sub.id)}
+                        className={`p-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
+                          subcategory === sub.id
+                            ? 'border-primary bg-primary/5 text-primary'
+                            : 'border-border hover:border-primary/50'
+                        }`}
+                      >
+                        {t(sub.id as TranslationKey)}
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             )}

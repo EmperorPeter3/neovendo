@@ -18,6 +18,7 @@ import {
 export interface Subcategory {
   id: string;
   translationKey: string;
+  children?: Subcategory[];
 }
 
 export interface SubcategoryGroup {
@@ -26,16 +27,51 @@ export interface SubcategoryGroup {
   items: Subcategory[];
 }
 
+// Helper to get all subcategory IDs including nested ones (for database queries)
+export const getAllSubcategoryIds = (subcategory: Subcategory): string[] => {
+  if (subcategory.children && subcategory.children.length > 0) {
+    return subcategory.children.map(child => child.id);
+  }
+  return [subcategory.id];
+};
+
+// Helper to find a subcategory by ID (including nested ones)
+export const findSubcategoryById = (subcategories: Subcategory[], id: string): Subcategory | undefined => {
+  for (const sub of subcategories) {
+    if (sub.id === id) return sub;
+    if (sub.children) {
+      const found = sub.children.find(child => child.id === id);
+      if (found) return found;
+    }
+  }
+  return undefined;
+};
+
+// Helper to get parent subcategory for a nested subcategory
+export const getParentSubcategory = (subcategories: Subcategory[], childId: string): Subcategory | undefined => {
+  for (const sub of subcategories) {
+    if (sub.children?.some(child => child.id === childId)) {
+      return sub;
+    }
+  }
+  return undefined;
+};
+
 export const subcategoriesData: Record<Category, Subcategory[]> = {
   transport: [
     { id: 'cars', translationKey: 'Автомобили' },
-    { id: 'motorcycles', translationKey: 'Мотоциклы и мототехника' },
-    { id: 'atvs', translationKey: 'Вездеходы' },
-    { id: 'karting', translationKey: 'Картинг' },
-    { id: 'quads_buggies', translationKey: 'Квадроциклы и багги' },
-    { id: 'mopeds_scooters', translationKey: 'Мопеды и скутеры' },
-    { id: 'motorbikes', translationKey: 'Мотоциклы' },
-    { id: 'snowmobiles', translationKey: 'Снегоходы' },
+    { 
+      id: 'motorcycles', 
+      translationKey: 'Мотоциклы и мототехника',
+      children: [
+        { id: 'atvs', translationKey: 'Вездеходы' },
+        { id: 'karting', translationKey: 'Картинг' },
+        { id: 'quads_buggies', translationKey: 'Квадроциклы и багги' },
+        { id: 'mopeds_scooters', translationKey: 'Мопеды и скутеры' },
+        { id: 'motorbikes', translationKey: 'Мотоциклы' },
+        { id: 'snowmobiles', translationKey: 'Снегоходы' },
+      ]
+    },
     { id: 'trucks', translationKey: 'Грузовики и спецтехника' },
     { id: 'watercraft', translationKey: 'Водный транспорт' },
   ],
