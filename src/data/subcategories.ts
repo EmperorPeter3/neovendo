@@ -101,11 +101,45 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     },
   ],
   realEstate: [
-    { id: 'buy', translationKey: 'Купить жильё' },
-    { id: 'rent_daily', translationKey: 'Арендовать посуточно' },
-    { id: 'rent_long', translationKey: 'Арендовать долгосрочно' },
+    { 
+      id: 'buy', 
+      translationKey: 'Купить жильё',
+      children: [
+        { id: 'buy_all_apartments', translationKey: 'Все квартиры' },
+        { id: 'buy_secondary', translationKey: 'Вторичка' },
+        { id: 'buy_new', translationKey: 'Новостройки' },
+        { id: 'buy_houses', translationKey: 'Дома, дачи, коттеджи' },
+        { id: 'buy_rooms', translationKey: 'Комнаты' },
+      ]
+    },
+    { 
+      id: 'rent_daily', 
+      translationKey: 'Арендовать посуточно',
+      children: [
+        { id: 'rent_daily_apartments', translationKey: 'Квартиры' },
+        { id: 'rent_daily_houses', translationKey: 'Дома, дачи и коттеджи' },
+        { id: 'rent_daily_rooms', translationKey: 'Комнаты и койко-места' },
+        { id: 'rent_daily_hotels', translationKey: 'Отели' },
+      ]
+    },
+    { 
+      id: 'rent_long', 
+      translationKey: 'Арендовать долгосрочно',
+      children: [
+        { id: 'rent_long_apartments', translationKey: 'Квартиры' },
+        { id: 'rent_long_houses', translationKey: 'Дома, дачи и коттеджи' },
+        { id: 'rent_long_rooms', translationKey: 'Комнаты и койко-места' },
+      ]
+    },
     { id: 'commercial', translationKey: 'Коммерческая недвижимость' },
-    { id: 'land', translationKey: 'Земельные участки' },
+    { 
+      id: 'realestate_other', 
+      translationKey: 'Другое',
+      children: [
+        { id: 'realestate_land', translationKey: 'Земельные участки' },
+        { id: 'realestate_garages', translationKey: 'Гаражи и машиноместа' },
+      ]
+    },
   ],
   jobs: [
     { id: 'looking_job', translationKey: 'Ищу работу' },
