@@ -128,6 +128,7 @@ const SearchPage = () => {
 const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(true); // Default open
   const [showCategoryList, setShowCategoryList] = useState(false); // Collapsed when category selected
+  const [expandedSubcategories, setExpandedSubcategories] = useState<Record<string, boolean>>({}); // Track expanded subcategories
 
   const query = searchParams.get('q') || '';
   const categoryParam = searchParams.get('category') as Category | null;
@@ -543,49 +544,64 @@ const [searchParams, setSearchParams] = useSearchParams();
                               </AccordionTrigger>
                               <AccordionContent className="pb-0 pt-1">
                                 <div className="pl-6 space-y-1">
-                                  {subcategories.map(subcategory => (
-                                    <div key={subcategory.id}>
-                                      <button
-                                        onClick={() => {
-                                          if (!subcategory.children || subcategory.children.length === 0) {
-                                            handleSubcategoryFilterSelect(category, subcategory.id);
-                                            setShowCategoryList(false);
-                                          }
-                                        }}
-                                        className={cn(
-                                          "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
-                                          selectedCategory === category && selectedSubcategory === subcategory.id
-                                            ? 'bg-primary/20 text-primary font-medium'
-                                            : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
-                                          subcategory.children && subcategory.children.length > 0 && 'font-medium text-foreground cursor-default'
+                                  {subcategories.map(subcategory => {
+                                    const hasChildren = subcategory.children && subcategory.children.length > 0;
+                                    const isExpanded = expandedSubcategories[subcategory.id] ?? false;
+                                    
+                                    return (
+                                      <div key={subcategory.id}>
+                                        <button
+                                          onClick={() => {
+                                            if (hasChildren) {
+                                              setExpandedSubcategories(prev => ({
+                                                ...prev,
+                                                [subcategory.id]: !prev[subcategory.id]
+                                              }));
+                                            } else {
+                                              handleSubcategoryFilterSelect(category, subcategory.id);
+                                              setShowCategoryList(false);
+                                            }
+                                          }}
+                                          className={cn(
+                                            "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors flex items-center gap-1",
+                                            selectedCategory === category && selectedSubcategory === subcategory.id
+                                              ? 'bg-primary/20 text-primary font-medium'
+                                              : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
+                                            hasChildren && 'font-medium text-foreground'
+                                          )}
+                                        >
+                                          {hasChildren && (
+                                            isExpanded 
+                                              ? <ChevronDown className="w-3 h-3 shrink-0" />
+                                              : <ChevronRight className="w-3 h-3 shrink-0" />
+                                          )}
+                                          <span>{t(subcategory.id as TranslationKey)}</span>
+                                        </button>
+                                        {/* Render nested children - collapsible */}
+                                        {hasChildren && isExpanded && (
+                                          <div className="pl-4 space-y-1 mt-1">
+                                            {subcategory.children!.map(child => (
+                                              <button
+                                                key={child.id}
+                                                onClick={() => {
+                                                  handleSubcategoryFilterSelect(category, child.id);
+                                                  setShowCategoryList(false);
+                                                }}
+                                                className={cn(
+                                                  "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                                  selectedCategory === category && selectedSubcategory === child.id
+                                                    ? 'bg-primary/20 text-primary font-medium'
+                                                    : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
+                                                )}
+                                              >
+                                                {t(child.id as TranslationKey)}
+                                              </button>
+                                            ))}
+                                          </div>
                                         )}
-                                      >
-                                        {t(subcategory.id as TranslationKey)}
-                                      </button>
-                                      {/* Render nested children */}
-                                      {subcategory.children && subcategory.children.length > 0 && (
-                                        <div className="pl-4 space-y-1 mt-1">
-                                          {subcategory.children.map(child => (
-                                            <button
-                                              key={child.id}
-                                              onClick={() => {
-                                                handleSubcategoryFilterSelect(category, child.id);
-                                                setShowCategoryList(false);
-                                              }}
-                                              className={cn(
-                                                "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
-                                                selectedCategory === category && selectedSubcategory === child.id
-                                                  ? 'bg-primary/20 text-primary font-medium'
-                                                  : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
-                                              )}
-                                            >
-                                              {t(child.id as TranslationKey)}
-                                            </button>
-                                          ))}
-                                        </div>
-                                      )}
-                                    </div>
-                                  ))}
+                                      </div>
+                                    );
+                                  })}
                                 </div>
                               </AccordionContent>
                             </AccordionItem>
