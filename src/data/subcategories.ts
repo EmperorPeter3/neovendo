@@ -72,7 +72,23 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
         { id: 'snowmobiles', translationKey: 'Снегоходы' },
       ]
     },
-    { id: 'trucks', translationKey: 'Грузовики и спецтехника' },
+    { 
+      id: 'trucks', 
+      translationKey: 'Грузовики и спецтехника',
+      children: [
+        { id: 'trucks_cargo', translationKey: 'Грузовики' },
+        { id: 'trucks_agro', translationKey: 'Сельхозтехника' },
+        { id: 'trucks_trailers', translationKey: 'Прицепы' },
+        { id: 'trucks_excavators', translationKey: 'Экскаваторы' },
+        { id: 'trucks_buses', translationKey: 'Автобусы' },
+        { id: 'trucks_motorhomes', translationKey: 'Автодома' },
+        { id: 'trucks_cranes', translationKey: 'Автокраны' },
+        { id: 'trucks_bulldozers', translationKey: 'Бульдозеры' },
+        { id: 'trucks_loaders', translationKey: 'Погрузчики' },
+        { id: 'trucks_construction', translationKey: 'Строительная техника' },
+        { id: 'trucks_other', translationKey: 'Другое' },
+      ]
+    },
     { id: 'watercraft', translationKey: 'Водный транспорт' },
   ],
   realEstate: [
