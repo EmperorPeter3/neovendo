@@ -193,10 +193,10 @@ export const useListings = (filters?: {
 
       if (error) throw error;
 
-      // Fetch owners separately
+      // Fetch owners separately from public view
       const ownerIds = [...new Set(listings?.map(l => l.owner_id) || [])];
       const { data: owners } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('id, name, avatar_url, rating, rating_count, user_id')
         .in('user_id', ownerIds);
 
@@ -223,9 +223,9 @@ export const useListing = (id: string) => {
       if (error) throw error;
       if (!listing) return null;
 
-      // Fetch owner
+      // Fetch owner from public view
       const { data: owner } = await supabase
-        .from('profiles')
+        .from('profiles_public')
         .select('id, name, avatar_url, rating, rating_count, user_id')
         .eq('user_id', listing.owner_id)
         .maybeSingle();
