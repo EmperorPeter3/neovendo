@@ -6,14 +6,13 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { categories } from '@/data/mockListings';
-import { subcategoriesData, categoryIcons, Subcategory } from '@/data/subcategories';
 import { ImagePlus, X, ArrowLeft, Loader2 } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
 import { useCreateListing, useUploadListingImage } from '@/hooks/useListings';
 import { Category } from '@/types/listing';
 import { CarFieldsForm, CarFieldsData, defaultCarFields } from '@/components/CarFieldsForm';
+import { CategoryModal } from '@/components/CategoryModal';
 
 const CreateListing = () => {
   const { t } = useLanguage();
@@ -37,8 +36,13 @@ const CreateListing = () => {
   const [carFields, setCarFields] = useState<CarFieldsData>(defaultCarFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
-  const subcategories = category ? subcategoriesData[category] : [];
   const isCarListing = subcategory === 'cars';
+
+  const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
+    setCategory(newCategory);
+    setSubcategory(newSubcategory || '');
+    clearFieldError('category');
+  };
 
   // Clear field error when user starts typing
   const clearFieldError = (field: string) => {
@@ -327,84 +331,16 @@ const CreateListing = () => {
               <label className="block text-sm font-medium text-foreground mb-2">
                 {t('category')} *
               </label>
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-                {categories.map(cat => {
-                  const Icon = categoryIcons[cat.id];
-                  return (
-                    <button
-                      key={cat.id}
-                      type="button"
-                      onClick={() => {
-                        setCategory(cat.id);
-                        setSubcategory(''); // Reset subcategory when category changes
-                      }}
-                      className={`p-3 rounded-xl border-2 text-sm font-medium transition-all flex items-center gap-2 whitespace-nowrap ${
-                        category === cat.id
-                          ? 'border-primary bg-primary/5 text-primary'
-                          : 'border-border hover:border-primary/50'
-                      }`}
-                    >
-                      <Icon className="w-5 h-5 text-emerald-600 flex-shrink-0" />
-                      {t(cat.id as TranslationKey)}
-                    </button>
-                  );
-                })}
-              </div>
+              <CategoryModal 
+                value={category} 
+                onChange={handleCategoryChange}
+              />
+              {subcategory && (
+                <p className="text-sm text-muted-foreground mt-2">
+                  {t('subcategory')}: {t(subcategory as TranslationKey)}
+                </p>
+              )}
             </div>
-
-            {/* Subcategory */}
-            {category && subcategories.length > 0 && (
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {t('subcategory')} *
-                </label>
-                <div className={`grid gap-2 ${subcategories.length > 6 ? 'grid-cols-2 md:grid-cols-3' : 'grid-cols-2'}`}>
-                  {subcategories.map(sub => {
-                    // If subcategory has children, render them as nested buttons
-                    if (sub.children && sub.children.length > 0) {
-                      return (
-                        <div key={sub.id} className="col-span-full">
-                          <div className="text-sm font-medium text-muted-foreground mb-2 mt-2">
-                            {t(sub.id as TranslationKey)}
-                          </div>
-                          <div className="grid gap-2 grid-cols-2 md:grid-cols-3">
-                            {sub.children.map(child => (
-                              <button
-                                key={child.id}
-                                type="button"
-                                onClick={() => setSubcategory(child.id)}
-                                className={`p-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
-                                  subcategory === child.id
-                                    ? 'border-primary bg-primary/5 text-primary'
-                                    : 'border-border hover:border-primary/50'
-                                }`}
-                              >
-                                {t(child.id as TranslationKey)}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      );
-                    }
-                    
-                    return (
-                      <button
-                        key={sub.id}
-                        type="button"
-                        onClick={() => setSubcategory(sub.id)}
-                        className={`p-3 rounded-xl border-2 text-sm font-medium transition-all text-left ${
-                          subcategory === sub.id
-                            ? 'border-primary bg-primary/5 text-primary'
-                            : 'border-border hover:border-primary/50'
-                        }`}
-                      >
-                        {t(sub.id as TranslationKey)}
-                      </button>
-                    );
-                  })}
-                </div>
-              </div>
-            )}
 
             {/* Car-specific fields */}
             {isCarListing && (
