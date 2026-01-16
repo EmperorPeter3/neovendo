@@ -69,13 +69,23 @@ export const useChats = () => {
       const userIds = [...new Set(chats?.flatMap(c => [c.buyer_id, c.seller_id]) || [])];
       const listingIds = [...new Set(chats?.map(c => c.listing_id) || [])];
 
-      // Fetch profiles
+      // Fetch public profiles (privacy-safe)
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('id, name, avatar_url, user_id')
+        .from('profiles_public')
+        .select('user_id, name, avatar_url')
         .in('user_id', userIds);
 
-      const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+      const profilesMap = new Map(
+        profiles?.map((p) => [
+          p.user_id,
+          {
+            id: p.user_id,
+            name: p.name ?? 'Unknown',
+            avatar_url: p.avatar_url,
+            user_id: p.user_id,
+          },
+        ]) || []
+      );
 
       // Fetch listings
       const { data: listings } = await supabase
@@ -125,14 +135,23 @@ export const useChatMessages = (chatId: string) => {
 
       if (error) throw error;
 
-      // Fetch senders
-      const senderIds = [...new Set(messages?.map(m => m.sender_id) || [])];
+      // Fetch senders (public profiles)
+      const senderIds = [...new Set(messages?.map((m) => m.sender_id) || [])];
       const { data: profiles } = await supabase
-        .from('profiles')
-        .select('name, avatar_url, user_id')
+        .from('profiles_public')
+        .select('user_id, name, avatar_url')
         .in('user_id', senderIds);
 
-      const profilesMap = new Map(profiles?.map(p => [p.user_id, p]) || []);
+      const profilesMap = new Map(
+        profiles?.map((p) => [
+          p.user_id,
+          {
+            name: p.name ?? 'Unknown',
+            avatar_url: p.avatar_url,
+            user_id: p.user_id,
+          },
+        ]) || []
+      );
 
       return (messages || []).map(msg => ({
         ...msg,

@@ -94,7 +94,7 @@ const ChatPage = () => {
             </Avatar>
             
             <div className="flex-1">
-              <h2 className="font-medium text-foreground">{otherUser?.name || 'Loading...'}</h2>
+              <h2 className="font-medium text-foreground">{otherUser?.name || 'Unknown'}</h2>
               {chat?.listing && (
                 <Link to={`/listing/${chat.listing.id}`} className="text-sm text-primary hover:underline">
                   {chat.listing.title}
