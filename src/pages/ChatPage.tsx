@@ -78,7 +78,7 @@ const ChatPage = () => {
 
   return (
     <Layout>
-      <div className="container py-0 max-w-2xl h-[calc(100vh-4rem)]">
+      <div className="container py-0 max-w-2xl h-[calc(100vh-8rem)] max-h-[calc(100vh-8rem)]">
         <div className="flex flex-col h-full">
           {/* Chat Header */}
           <div className="flex items-center gap-3 py-4 border-b border-border">
