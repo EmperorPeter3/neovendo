@@ -52,7 +52,7 @@ const Messages = () => {
 
   return (
     <Layout>
-      <div className="container py-6 md:py-8 max-w-2xl">
+      <div className="container py-6 md:py-8">
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" />
           {t('back')}
@@ -128,7 +128,7 @@ const Messages = () => {
                           )}
                         </div>
                         
-                        <p className="text-sm text-muted-foreground truncate">
+                        <p className="text-sm text-foreground font-semibold truncate">
                           {chat.listing?.title}
                         </p>
                         
