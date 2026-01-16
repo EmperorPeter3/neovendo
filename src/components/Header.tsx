@@ -4,6 +4,7 @@ import { Plus, MessageCircle, User, Menu, X, Globe, LogOut, Heart, List } from '
 import { Button } from '@/components/ui/button';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { useUnreadMessages } from '@/hooks/useUnreadMessages';
 import { Language } from '@/i18n/translations';
 import {
   DropdownMenu,
@@ -28,6 +29,7 @@ export const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
   const { user, profile, signOut } = useAuth();
+  const { hasUnread } = useUnreadMessages();
   const navigate = useNavigate();
 
   const currentLang = languages.find(l => l.code === language);
@@ -83,10 +85,13 @@ export const Header = () => {
 
             {user ? (
               <>
-                <Link to="/messages">
+                <Link to="/messages" className="relative">
                   <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                     <MessageCircle className="w-5 h-5" />
                   </Button>
+                  {hasUnread && (
+                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-destructive rounded-full" />
+                  )}
                 </Link>
 
                 <Link to="/create">
@@ -137,10 +142,13 @@ export const Header = () => {
               </>
             ) : (
               <>
-                <Link to="/messages">
+                <Link to="/messages" className="relative">
                   <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground">
                     <MessageCircle className="w-5 h-5" />
                   </Button>
+                  {hasUnread && (
+                    <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-destructive rounded-full" />
+                  )}
                 </Link>
 
                 <Link to="/create">
@@ -173,10 +181,13 @@ export const Header = () => {
         {mobileMenuOpen && (
           <div className="md:hidden py-4 border-t border-border animate-fade-in">
             <nav className="flex flex-col gap-2">
-              <Link to="/messages" onClick={() => setMobileMenuOpen(false)}>
+              <Link to="/messages" onClick={() => setMobileMenuOpen(false)} className="relative">
                 <Button variant="ghost" className="w-full justify-start gap-2">
                   <MessageCircle className="w-4 h-4" />
                   {t('messages')}
+                  {hasUnread && (
+                    <span className="w-2 h-2 bg-destructive rounded-full ml-auto" />
+                  )}
                 </Button>
               </Link>
               <Link to="/create" onClick={() => setMobileMenuOpen(false)}>
