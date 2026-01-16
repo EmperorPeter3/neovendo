@@ -146,21 +146,195 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     { id: 'looking_employee', translationKey: 'Ищу сотрудника' },
   ],
   services: [
-    { id: 'auto_service', translationKey: 'Автосервис, аренда' },
-    { id: 'transportation', translationKey: 'Перевозки и доставка' },
-    { id: 'movers', translationKey: 'Грузчики, складские услуги' },
+    { 
+      id: 'auto_service', 
+      translationKey: 'Автосервис, аренда',
+      children: [
+        { id: 'auto_service_cars', translationKey: 'Автосервисы для автомобилей' },
+        { id: 'auto_service_trucks', translationKey: 'Автосервисы для грузовиков и спецтехники' },
+        { id: 'auto_service_other', translationKey: 'Автосервисы для другой техники' },
+        { id: 'auto_rental_cars', translationKey: 'Аренда авто' },
+        { id: 'auto_rental_special', translationKey: 'Аренда спецтехники' },
+      ]
+    },
+    { 
+      id: 'transportation', 
+      translationKey: 'Перевозки и доставка',
+      children: [
+        { id: 'transport_city', translationKey: 'По городу' },
+        { id: 'transport_intercity', translationKey: 'Между городами' },
+        { id: 'transport_international', translationKey: 'Международные' },
+        { id: 'transport_transfer', translationKey: 'Трансфер' },
+        { id: 'transport_custom_car', translationKey: 'Авто под заказ' },
+        { id: 'transport_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'movers', 
+      translationKey: 'Грузчики, складские услуги',
+      children: [
+        { id: 'movers_porters', translationKey: 'Грузчики' },
+        { id: 'movers_fulfillment', translationKey: 'Фулфилмент' },
+      ]
+    },
     { id: 'tow_truck', translationKey: 'Услуги эвакуатора' },
-    { id: 'repair_finishing', translationKey: 'Ремонт и отделка' },
-    { id: 'construction', translationKey: 'Строительство' },
-    { id: 'garden_landscaping', translationKey: 'Сад, благоустройство' },
-    { id: 'beauty', translationKey: 'Красота' },
-    { id: 'health', translationKey: 'Здоровье' },
-    { id: 'tech_repair', translationKey: 'Ремонт и обслуживание техники' },
-    { id: 'computer_help', translationKey: 'Компьютерная помощь' },
+    { 
+      id: 'repair_finishing', 
+      translationKey: 'Ремонт и отделка',
+      children: [
+        { id: 'repair_turnkey', translationKey: 'Ремонт квартир и домов под ключ' },
+        { id: 'repair_design', translationKey: 'Дизайн интерьеров' },
+        { id: 'repair_plumbing', translationKey: 'Сантехника' },
+        { id: 'repair_electrical', translationKey: 'Электрика' },
+        { id: 'repair_furniture', translationKey: 'Сборка и ремонт мебели' },
+        { id: 'repair_windows', translationKey: 'Окна и балконы' },
+        { id: 'repair_wallpaper', translationKey: 'Поклейка обоев и малярные работы' },
+        { id: 'repair_ceilings', translationKey: 'Потолки' },
+        { id: 'repair_floors', translationKey: 'Полы и напольные покрытия' },
+        { id: 'repair_plastering', translationKey: 'Штукатурные работы' },
+        { id: 'repair_doors', translationKey: 'Двери' },
+        { id: 'repair_tiles', translationKey: 'Плиточные работы' },
+        { id: 'repair_carpentry', translationKey: 'Столярные и плотницкие работы' },
+        { id: 'repair_drywall', translationKey: 'Гипсокартонные работы' },
+        { id: 'repair_height', translationKey: 'Высотные работы' },
+        { id: 'repair_insulation', translationKey: 'Изоляция и утепление' },
+        { id: 'repair_commercial', translationKey: 'Ремонт коммерческих помещений' },
+        { id: 'repair_ventilation', translationKey: 'Вентиляция' },
+        { id: 'repair_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'construction', 
+      translationKey: 'Строительство',
+      children: [
+        { id: 'construction_houses', translationKey: 'Строительство домов под ключ' },
+        { id: 'construction_garages', translationKey: 'Строительство гаражей, бань, веранд' },
+        { id: 'construction_wooden', translationKey: 'Отделка деревянных домов, бань, саун' },
+        { id: 'construction_masonry', translationKey: 'Кладочные работы' },
+        { id: 'construction_roofing', translationKey: 'Кровельные работы' },
+        { id: 'construction_welding', translationKey: 'Сварка, ковка, металлоконструкции' },
+        { id: 'construction_foundation', translationKey: 'Фундаментные и бетонные работы' },
+        { id: 'construction_diamond', translationKey: 'Алмазное сверление и резка' },
+        { id: 'construction_demolition', translationKey: 'Снос и демонтаж' },
+        { id: 'construction_facade', translationKey: 'Фасадные работы' },
+        { id: 'construction_design', translationKey: 'Проектирование и сметы' },
+        { id: 'construction_laborers', translationKey: 'Разнорабочие' },
+        { id: 'construction_survey', translationKey: 'Изыскательные работы' },
+        { id: 'construction_stairs', translationKey: 'Лестницы' },
+        { id: 'construction_gas', translationKey: 'Газификация' },
+        { id: 'construction_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'garden_landscaping', 
+      translationKey: 'Сад, благоустройство',
+      children: [
+        { id: 'garden_wells', translationKey: 'Бурение, скважины, септики, колодцы' },
+        { id: 'garden_water', translationKey: 'Водоёмы, бассейны, фонтаны' },
+        { id: 'garden_roads', translationKey: 'Дорожное строительство' },
+        { id: 'garden_fences', translationKey: 'Ограждения, навесы, рольставни' },
+        { id: 'garden_earthwork', translationKey: 'Земляные работы' },
+        { id: 'garden_greenery', translationKey: 'Озеленение, уход за садом и огородом' },
+        { id: 'garden_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'beauty', 
+      translationKey: 'Красота',
+      children: [
+        { id: 'beauty_nails', translationKey: 'Маникюр, педикюр' },
+        { id: 'beauty_hair', translationKey: 'Услуги парикмахера' },
+        { id: 'beauty_lashes', translationKey: 'Ресницы, брови' },
+        { id: 'beauty_permanent', translationKey: 'Перманентный макияж' },
+        { id: 'beauty_cosmetology', translationKey: 'Косметология' },
+        { id: 'beauty_epilation', translationKey: 'Эпиляция' },
+        { id: 'beauty_makeup', translationKey: 'Макияж' },
+        { id: 'beauty_spa', translationKey: 'СПА-услуги, массаж' },
+        { id: 'beauty_tattoo', translationKey: 'Тату, пирсинг' },
+        { id: 'beauty_rental', translationKey: 'Аренда рабочего места' },
+        { id: 'beauty_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'health', 
+      translationKey: 'Здоровье',
+      children: [
+        { id: 'health_psychology', translationKey: 'Психология' },
+        { id: 'health_nutrition', translationKey: 'Диетология' },
+        { id: 'health_fitness', translationKey: 'Фитнес, йога' },
+        { id: 'health_dental', translationKey: 'Стоматология' },
+        { id: 'health_podology', translationKey: 'Подология' },
+        { id: 'health_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'tech_repair', 
+      translationKey: 'Ремонт и обслуживание техники',
+      children: [
+        { id: 'tech_tv', translationKey: 'Телевизоры' },
+        { id: 'tech_mobile', translationKey: 'Мобильные устройства' },
+        { id: 'tech_photo_audio', translationKey: 'Фото-, аудио-, видеотехника' },
+        { id: 'tech_ac', translationKey: 'Кондиционеры, вентиляция' },
+        { id: 'tech_washing', translationKey: 'Стиральные, сушильные машины' },
+        { id: 'tech_dishwasher', translationKey: 'Посудомоечные машины' },
+        { id: 'tech_fridge', translationKey: 'Холодильники, морозильные камеры' },
+        { id: 'tech_stove', translationKey: 'Варочные панели, духовые шкафы' },
+        { id: 'tech_boiler', translationKey: 'Газовые котлы, водонагреватели' },
+        { id: 'tech_coffee', translationKey: 'Кофемашины' },
+        { id: 'tech_sewing', translationKey: 'Швейные машины, оверлоки' },
+        { id: 'tech_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'computer_help', 
+      translationKey: 'Компьютерная помощь',
+      children: [
+        { id: 'computer_pc', translationKey: 'Компьютеры' },
+        { id: 'computer_printers', translationKey: 'Принтеры' },
+        { id: 'computer_mining', translationKey: 'Оборудование для майнинга' },
+        { id: 'computer_consoles', translationKey: 'Игровые приставки' },
+        { id: 'computer_software', translationKey: 'ОС и программы' },
+        { id: 'computer_network', translationKey: 'Интернет и другие сети' },
+      ]
+    },
     { id: 'installation', translationKey: 'Монтаж и установка техники' },
-    { id: 'equipment_production', translationKey: 'Оборудование, производство' },
-    { id: 'education_courses', translationKey: 'Обучение, курсы' },
-    { id: 'business_services', translationKey: 'Деловые услуги' },
+    { 
+      id: 'equipment_production', 
+      translationKey: 'Оборудование, производство',
+      children: [
+        { id: 'equipment_rental', translationKey: 'Аренда оборудования' },
+        { id: 'equipment_manufacturing', translationKey: 'Производство, обработка' },
+      ]
+    },
+    { 
+      id: 'education_courses', 
+      translationKey: 'Обучение, курсы',
+      children: [
+        { id: 'education_school', translationKey: 'Предметы школы и вуза' },
+        { id: 'education_languages', translationKey: 'Иностранные языки' },
+        { id: 'education_kids', translationKey: 'Детское развитие, логопеды' },
+        { id: 'education_it', translationKey: 'IT, бизнес' },
+        { id: 'education_design', translationKey: 'Дизайн, рисование' },
+        { id: 'education_beauty', translationKey: 'Красота, здоровье' },
+        { id: 'education_sports', translationKey: 'Спорт, танцы' },
+        { id: 'education_driving', translationKey: 'Вождение' },
+        { id: 'education_music', translationKey: 'Музыка, театр' },
+        { id: 'education_professional', translationKey: 'Профессиональная подготовка' },
+        { id: 'education_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'business_services', 
+      translationKey: 'Деловые услуги',
+      children: [
+        { id: 'business_accounting', translationKey: 'Бухгалтерия, финансы' },
+        { id: 'business_consulting', translationKey: 'Консультирование' },
+        { id: 'business_realestate', translationKey: 'Консультации по недвижимости' },
+        { id: 'business_it_design', translationKey: 'IT, дизайн, тексты' },
+        { id: 'business_legal', translationKey: 'Юридические услуги' },
+        { id: 'business_marketing', translationKey: 'Маркетинг и продвижение' },
+      ]
+    },
     { id: 'insurance', translationKey: 'Страхование' },
     { id: 'intermediary', translationKey: 'Услуги посредников' },
     { id: 'printing_advertising', translationKey: 'Полиграфия, наружная реклама' },
