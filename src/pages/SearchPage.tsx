@@ -8,7 +8,7 @@ import { useListings, ListingWithOwner, CarsQueryFilters } from '@/hooks/useList
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
-import { subcategoriesData } from '@/data/subcategories';
+import { subcategoriesData, Subcategory } from '@/data/subcategories';
 import { 
   Search as SearchIcon, 
   House, 
@@ -544,21 +544,47 @@ const [searchParams, setSearchParams] = useSearchParams();
                               <AccordionContent className="pb-0 pt-1">
                                 <div className="pl-6 space-y-1">
                                   {subcategories.map(subcategory => (
-                                    <button
-                                      key={subcategory.id}
-                                      onClick={() => {
-                                        handleSubcategoryFilterSelect(category, subcategory.id);
-                                        setShowCategoryList(false);
-                                      }}
-                                      className={cn(
-                                        "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
-                                        selectedCategory === category && selectedSubcategory === subcategory.id
-                                          ? 'bg-primary/20 text-primary font-medium'
-                                          : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
+                                    <div key={subcategory.id}>
+                                      <button
+                                        onClick={() => {
+                                          if (!subcategory.children || subcategory.children.length === 0) {
+                                            handleSubcategoryFilterSelect(category, subcategory.id);
+                                            setShowCategoryList(false);
+                                          }
+                                        }}
+                                        className={cn(
+                                          "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                          selectedCategory === category && selectedSubcategory === subcategory.id
+                                            ? 'bg-primary/20 text-primary font-medium'
+                                            : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
+                                          subcategory.children && subcategory.children.length > 0 && 'font-medium text-foreground cursor-default'
+                                        )}
+                                      >
+                                        {t(subcategory.id as TranslationKey)}
+                                      </button>
+                                      {/* Render nested children */}
+                                      {subcategory.children && subcategory.children.length > 0 && (
+                                        <div className="pl-4 space-y-1 mt-1">
+                                          {subcategory.children.map(child => (
+                                            <button
+                                              key={child.id}
+                                              onClick={() => {
+                                                handleSubcategoryFilterSelect(category, child.id);
+                                                setShowCategoryList(false);
+                                              }}
+                                              className={cn(
+                                                "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                                selectedCategory === category && selectedSubcategory === child.id
+                                                  ? 'bg-primary/20 text-primary font-medium'
+                                                  : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
+                                              )}
+                                            >
+                                              {t(child.id as TranslationKey)}
+                                            </button>
+                                          ))}
+                                        </div>
                                       )}
-                                    >
-                                      {t(subcategory.id as TranslationKey)}
-                                    </button>
+                                    </div>
                                   ))}
                                 </div>
                               </AccordionContent>
@@ -674,18 +700,43 @@ const [searchParams, setSearchParams] = useSearchParams();
                           <AccordionContent className="pb-0 pt-1">
                             <div className="pl-6 space-y-1">
                               {subcategories.map(subcategory => (
-                                <button
-                                  key={subcategory.id}
-                                  onClick={() => handleSubcategoryFilterSelect(category, subcategory.id)}
-                                  className={cn(
-                                    "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
-                                    selectedCategory === category && selectedSubcategory === subcategory.id
-                                      ? 'bg-primary/20 text-primary font-medium'
-                                      : 'text-muted-foreground hover:text-foreground'
+                                <div key={subcategory.id}>
+                                  <button
+                                    onClick={() => {
+                                      if (!subcategory.children || subcategory.children.length === 0) {
+                                        handleSubcategoryFilterSelect(category, subcategory.id);
+                                      }
+                                    }}
+                                    className={cn(
+                                      "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                      selectedCategory === category && selectedSubcategory === subcategory.id
+                                        ? 'bg-primary/20 text-primary font-medium'
+                                        : 'text-muted-foreground hover:text-foreground',
+                                      subcategory.children && subcategory.children.length > 0 && 'font-medium text-foreground cursor-default'
+                                    )}
+                                  >
+                                    {t(subcategory.id as TranslationKey)}
+                                  </button>
+                                  {/* Render nested children */}
+                                  {subcategory.children && subcategory.children.length > 0 && (
+                                    <div className="pl-4 space-y-1 mt-1">
+                                      {subcategory.children.map(child => (
+                                        <button
+                                          key={child.id}
+                                          onClick={() => handleSubcategoryFilterSelect(category, child.id)}
+                                          className={cn(
+                                            "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                            selectedCategory === category && selectedSubcategory === child.id
+                                              ? 'bg-primary/20 text-primary font-medium'
+                                              : 'text-muted-foreground hover:text-foreground'
+                                          )}
+                                        >
+                                          {t(child.id as TranslationKey)}
+                                        </button>
+                                      ))}
+                                    </div>
                                   )}
-                                >
-                                  {t(subcategory.id as TranslationKey)}
-                                </button>
+                                </div>
                               ))}
                             </div>
                           </AccordionContent>
