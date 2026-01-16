@@ -336,13 +336,60 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
       ]
     },
     { id: 'insurance', translationKey: 'Страхование' },
-    { id: 'intermediary', translationKey: 'Услуги посредников' },
+    { 
+      id: 'intermediary', 
+      translationKey: 'Услуги посредников',
+      children: [
+        { id: 'intermediary_buyout', translationKey: 'Услуги выкупа' },
+        { id: 'intermediary_import', translationKey: 'Поставка товаров из-за границы' },
+        { id: 'intermediary_finance', translationKey: 'Помощь с финансовыми вопросами' },
+        { id: 'intermediary_tourism', translationKey: 'Туристические услуги' },
+        { id: 'intermediary_consulting', translationKey: 'Консультации' },
+      ]
+    },
     { id: 'printing_advertising', translationKey: 'Полиграфия, наружная реклама' },
-    { id: 'waste_removal', translationKey: 'Вывоз мусора и вторсырья' },
-    { id: 'cleaning', translationKey: 'Уборка' },
+    { 
+      id: 'waste_removal', 
+      translationKey: 'Вывоз мусора и вторсырья',
+      children: [
+        { id: 'waste_garbage', translationKey: 'Вывоз мусора' },
+        { id: 'waste_recycling', translationKey: 'Приём вторсырья' },
+      ]
+    },
+    { 
+      id: 'cleaning', 
+      translationKey: 'Уборка',
+      children: [
+        { id: 'cleaning_general', translationKey: 'Генеральная уборка' },
+        { id: 'cleaning_windows', translationKey: 'Мойка окон' },
+        { id: 'cleaning_simple', translationKey: 'Простая уборка' },
+        { id: 'cleaning_carpets', translationKey: 'Чистка ковров' },
+        { id: 'cleaning_furniture', translationKey: 'Чистка мягкой мебели' },
+        { id: 'cleaning_other', translationKey: 'Другое' },
+      ]
+    },
     { id: 'disinfection', translationKey: 'Дезинфекция, дезинсекция, спецуборка' },
-    { id: 'household', translationKey: 'Бытовые услуги' },
-    { id: 'events', translationKey: 'Праздники, мероприятия' },
+    { 
+      id: 'household', 
+      translationKey: 'Бытовые услуги',
+      children: [
+        { id: 'household_keys', translationKey: 'Изготовление ключей и заточка' },
+        { id: 'household_sewing', translationKey: 'Пошив и ремонт одежды и других изделий' },
+        { id: 'household_watches', translationKey: 'Ремонт часов' },
+        { id: 'household_dryclean', translationKey: 'Химчистка, стирка' },
+        { id: 'household_jewelry', translationKey: 'Ювелирные услуги' },
+      ]
+    },
+    { 
+      id: 'events', 
+      translationKey: 'Праздники, мероприятия',
+      children: [
+        { id: 'events_organization', translationKey: 'Организация и проведение мероприятий' },
+        { id: 'events_decoration', translationKey: 'Оформление и декор' },
+        { id: 'events_rental', translationKey: 'Прокат и аренда для мероприятий' },
+        { id: 'events_leisure', translationKey: 'Организация досуга и отдыха' },
+      ]
+    },
     { id: 'food_delivery', translationKey: 'Доставка продуктов, десертов, кейтеринг' },
     { id: 'photo_video', translationKey: 'Фото- и видеосъёмка' },
     { id: 'nannies_caregivers', translationKey: 'Няни, сиделки' },
