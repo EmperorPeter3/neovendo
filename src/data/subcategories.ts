@@ -424,11 +424,61 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     { id: 'other', translationKey: 'Другое' },
   ],
   personalItems: [
-    { id: 'clothing', translationKey: 'Одежда, обувь, аксессуары' },
-    { id: 'kids_clothing', translationKey: 'Детская одежда и обувь' },
-    { id: 'kids_goods', translationKey: 'Товары для детей и игрушки' },
-    { id: 'beauty_health', translationKey: 'Красота и здоровье' },
-    { id: 'watches_jewelry', translationKey: 'Часы и украшения' },
+    { 
+      id: 'clothing', 
+      translationKey: 'Одежда, обувь, аксессуары',
+      children: [
+        { id: 'clothing_women', translationKey: 'Женская одежда' },
+        { id: 'clothing_women_shoes', translationKey: 'Женская обувь' },
+        { id: 'clothing_men', translationKey: 'Мужская одежда' },
+        { id: 'clothing_men_shoes', translationKey: 'Мужская обувь' },
+        { id: 'clothing_bags', translationKey: 'Сумки, рюкзаки и чемоданы' },
+        { id: 'clothing_accessories', translationKey: 'Аксессуары' },
+      ]
+    },
+    { 
+      id: 'kids_clothing', 
+      translationKey: 'Детская одежда и обувь',
+      children: [
+        { id: 'kids_clothing_girls', translationKey: 'Для девочек' },
+        { id: 'kids_clothing_boys', translationKey: 'Для мальчиков' },
+      ]
+    },
+    { 
+      id: 'kids_goods', 
+      translationKey: 'Товары для детей и игрушки',
+      children: [
+        { id: 'kids_car_seats', translationKey: 'Автомобильные кресла' },
+        { id: 'kids_scooters', translationKey: 'Самокаты и беговелы' },
+        { id: 'kids_furniture', translationKey: 'Детская мебель' },
+        { id: 'kids_strollers', translationKey: 'Детские коляски' },
+        { id: 'kids_toys', translationKey: 'Игрушки' },
+        { id: 'kids_bedding', translationKey: 'Постельные принадлежности' },
+        { id: 'kids_school', translationKey: 'Товары для школы' },
+        { id: 'kids_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'beauty_health', 
+      translationKey: 'Красота и здоровье',
+      children: [
+        { id: 'beauty_makeup_nails', translationKey: 'Макияж и маникюр' },
+        { id: 'beauty_perfume', translationKey: 'Парфюмерия' },
+        { id: 'beauty_devices', translationKey: 'Приборы и аксессуары' },
+        { id: 'beauty_care', translationKey: 'Уход и гигиена' },
+        { id: 'beauty_hair_products', translationKey: 'Средства для волос' },
+        { id: 'beauty_medical', translationKey: 'Медицинские изделия' },
+      ]
+    },
+    { 
+      id: 'watches_jewelry', 
+      translationKey: 'Часы и украшения',
+      children: [
+        { id: 'jewelry_gold', translationKey: 'Ювелирные изделия' },
+        { id: 'jewelry_watches', translationKey: 'Часы' },
+        { id: 'jewelry_bijouterie', translationKey: 'Бижутерия' },
+      ]
+    },
   ],
   homeAndGarden: [
     { id: 'repair_construction', translationKey: 'Ремонт и строительство' },
