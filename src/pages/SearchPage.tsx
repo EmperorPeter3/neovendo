@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -37,6 +37,7 @@ import { CarsFilters, CarsFiltersState, defaultCarsFilters } from '@/components/
 import { AtvFilters, AtvFiltersState, defaultAtvFilters } from '@/components/filters/AtvFilters';
 import { KartingFilters, KartingFiltersState, defaultKartingFilters } from '@/components/filters/KartingFilters';
 import { QuadFilters, QuadFiltersState, defaultQuadFilters } from '@/components/filters/QuadFilters';
+import { MopedFilters, MopedFiltersState, defaultMopedFilters } from '@/components/filters/MopedFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 
@@ -144,6 +145,7 @@ const [searchParams, setSearchParams] = useSearchParams();
   const [atvFilters, setAtvFilters] = useState<AtvFiltersState>(defaultAtvFilters);
   const [kartingFilters, setKartingFilters] = useState<KartingFiltersState>(defaultKartingFilters);
   const [quadFilters, setQuadFilters] = useState<QuadFiltersState>(defaultQuadFilters);
+  const [mopedFilters, setMopedFilters] = useState<MopedFiltersState>(defaultMopedFilters);
   
   // Local state for price inputs with debounce
   const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
@@ -372,6 +374,41 @@ const [searchParams, setSearchParams] = useSearchParams();
     return Object.keys(result).length > 0 ? result : undefined;
   };
 
+  // Convert MopedFiltersState to MopedQueryFilters for the query
+  const convertMopedFilters = (filters: MopedFiltersState): MopedQueryFilters | undefined => {
+    if (selectedSubcategory !== 'mopeds_scooters') return undefined;
+
+    const result: MopedQueryFilters = {};
+
+    const types: string[] = [];
+    if (filters.typeScooter) types.push('scooter');
+    if (filters.typeMaxiScooter) types.push('maxi_scooter');
+    if (filters.typeMoped) types.push('moped');
+    if (filters.typeMiniBike) types.push('mini_bike');
+    if (types.length > 0) result.types = types;
+
+    if (filters.brand) result.brand = filters.brand;
+    if (filters.originCountries.length > 0) result.originCountries = filters.originCountries;
+    if (filters.yearFrom) result.yearFrom = Number(filters.yearFrom);
+    if (filters.yearTo) result.yearTo = Number(filters.yearTo);
+    if (filters.condition !== 'all') result.condition = filters.condition;
+
+    const engineTypes: string[] = [];
+    if (filters.enginePetrol) engineTypes.push('petrol');
+    if (filters.engineElectric) engineTypes.push('electric');
+    if (engineTypes.length > 0) result.engineTypes = engineTypes;
+
+    if (filters.engineVolumeFrom) result.engineVolumeFrom = Number(filters.engineVolumeFrom);
+    if (filters.engineVolumeTo) result.engineVolumeTo = Number(filters.engineVolumeTo);
+    if (filters.powerFrom) result.powerFrom = Number(filters.powerFrom);
+    if (filters.powerTo) result.powerTo = Number(filters.powerTo);
+    if (filters.mileageFrom) result.mileageFrom = Number(filters.mileageFrom);
+    if (filters.mileageTo) result.mileageTo = Number(filters.mileageTo);
+    if (filters.descriptionSearch) result.descriptionSearch = filters.descriptionSearch;
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -428,6 +465,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     atvs: convertAtvFilters(atvFilters),
     karting: convertKartingFilters(kartingFilters),
     quads: convertQuadFilters(quadFilters),
+    mopeds: convertMopedFilters(mopedFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -754,6 +792,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <>
                     <Separator className="my-4" />
                     <QuadFilters filters={quadFilters} onChange={setQuadFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'mopeds_scooters' && (
+                  <>
+                    <Separator className="my-4" />
+                    <MopedFilters filters={mopedFilters} onChange={setMopedFilters} />
                   </>
                 )}
 

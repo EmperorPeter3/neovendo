@@ -58,6 +58,16 @@ export interface ListingWithOwner {
   quad_power: number | null;
   quad_mileage: number | null;
   quad_max_passengers: number | null;
+  // Moped-specific fields
+  moped_type: string | null;
+  moped_brand: string | null;
+  moped_origin_country: string | null;
+  moped_year: number | null;
+  moped_condition: string | null;
+  moped_engine_type: string | null;
+  moped_engine_volume: number | null;
+  moped_power: number | null;
+  moped_mileage: number | null;
   owner: {
     id: string;
     name: string;
@@ -137,6 +147,23 @@ export interface QuadQueryFilters {
   descriptionSearch?: string;
 }
 
+export interface MopedQueryFilters {
+  types?: string[];
+  brand?: string;
+  originCountries?: string[];
+  yearFrom?: number;
+  yearTo?: number;
+  condition?: 'new' | 'used' | 'for_parts';
+  engineTypes?: string[];
+  engineVolumeFrom?: number;
+  engineVolumeTo?: number;
+  powerFrom?: number;
+  powerTo?: number;
+  mileageFrom?: number;
+  mileageTo?: number;
+  descriptionSearch?: string;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -150,6 +177,7 @@ export const useListings = (filters?: {
   atvs?: AtvQueryFilters;
   karting?: KartingQueryFilters;
   quads?: QuadQueryFilters;
+  mopeds?: MopedQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -373,6 +401,53 @@ export const useListings = (filters?: {
         }
         if (quads.descriptionSearch) {
           query = query.ilike('description', `%${quads.descriptionSearch}%`);
+        }
+      }
+
+      // Moped-specific filters
+      const mopeds = filters?.mopeds;
+      if (mopeds) {
+        if (mopeds.types && mopeds.types.length > 0) {
+          query = query.in('moped_type', mopeds.types);
+        }
+        if (mopeds.brand) {
+          query = query.ilike('moped_brand', `%${mopeds.brand}%`);
+        }
+        if (mopeds.originCountries && mopeds.originCountries.length > 0) {
+          query = query.in('moped_origin_country', mopeds.originCountries);
+        }
+        if (mopeds.yearFrom !== undefined) {
+          query = query.gte('moped_year', mopeds.yearFrom);
+        }
+        if (mopeds.yearTo !== undefined) {
+          query = query.lte('moped_year', mopeds.yearTo);
+        }
+        if (mopeds.condition) {
+          query = query.eq('moped_condition', mopeds.condition);
+        }
+        if (mopeds.engineTypes && mopeds.engineTypes.length > 0) {
+          query = query.in('moped_engine_type', mopeds.engineTypes);
+        }
+        if (mopeds.engineVolumeFrom !== undefined) {
+          query = query.gte('moped_engine_volume', mopeds.engineVolumeFrom);
+        }
+        if (mopeds.engineVolumeTo !== undefined) {
+          query = query.lte('moped_engine_volume', mopeds.engineVolumeTo);
+        }
+        if (mopeds.powerFrom !== undefined) {
+          query = query.gte('moped_power', mopeds.powerFrom);
+        }
+        if (mopeds.powerTo !== undefined) {
+          query = query.lte('moped_power', mopeds.powerTo);
+        }
+        if (mopeds.mileageFrom !== undefined) {
+          query = query.gte('moped_mileage', mopeds.mileageFrom);
+        }
+        if (mopeds.mileageTo !== undefined) {
+          query = query.lte('moped_mileage', mopeds.mileageTo);
+        }
+        if (mopeds.descriptionSearch) {
+          query = query.ilike('description', `%${mopeds.descriptionSearch}%`);
         }
       }
 
