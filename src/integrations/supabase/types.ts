@@ -113,6 +113,7 @@ export type Database = {
           description: string | null
           id: string
           images: string[] | null
+          kart_condition: string | null
           owner_id: string
           price: number
           status: Database["public"]["Enums"]["listing_status"]
@@ -154,6 +155,7 @@ export type Database = {
           description?: string | null
           id?: string
           images?: string[] | null
+          kart_condition?: string | null
           owner_id: string
           price: number
           status?: Database["public"]["Enums"]["listing_status"]
@@ -195,6 +197,7 @@ export type Database = {
           description?: string | null
           id?: string
           images?: string[] | null
+          kart_condition?: string | null
           owner_id?: string
           price?: number
           status?: Database["public"]["Enums"]["listing_status"]

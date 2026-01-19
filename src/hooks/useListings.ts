@@ -45,6 +45,8 @@ export interface ListingWithOwner {
   atv_power: number | null;
   atv_mileage: number | null;
   atv_max_passengers: number | null;
+  // Karting-specific fields
+  kart_condition: string | null;
   owner: {
     id: string;
     name: string;
@@ -100,6 +102,11 @@ export interface AtvQueryFilters {
   descriptionSearch?: string;
 }
 
+export interface KartingQueryFilters {
+  condition?: 'new' | 'used' | 'for_parts';
+  descriptionSearch?: string;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -111,6 +118,7 @@ export const useListings = (filters?: {
   limit?: number;
   cars?: CarsQueryFilters;
   atvs?: AtvQueryFilters;
+  karting?: KartingQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -270,6 +278,17 @@ export const useListings = (filters?: {
         }
         if (atvs.descriptionSearch) {
           query = query.ilike('description', `%${atvs.descriptionSearch}%`);
+        }
+      }
+
+      // Karting-specific filters
+      const karting = filters?.karting;
+      if (karting) {
+        if (karting.condition) {
+          query = query.eq('kart_condition', karting.condition);
+        }
+        if (karting.descriptionSearch) {
+          query = query.ilike('description', `%${karting.descriptionSearch}%`);
         }
       }
 

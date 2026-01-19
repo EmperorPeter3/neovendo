@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -35,6 +35,7 @@ import {
 import { cn } from '@/lib/utils';
 import { CarsFilters, CarsFiltersState, defaultCarsFilters } from '@/components/filters/CarsFilters';
 import { AtvFilters, AtvFiltersState, defaultAtvFilters } from '@/components/filters/AtvFilters';
+import { KartingFilters, KartingFiltersState, defaultKartingFilters } from '@/components/filters/KartingFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 
@@ -140,6 +141,7 @@ const [searchParams, setSearchParams] = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(query);
   const [carsFilters, setCarsFilters] = useState<CarsFiltersState>(defaultCarsFilters);
   const [atvFilters, setAtvFilters] = useState<AtvFiltersState>(defaultAtvFilters);
+  const [kartingFilters, setKartingFilters] = useState<KartingFiltersState>(defaultKartingFilters);
   
   // Local state for price inputs with debounce
   const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
@@ -317,6 +319,18 @@ const [searchParams, setSearchParams] = useSearchParams();
     return Object.keys(result).length > 0 ? result : undefined;
   };
 
+  // Convert KartingFiltersState to KartingQueryFilters for the query
+  const convertKartingFilters = (filters: KartingFiltersState): KartingQueryFilters | undefined => {
+    if (selectedSubcategory !== 'karting') return undefined;
+
+    const result: KartingQueryFilters = {};
+
+    if (filters.condition !== 'all') result.condition = filters.condition;
+    if (filters.descriptionSearch) result.descriptionSearch = filters.descriptionSearch;
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -371,6 +385,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     city: selectedRegion.city || undefined,
     cars: convertCarsFilters(carsFilters),
     atvs: convertAtvFilters(atvFilters),
+    karting: convertKartingFilters(kartingFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -685,6 +700,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <>
                     <Separator className="my-4" />
                     <AtvFilters filters={atvFilters} onChange={setAtvFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'karting' && (
+                  <>
+                    <Separator className="my-4" />
+                    <KartingFilters filters={kartingFilters} onChange={setKartingFilters} />
                   </>
                 )}
 
