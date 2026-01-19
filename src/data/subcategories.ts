@@ -888,8 +888,32 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     { id: 'cats', translationKey: 'Кошки' },
     { id: 'birds', translationKey: 'Птицы' },
     { id: 'aquarium', translationKey: 'Аквариум' },
-    { id: 'other_animals', translationKey: 'Другие животные' },
-    { id: 'pet_supplies', translationKey: 'Товары для животных' },
+    { 
+      id: 'other_animals', 
+      translationKey: 'Другие животные',
+      children: [
+        { id: 'animals_amphibians', translationKey: 'Амфибии' },
+        { id: 'animals_rodents', translationKey: 'Грызуны' },
+        { id: 'animals_rabbits', translationKey: 'Кролики' },
+        { id: 'animals_horses', translationKey: 'Лошади' },
+        { id: 'animals_reptiles', translationKey: 'Рептилии' },
+        { id: 'animals_farm', translationKey: 'С/х животные' },
+        { id: 'animals_ferrets', translationKey: 'Хорьки' },
+        { id: 'animals_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'pet_supplies', 
+      translationKey: 'Товары для животных',
+      children: [
+        { id: 'supplies_dogs_cats', translationKey: 'Собаки и кошки' },
+        { id: 'supplies_rodents', translationKey: 'Грызуны' },
+        { id: 'supplies_birds', translationKey: 'Птицы' },
+        { id: 'supplies_fish_reptiles', translationKey: 'Рыбы и рептилии' },
+        { id: 'supplies_farm', translationKey: 'Фермерское хозяйство' },
+        { id: 'supplies_other', translationKey: 'Другое' },
+      ]
+    },
   ],
   business: [
     { id: 'business_equipment', translationKey: 'Оборудование для бизнеса' },
