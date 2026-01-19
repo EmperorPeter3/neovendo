@@ -116,6 +116,16 @@ export type Database = {
           kart_condition: string | null
           owner_id: string
           price: number
+          quad_brand: string | null
+          quad_condition: string | null
+          quad_engine_type: string | null
+          quad_engine_volume: number | null
+          quad_max_passengers: number | null
+          quad_mileage: number | null
+          quad_origin_country: string | null
+          quad_power: number | null
+          quad_type: string | null
+          quad_year: number | null
           status: Database["public"]["Enums"]["listing_status"]
           subcategory: string | null
           title: string
@@ -158,6 +168,16 @@ export type Database = {
           kart_condition?: string | null
           owner_id: string
           price: number
+          quad_brand?: string | null
+          quad_condition?: string | null
+          quad_engine_type?: string | null
+          quad_engine_volume?: number | null
+          quad_max_passengers?: number | null
+          quad_mileage?: number | null
+          quad_origin_country?: string | null
+          quad_power?: number | null
+          quad_type?: string | null
+          quad_year?: number | null
           status?: Database["public"]["Enums"]["listing_status"]
           subcategory?: string | null
           title: string
@@ -200,6 +220,16 @@ export type Database = {
           kart_condition?: string | null
           owner_id?: string
           price?: number
+          quad_brand?: string | null
+          quad_condition?: string | null
+          quad_engine_type?: string | null
+          quad_engine_volume?: number | null
+          quad_max_passengers?: number | null
+          quad_mileage?: number | null
+          quad_origin_country?: string | null
+          quad_power?: number | null
+          quad_type?: string | null
+          quad_year?: number | null
           status?: Database["public"]["Enums"]["listing_status"]
           subcategory?: string | null
           title?: string

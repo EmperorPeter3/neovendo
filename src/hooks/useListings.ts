@@ -47,6 +47,17 @@ export interface ListingWithOwner {
   atv_max_passengers: number | null;
   // Karting-specific fields
   kart_condition: string | null;
+  // Quad-specific fields
+  quad_type: string | null;
+  quad_brand: string | null;
+  quad_origin_country: string | null;
+  quad_year: number | null;
+  quad_condition: string | null;
+  quad_engine_type: string | null;
+  quad_engine_volume: number | null;
+  quad_power: number | null;
+  quad_mileage: number | null;
+  quad_max_passengers: number | null;
   owner: {
     id: string;
     name: string;
@@ -107,6 +118,25 @@ export interface KartingQueryFilters {
   descriptionSearch?: string;
 }
 
+export interface QuadQueryFilters {
+  types?: string[];
+  brand?: string;
+  originCountries?: string[];
+  yearFrom?: number;
+  yearTo?: number;
+  condition?: 'new' | 'used' | 'for_parts';
+  engineTypes?: string[];
+  engineVolumeFrom?: number;
+  engineVolumeTo?: number;
+  powerFrom?: number;
+  powerTo?: number;
+  mileageFrom?: number;
+  mileageTo?: number;
+  maxPassengersFrom?: number;
+  maxPassengersTo?: number;
+  descriptionSearch?: string;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -119,6 +149,7 @@ export const useListings = (filters?: {
   cars?: CarsQueryFilters;
   atvs?: AtvQueryFilters;
   karting?: KartingQueryFilters;
+  quads?: QuadQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -289,6 +320,59 @@ export const useListings = (filters?: {
         }
         if (karting.descriptionSearch) {
           query = query.ilike('description', `%${karting.descriptionSearch}%`);
+        }
+      }
+
+      // Quad-specific filters
+      const quads = filters?.quads;
+      if (quads) {
+        if (quads.types && quads.types.length > 0) {
+          query = query.in('quad_type', quads.types);
+        }
+        if (quads.brand) {
+          query = query.ilike('quad_brand', `%${quads.brand}%`);
+        }
+        if (quads.originCountries && quads.originCountries.length > 0) {
+          query = query.in('quad_origin_country', quads.originCountries);
+        }
+        if (quads.yearFrom !== undefined) {
+          query = query.gte('quad_year', quads.yearFrom);
+        }
+        if (quads.yearTo !== undefined) {
+          query = query.lte('quad_year', quads.yearTo);
+        }
+        if (quads.condition) {
+          query = query.eq('quad_condition', quads.condition);
+        }
+        if (quads.engineTypes && quads.engineTypes.length > 0) {
+          query = query.in('quad_engine_type', quads.engineTypes);
+        }
+        if (quads.engineVolumeFrom !== undefined) {
+          query = query.gte('quad_engine_volume', quads.engineVolumeFrom);
+        }
+        if (quads.engineVolumeTo !== undefined) {
+          query = query.lte('quad_engine_volume', quads.engineVolumeTo);
+        }
+        if (quads.powerFrom !== undefined) {
+          query = query.gte('quad_power', quads.powerFrom);
+        }
+        if (quads.powerTo !== undefined) {
+          query = query.lte('quad_power', quads.powerTo);
+        }
+        if (quads.mileageFrom !== undefined) {
+          query = query.gte('quad_mileage', quads.mileageFrom);
+        }
+        if (quads.mileageTo !== undefined) {
+          query = query.lte('quad_mileage', quads.mileageTo);
+        }
+        if (quads.maxPassengersFrom !== undefined) {
+          query = query.gte('quad_max_passengers', quads.maxPassengersFrom);
+        }
+        if (quads.maxPassengersTo !== undefined) {
+          query = query.lte('quad_max_passengers', quads.maxPassengersTo);
+        }
+        if (quads.descriptionSearch) {
+          query = query.ilike('description', `%${quads.descriptionSearch}%`);
         }
       }
 

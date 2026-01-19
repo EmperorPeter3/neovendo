@@ -14,6 +14,7 @@ import { Category } from '@/types/listing';
 import { CarFieldsForm, CarFieldsData, defaultCarFields } from '@/components/CarFieldsForm';
 import { AtvFieldsForm, AtvFieldsData, defaultAtvFields } from '@/components/AtvFieldsForm';
 import KartingFieldsForm, { KartingFieldsData, defaultKartingFields } from '@/components/KartingFieldsForm';
+import QuadFieldsForm, { QuadFieldsData, defaultQuadFields } from '@/components/QuadFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 
 const CreateListing = () => {
@@ -38,11 +39,13 @@ const CreateListing = () => {
   const [carFields, setCarFields] = useState<CarFieldsData>(defaultCarFields);
   const [atvFields, setAtvFields] = useState<AtvFieldsData>(defaultAtvFields);
   const [kartingFields, setKartingFields] = useState<KartingFieldsData>(defaultKartingFields);
+  const [quadFields, setQuadFields] = useState<QuadFieldsData>(defaultQuadFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   const isCarListing = subcategory === 'cars';
   const isAtvListing = subcategory === 'atvs';
   const isKartingListing = subcategory === 'karting';
+  const isQuadListing = subcategory === 'quads_buggies';
 
   const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
     setCategory(newCategory);
@@ -358,6 +361,11 @@ const CreateListing = () => {
             {/* Karting-specific fields */}
             {isKartingListing && (
               <KartingFieldsForm data={kartingFields} onChange={setKartingFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Quad-specific fields */}
+            {isQuadListing && (
+              <QuadFieldsForm data={quadFields} onChange={setQuadFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}
