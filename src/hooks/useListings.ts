@@ -34,6 +34,17 @@ export interface ListingWithOwner {
   car_seats: number | null;
   car_trunk_volume: number | null;
   car_steering_position: string | null;
+  // ATV-specific fields
+  atv_type: string | null;
+  atv_brand: string | null;
+  atv_origin_country: string | null;
+  atv_year: number | null;
+  atv_condition: string | null;
+  atv_engine_type: string | null;
+  atv_engine_volume: number | null;
+  atv_power: number | null;
+  atv_mileage: number | null;
+  atv_max_passengers: number | null;
   owner: {
     id: string;
     name: string;
@@ -70,6 +81,25 @@ export interface CarsQueryFilters {
   steeringPosition?: 'left' | 'right';
 }
 
+export interface AtvQueryFilters {
+  types?: string[];
+  brand?: string;
+  originCountries?: string[];
+  yearFrom?: number;
+  yearTo?: number;
+  condition?: 'new' | 'used' | 'for_parts';
+  engineTypes?: string[];
+  engineVolumeFrom?: number;
+  engineVolumeTo?: number;
+  powerFrom?: number;
+  powerTo?: number;
+  mileageFrom?: number;
+  mileageTo?: number;
+  maxPassengersFrom?: number;
+  maxPassengersTo?: number;
+  descriptionSearch?: string;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -80,6 +110,7 @@ export const useListings = (filters?: {
   search?: string;
   limit?: number;
   cars?: CarsQueryFilters;
+  atvs?: AtvQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -186,6 +217,59 @@ export const useListings = (filters?: {
         }
         if (cars.steeringPosition) {
           query = query.eq('car_steering_position', cars.steeringPosition);
+        }
+      }
+
+      // ATV-specific filters
+      const atvs = filters?.atvs;
+      if (atvs) {
+        if (atvs.types && atvs.types.length > 0) {
+          query = query.in('atv_type', atvs.types);
+        }
+        if (atvs.brand) {
+          query = query.ilike('atv_brand', `%${atvs.brand}%`);
+        }
+        if (atvs.originCountries && atvs.originCountries.length > 0) {
+          query = query.in('atv_origin_country', atvs.originCountries);
+        }
+        if (atvs.yearFrom !== undefined) {
+          query = query.gte('atv_year', atvs.yearFrom);
+        }
+        if (atvs.yearTo !== undefined) {
+          query = query.lte('atv_year', atvs.yearTo);
+        }
+        if (atvs.condition) {
+          query = query.eq('atv_condition', atvs.condition);
+        }
+        if (atvs.engineTypes && atvs.engineTypes.length > 0) {
+          query = query.in('atv_engine_type', atvs.engineTypes);
+        }
+        if (atvs.engineVolumeFrom !== undefined) {
+          query = query.gte('atv_engine_volume', atvs.engineVolumeFrom);
+        }
+        if (atvs.engineVolumeTo !== undefined) {
+          query = query.lte('atv_engine_volume', atvs.engineVolumeTo);
+        }
+        if (atvs.powerFrom !== undefined) {
+          query = query.gte('atv_power', atvs.powerFrom);
+        }
+        if (atvs.powerTo !== undefined) {
+          query = query.lte('atv_power', atvs.powerTo);
+        }
+        if (atvs.mileageFrom !== undefined) {
+          query = query.gte('atv_mileage', atvs.mileageFrom);
+        }
+        if (atvs.mileageTo !== undefined) {
+          query = query.lte('atv_mileage', atvs.mileageTo);
+        }
+        if (atvs.maxPassengersFrom !== undefined) {
+          query = query.gte('atv_max_passengers', atvs.maxPassengersFrom);
+        }
+        if (atvs.maxPassengersTo !== undefined) {
+          query = query.lte('atv_max_passengers', atvs.maxPassengersTo);
+        }
+        if (atvs.descriptionSearch) {
+          query = query.ilike('description', `%${atvs.descriptionSearch}%`);
         }
       }
 

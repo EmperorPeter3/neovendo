@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner, CarsQueryFilters } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -34,6 +34,7 @@ import {
 } from '@/components/ui/accordion';
 import { cn } from '@/lib/utils';
 import { CarsFilters, CarsFiltersState, defaultCarsFilters } from '@/components/filters/CarsFilters';
+import { AtvFilters, AtvFiltersState, defaultAtvFilters } from '@/components/filters/AtvFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 
@@ -138,6 +139,7 @@ const [searchParams, setSearchParams] = useSearchParams();
   
   const [searchQuery, setSearchQuery] = useState(query);
   const [carsFilters, setCarsFilters] = useState<CarsFiltersState>(defaultCarsFilters);
+  const [atvFilters, setAtvFilters] = useState<AtvFiltersState>(defaultAtvFilters);
   
   // Local state for price inputs with debounce
   const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
@@ -277,6 +279,44 @@ const [searchParams, setSearchParams] = useSearchParams();
     return Object.keys(result).length > 0 ? result : undefined;
   };
 
+  // Convert AtvFiltersState to AtvQueryFilters for the query
+  const convertAtvFilters = (filters: AtvFiltersState): AtvQueryFilters | undefined => {
+    if (selectedSubcategory !== 'atvs') return undefined;
+
+    const result: AtvQueryFilters = {};
+
+    // Types
+    const types: string[] = [];
+    if (filters.typeTracked) types.push('tracked');
+    if (filters.typeWheeled) types.push('wheeled');
+    if (filters.typeHomemade) types.push('homemade');
+    if (types.length > 0) result.types = types;
+
+    if (filters.brand) result.brand = filters.brand;
+    if (filters.originCountries.length > 0) result.originCountries = filters.originCountries;
+    if (filters.yearFrom) result.yearFrom = Number(filters.yearFrom);
+    if (filters.yearTo) result.yearTo = Number(filters.yearTo);
+    if (filters.condition !== 'all') result.condition = filters.condition;
+
+    const engineTypes: string[] = [];
+    if (filters.enginePetrol) engineTypes.push('petrol');
+    if (filters.engineDiesel) engineTypes.push('diesel');
+    if (filters.engineElectric) engineTypes.push('electric');
+    if (engineTypes.length > 0) result.engineTypes = engineTypes;
+
+    if (filters.engineVolumeFrom) result.engineVolumeFrom = Number(filters.engineVolumeFrom);
+    if (filters.engineVolumeTo) result.engineVolumeTo = Number(filters.engineVolumeTo);
+    if (filters.powerFrom) result.powerFrom = Number(filters.powerFrom);
+    if (filters.powerTo) result.powerTo = Number(filters.powerTo);
+    if (filters.mileageFrom) result.mileageFrom = Number(filters.mileageFrom);
+    if (filters.mileageTo) result.mileageTo = Number(filters.mileageTo);
+    if (filters.maxPassengersFrom) result.maxPassengersFrom = Number(filters.maxPassengersFrom);
+    if (filters.maxPassengersTo) result.maxPassengersTo = Number(filters.maxPassengersTo);
+    if (filters.descriptionSearch) result.descriptionSearch = filters.descriptionSearch;
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -330,6 +370,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     country: selectedRegion.country || undefined,
     city: selectedRegion.city || undefined,
     cars: convertCarsFilters(carsFilters),
+    atvs: convertAtvFilters(atvFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -640,6 +681,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                     <CarsFilters filters={carsFilters} onChange={setCarsFilters} />
                   </>
                 )}
+                {selectedSubcategory === 'atvs' && (
+                  <>
+                    <Separator className="my-4" />
+                    <AtvFilters filters={atvFilters} onChange={setAtvFilters} />
+                  </>
+                )}
 
               </div>
             </div>
@@ -789,6 +836,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <>
                     <Separator className="my-4" />
                     <CarsFilters filters={carsFilters} onChange={setCarsFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'atvs' && (
+                  <>
+                    <Separator className="my-4" />
+                    <AtvFilters filters={atvFilters} onChange={setAtvFilters} />
                   </>
                 )}
 

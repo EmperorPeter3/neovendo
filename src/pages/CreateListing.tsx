@@ -12,6 +12,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useCreateListing, useUploadListingImage } from '@/hooks/useListings';
 import { Category } from '@/types/listing';
 import { CarFieldsForm, CarFieldsData, defaultCarFields } from '@/components/CarFieldsForm';
+import { AtvFieldsForm, AtvFieldsData, defaultAtvFields } from '@/components/AtvFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 
 const CreateListing = () => {
@@ -34,9 +35,11 @@ const CreateListing = () => {
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [carFields, setCarFields] = useState<CarFieldsData>(defaultCarFields);
+  const [atvFields, setAtvFields] = useState<AtvFieldsData>(defaultAtvFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   const isCarListing = subcategory === 'cars';
+  const isAtvListing = subcategory === 'atvs';
 
   const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
     setCategory(newCategory);
@@ -342,6 +345,11 @@ const CreateListing = () => {
             {/* Car-specific fields */}
             {isCarListing && (
               <CarFieldsForm data={carFields} onChange={setCarFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* ATV-specific fields */}
+            {isAtvListing && (
+              <AtvFieldsForm data={atvFields} onChange={setAtvFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}
