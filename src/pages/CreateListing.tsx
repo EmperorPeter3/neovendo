@@ -13,6 +13,7 @@ import { useCreateListing, useUploadListingImage } from '@/hooks/useListings';
 import { Category } from '@/types/listing';
 import { CarFieldsForm, CarFieldsData, defaultCarFields } from '@/components/CarFieldsForm';
 import { AtvFieldsForm, AtvFieldsData, defaultAtvFields } from '@/components/AtvFieldsForm';
+import KartingFieldsForm, { KartingFieldsData, defaultKartingFields } from '@/components/KartingFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 
 const CreateListing = () => {
@@ -36,10 +37,12 @@ const CreateListing = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [carFields, setCarFields] = useState<CarFieldsData>(defaultCarFields);
   const [atvFields, setAtvFields] = useState<AtvFieldsData>(defaultAtvFields);
+  const [kartingFields, setKartingFields] = useState<KartingFieldsData>(defaultKartingFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   const isCarListing = subcategory === 'cars';
   const isAtvListing = subcategory === 'atvs';
+  const isKartingListing = subcategory === 'karting';
 
   const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
     setCategory(newCategory);
@@ -350,6 +353,11 @@ const CreateListing = () => {
             {/* ATV-specific fields */}
             {isAtvListing && (
               <AtvFieldsForm data={atvFields} onChange={setAtvFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Karting-specific fields */}
+            {isKartingListing && (
+              <KartingFieldsForm data={kartingFields} onChange={setKartingFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}
