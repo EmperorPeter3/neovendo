@@ -114,6 +114,15 @@ export type Database = {
           id: string
           images: string[] | null
           kart_condition: string | null
+          moped_brand: string | null
+          moped_condition: string | null
+          moped_engine_type: string | null
+          moped_engine_volume: number | null
+          moped_mileage: number | null
+          moped_origin_country: string | null
+          moped_power: number | null
+          moped_type: string | null
+          moped_year: number | null
           owner_id: string
           price: number
           quad_brand: string | null
@@ -166,6 +175,15 @@ export type Database = {
           id?: string
           images?: string[] | null
           kart_condition?: string | null
+          moped_brand?: string | null
+          moped_condition?: string | null
+          moped_engine_type?: string | null
+          moped_engine_volume?: number | null
+          moped_mileage?: number | null
+          moped_origin_country?: string | null
+          moped_power?: number | null
+          moped_type?: string | null
+          moped_year?: number | null
           owner_id: string
           price: number
           quad_brand?: string | null
@@ -218,6 +236,15 @@ export type Database = {
           id?: string
           images?: string[] | null
           kart_condition?: string | null
+          moped_brand?: string | null
+          moped_condition?: string | null
+          moped_engine_type?: string | null
+          moped_engine_volume?: number | null
+          moped_mileage?: number | null
+          moped_origin_country?: string | null
+          moped_power?: number | null
+          moped_type?: string | null
+          moped_year?: number | null
           owner_id?: string
           price?: number
           quad_brand?: string | null
