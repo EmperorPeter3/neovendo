@@ -670,15 +670,105 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     { id: 'auto_gps', translationKey: 'GPS-навигаторы' },
   ],
   electronics: [
-    { id: 'phones', translationKey: 'Телефоны' },
-    { id: 'audio_video', translationKey: 'Аудио и видео' },
-    { id: 'computer_goods', translationKey: 'Товары для компьютера' },
-    { id: 'games_consoles', translationKey: 'Игры, приставки и программы' },
+    { 
+      id: 'phones', 
+      translationKey: 'Телефоны',
+      children: [
+        { id: 'phones_mobile', translationKey: 'Мобильные телефоны' },
+        { id: 'phones_accessories', translationKey: 'Аксессуары' },
+        { id: 'phones_radios', translationKey: 'Рации' },
+        { id: 'phones_landline', translationKey: 'Стационарные телефоны' },
+      ]
+    },
+    { 
+      id: 'audio_video', 
+      translationKey: 'Аудио и видео',
+      children: [
+        { id: 'av_tv_projectors', translationKey: 'Телевизоры и проекторы' },
+        { id: 'av_headphones', translationKey: 'Наушники' },
+        { id: 'av_speakers_sub', translationKey: 'Акустика, колонки, сабвуферы' },
+        { id: 'av_accessories_el', translationKey: 'Аксессуары' },
+        { id: 'av_music_centers', translationKey: 'Музыкальные центры, магнитолы' },
+        { id: 'av_amplifiers', translationKey: 'Усилители и ресиверы' },
+        { id: 'av_camcorders', translationKey: 'Видеокамеры' },
+        { id: 'av_dvd_bluray', translationKey: 'Видео, DVD и Blu-ray плееры' },
+        { id: 'av_cables', translationKey: 'Кабели и адаптеры' },
+        { id: 'av_media', translationKey: 'Музыка и фильмы' },
+        { id: 'av_microphones', translationKey: 'Микрофоны' },
+        { id: 'av_mp3', translationKey: 'MP3-плееры' },
+      ]
+    },
+    { 
+      id: 'computer_goods', 
+      translationKey: 'Товары для компьютера',
+      children: [
+        { id: 'pc_components', translationKey: 'Комплектующие' },
+        { id: 'pc_monitors', translationKey: 'Мониторы и запчасти' },
+        { id: 'pc_network', translationKey: 'Сетевое оборудование' },
+        { id: 'pc_keyboards', translationKey: 'Клавиатуры и мыши' },
+        { id: 'pc_accessories', translationKey: 'Аксессуары' },
+        { id: 'pc_controllers', translationKey: 'Джойстики и рули' },
+        { id: 'pc_flash', translationKey: 'Флэшки и карты памяти' },
+        { id: 'pc_audio', translationKey: 'Акустика' },
+        { id: 'pc_hdd', translationKey: 'Переносные жёсткие диски' },
+        { id: 'pc_webcams', translationKey: 'Веб-камеры' },
+        { id: 'pc_tuners', translationKey: 'ТВ-тюнеры' },
+      ]
+    },
+    { 
+      id: 'games_consoles', 
+      translationKey: 'Игры, приставки и программы',
+      children: [
+        { id: 'games_consoles_acc', translationKey: 'Игровые приставки и аксессуары' },
+        { id: 'games_console_games', translationKey: 'Игры для приставок' },
+        { id: 'games_software', translationKey: 'Программы' },
+        { id: 'games_pc_games', translationKey: 'Компьютерные игры' },
+      ]
+    },
     { id: 'laptops', translationKey: 'Ноутбуки' },
-    { id: 'desktops', translationKey: 'Настольные компьютеры' },
-    { id: 'photo_equipment', translationKey: 'Фототехника' },
-    { id: 'tablets_ebooks', translationKey: 'Планшеты и электронные книги' },
-    { id: 'office_equipment', translationKey: 'Оргтехника и расходники' },
+    { 
+      id: 'desktops', 
+      translationKey: 'Настольные компьютеры',
+      children: [
+        { id: 'desktops_towers', translationKey: 'Системные блоки' },
+        { id: 'desktops_aio', translationKey: 'Моноблоки' },
+        { id: 'desktops_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'photo_equipment', 
+      translationKey: 'Фототехника',
+      children: [
+        { id: 'photo_gear', translationKey: 'Оборудование и аксессуары' },
+        { id: 'photo_lenses', translationKey: 'Объективы' },
+        { id: 'photo_compact', translationKey: 'Компактные фотоаппараты' },
+        { id: 'photo_film', translationKey: 'Плёночные фотоаппараты' },
+        { id: 'photo_dslr', translationKey: 'Зеркальные фотоаппараты' },
+        { id: 'photo_binoculars', translationKey: 'Бинокли и телескопы' },
+      ]
+    },
+    { 
+      id: 'tablets_ebooks', 
+      translationKey: 'Планшеты и электронные книги',
+      children: [
+        { id: 'tablets_tablets', translationKey: 'Планшеты' },
+        { id: 'tablets_accessories', translationKey: 'Аксессуары' },
+        { id: 'tablets_ereaders', translationKey: 'Электронные книги' },
+      ]
+    },
+    { 
+      id: 'office_equipment', 
+      translationKey: 'Оргтехника и расходники',
+      children: [
+        { id: 'office_mfp', translationKey: 'МФУ, копиры и сканеры' },
+        { id: 'office_printers', translationKey: 'Принтеры' },
+        { id: 'office_stationery', translationKey: 'Канцелярия' },
+        { id: 'office_ups', translationKey: 'ИБП, сетевые фильтры' },
+        { id: 'office_telephony', translationKey: 'Телефония' },
+        { id: 'office_shredders', translationKey: 'Уничтожители бумаг' },
+        { id: 'office_supplies', translationKey: 'Расходные материалы' },
+      ]
+    },
   ],
   hobbies: [
     { id: 'tickets_travel', translationKey: 'Билеты и путешествия' },
