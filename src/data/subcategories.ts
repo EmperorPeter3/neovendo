@@ -568,16 +568,105 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     },
   ],
   autoParts: [
-    { id: 'auto_parts', translationKey: 'Запчасти' },
-    { id: 'auto_tires_wheels', translationKey: 'Шины, диски и колёса' },
-    { id: 'auto_audio_video', translationKey: 'Аудио- и видеотехника' },
-    { id: 'auto_accessories', translationKey: 'Аксессуары' },
-    { id: 'auto_roof_racks', translationKey: 'Багажники и фаркопы' },
+    { 
+      id: 'auto_parts', 
+      translationKey: 'Запчасти',
+      children: [
+        { id: 'parts_cars', translationKey: 'Для автомобилей' },
+        { id: 'parts_moto', translationKey: 'Для мототехники' },
+        { id: 'parts_trucks', translationKey: 'Для грузовиков и спецтехники' },
+        { id: 'parts_watercraft', translationKey: 'Для водного транспорта' },
+      ]
+    },
+    { 
+      id: 'auto_tires_wheels', 
+      translationKey: 'Шины, диски и колёса',
+      children: [
+        { id: 'tires_car', translationKey: 'Шины' },
+        { id: 'tires_truck', translationKey: 'Шины для грузовиков и спецтехники' },
+        { id: 'tires_moto', translationKey: 'Мотошины' },
+        { id: 'wheels_rims', translationKey: 'Диски' },
+        { id: 'wheels_caps', translationKey: 'Колпаки' },
+        { id: 'wheels_complete', translationKey: 'Колёса' },
+      ]
+    },
+    { 
+      id: 'auto_audio_video', 
+      translationKey: 'Аудио- и видеотехника',
+      children: [
+        { id: 'av_accessories', translationKey: 'Аксессуары для автоакустики' },
+        { id: 'av_headunits', translationKey: 'Магнитолы' },
+        { id: 'av_speakers', translationKey: 'Автоакустика' },
+        { id: 'av_dashcams', translationKey: 'Видеорегистраторы' },
+        { id: 'av_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'auto_accessories', 
+      translationKey: 'Аксессуары',
+      children: [
+        { id: 'acc_moto_water', translationKey: 'Для мото- и водного транспорта' },
+        { id: 'acc_wipers', translationKey: 'Щётки стеклоочистителя' },
+        { id: 'acc_interior', translationKey: 'Для салона' },
+        { id: 'acc_protection', translationKey: 'Защита и декор' },
+        { id: 'acc_driver_kit', translationKey: 'Набор автомобилиста' },
+        { id: 'acc_wheels', translationKey: 'Для колёс' },
+        { id: 'acc_heating', translationKey: 'Отопительное оборудование' },
+        { id: 'acc_care', translationKey: 'Уход' },
+      ]
+    },
+    { 
+      id: 'auto_roof_racks', 
+      translationKey: 'Багажники и фаркопы',
+      children: [
+        { id: 'rack_crossbars', translationKey: 'Поперечные дуги и комплектующие' },
+        { id: 'rack_rails', translationKey: 'Рейлинги на крышу' },
+        { id: 'rack_towbars', translationKey: 'Фаркопы и комплектующие' },
+        { id: 'rack_bike_ski', translationKey: 'Крепления для перевозки велосипедов и лыж' },
+        { id: 'rack_expedition', translationKey: 'Экспедиционные багажники' },
+        { id: 'rack_boxes', translationKey: 'Автобоксы' },
+        { id: 'rack_other', translationKey: 'Другое' },
+      ]
+    },
     { id: 'auto_tools', translationKey: 'Инструменты' },
-    { id: 'auto_trailers', translationKey: 'Прицепы' },
+    { 
+      id: 'auto_trailers', 
+      translationKey: 'Прицепы',
+      children: [
+        { id: 'trailer_flatbed', translationKey: 'Бортовые' },
+        { id: 'trailer_boat', translationKey: 'Для водного транспорта' },
+        { id: 'trailer_tow', translationKey: 'Эвакуаторы' },
+        { id: 'trailer_parts', translationKey: 'Запчасти и комплектующие' },
+        { id: 'trailer_other', translationKey: 'Другое' },
+      ]
+    },
     { id: 'auto_equipment', translationKey: 'Экипировка' },
-    { id: 'auto_oils_chemicals', translationKey: 'Масла и автохимия' },
-    { id: 'auto_anti_theft', translationKey: 'Противоугонные устройства' },
+    { 
+      id: 'auto_oils_chemicals', 
+      translationKey: 'Масла и автохимия',
+      children: [
+        { id: 'oil_motor', translationKey: 'Моторные масла' },
+        { id: 'oil_transmission', translationKey: 'Трансмиссионные масла' },
+        { id: 'oil_coolant', translationKey: 'Охлаждающие жидкости' },
+        { id: 'oil_brake', translationKey: 'Тормозные жидкости' },
+        { id: 'oil_hydraulic', translationKey: 'Гидравлические жидкости' },
+        { id: 'oil_washer', translationKey: 'Жидкости для омывателя стекла' },
+        { id: 'oil_additives', translationKey: 'Промывочные жидкости, присадки и смазки' },
+        { id: 'oil_other', translationKey: 'Другие масла' },
+        { id: 'oil_cosmetics', translationKey: 'Автокосметика и аксессуары' },
+        { id: 'oil_fuel', translationKey: 'Топливо' },
+      ]
+    },
+    { 
+      id: 'auto_anti_theft', 
+      translationKey: 'Противоугонные устройства',
+      children: [
+        { id: 'antitheft_alarm', translationKey: 'Автосигнализации' },
+        { id: 'antitheft_immobilizer', translationKey: 'Иммобилайзеры' },
+        { id: 'antitheft_mechanical', translationKey: 'Механические блокираторы' },
+        { id: 'antitheft_satellite', translationKey: 'Спутниковые системы' },
+      ]
+    },
     { id: 'auto_gps', translationKey: 'GPS-навигаторы' },
   ],
   electronics: [
