@@ -344,17 +344,21 @@ const [searchParams, setSearchParams] = useSearchParams();
   };
 
   const handleCategoryFilterSelect = (category: Category | '') => {
-    updateFilters({
-      category: category || undefined,
-      subcategory: undefined,
-    });
+    const params = new URLSearchParams(searchParams);
+    if (category) {
+      params.set('category', category);
+    } else {
+      params.delete('category');
+    }
+    params.delete('subcategory');
+    setSearchParams(params, { replace: false });
   };
 
   const handleSubcategoryFilterSelect = (category: Category, subcategoryId: string) => {
-    updateFilters({
-      category: category,
-      subcategory: subcategoryId,
-    });
+    const params = new URLSearchParams(searchParams);
+    params.set('category', category);
+    params.set('subcategory', subcategoryId);
+    setSearchParams(params, { replace: false });
   };
 
   const handleRegionChange = (region: { country?: string; city?: string }) => {
