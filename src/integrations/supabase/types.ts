@@ -80,6 +80,16 @@ export type Database = {
       }
       listings: {
         Row: {
+          atv_brand: string | null
+          atv_condition: string | null
+          atv_engine_type: string | null
+          atv_engine_volume: number | null
+          atv_max_passengers: number | null
+          atv_mileage: number | null
+          atv_origin_country: string | null
+          atv_power: number | null
+          atv_type: string | null
+          atv_year: number | null
           car_body_condition: string | null
           car_body_type: string | null
           car_brand: string | null
@@ -111,6 +121,16 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          atv_brand?: string | null
+          atv_condition?: string | null
+          atv_engine_type?: string | null
+          atv_engine_volume?: number | null
+          atv_max_passengers?: number | null
+          atv_mileage?: number | null
+          atv_origin_country?: string | null
+          atv_power?: number | null
+          atv_type?: string | null
+          atv_year?: number | null
           car_body_condition?: string | null
           car_body_type?: string | null
           car_brand?: string | null
@@ -142,6 +162,16 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          atv_brand?: string | null
+          atv_condition?: string | null
+          atv_engine_type?: string | null
+          atv_engine_volume?: number | null
+          atv_max_passengers?: number | null
+          atv_mileage?: number | null
+          atv_origin_country?: string | null
+          atv_power?: number | null
+          atv_type?: string | null
+          atv_year?: number | null
           car_body_condition?: string | null
           car_body_type?: string | null
           car_brand?: string | null
