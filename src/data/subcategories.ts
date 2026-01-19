@@ -916,10 +916,77 @@ export const subcategoriesData: Record<Category, Subcategory[]> = {
     },
   ],
   business: [
-    { id: 'business_equipment', translationKey: 'Оборудование для бизнеса' },
-    { id: 'franchise', translationKey: 'Франшизы' },
-    { id: 'ready_business', translationKey: 'Готовый бизнес' },
-    { id: 'business_software', translationKey: 'ПО для бизнеса' },
+    { 
+      id: 'business_equipment', 
+      translationKey: 'Оборудование для бизнеса',
+      children: [
+        { id: 'biz_industrial', translationKey: 'Промышленное' },
+        { id: 'biz_logistics', translationKey: 'Логистика и склад' },
+        { id: 'biz_retail', translationKey: 'Торговое' },
+        { id: 'biz_food', translationKey: 'Пищевое' },
+        { id: 'biz_beauty', translationKey: 'Для салона красоты' },
+        { id: 'biz_auto', translationKey: 'Для автобизнеса' },
+        { id: 'biz_mining', translationKey: 'Майнинг' },
+        { id: 'biz_lab', translationKey: 'Лабораторное' },
+        { id: 'biz_medical', translationKey: 'Медицинское' },
+        { id: 'biz_telecom', translationKey: 'Телекоммуникационное' },
+        { id: 'biz_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'franchise', 
+      translationKey: 'Франшизы',
+      children: [
+        { id: 'fran_auto', translationKey: 'Автобизнес' },
+        { id: 'fran_rental', translationKey: 'Арендный бизнес' },
+        { id: 'fran_beauty', translationKey: 'Красота и здоровье' },
+        { id: 'fran_food', translationKey: 'Общественное питание' },
+        { id: 'fran_production', translationKey: 'Производство' },
+        { id: 'fran_pickup', translationKey: 'Пункты выдачи заказов' },
+        { id: 'fran_agriculture', translationKey: 'Сельское хозяйство' },
+        { id: 'fran_construction', translationKey: 'Строительство' },
+        { id: 'fran_entertainment', translationKey: 'Сфера развлечений' },
+        { id: 'fran_services', translationKey: 'Сфера услуг' },
+        { id: 'fran_retail', translationKey: 'Торговля' },
+        { id: 'fran_tourism', translationKey: 'Туризм' },
+        { id: 'fran_it', translationKey: 'IT бизнес' },
+      ]
+    },
+    { 
+      id: 'ready_business', 
+      translationKey: 'Готовый бизнес',
+      children: [
+        { id: 'ready_auto', translationKey: 'Автобизнес' },
+        { id: 'ready_rental', translationKey: 'Арендный бизнес' },
+        { id: 'ready_beauty', translationKey: 'Красота и здоровье' },
+        { id: 'ready_food', translationKey: 'Общественное питание' },
+        { id: 'ready_production', translationKey: 'Производство' },
+        { id: 'ready_pickup', translationKey: 'Пункты выдачи заказов' },
+        { id: 'ready_agriculture', translationKey: 'Сельское хозяйство' },
+        { id: 'ready_construction', translationKey: 'Строительство' },
+        { id: 'ready_entertainment', translationKey: 'Сфера развлечений' },
+        { id: 'ready_services', translationKey: 'Сфера услуг' },
+        { id: 'ready_retail', translationKey: 'Торговля' },
+        { id: 'ready_tourism', translationKey: 'Туризм' },
+        { id: 'ready_it', translationKey: 'IT бизнес' },
+        { id: 'ready_other', translationKey: 'Другое' },
+      ]
+    },
+    { 
+      id: 'business_software', 
+      translationKey: 'ПО для бизнеса',
+      children: [
+        { id: 'soft_analytics', translationKey: 'Аналитика' },
+        { id: 'soft_security', translationKey: 'Безопасность' },
+        { id: 'soft_logistics', translationKey: 'Закупки, склад, логистика' },
+        { id: 'soft_industry', translationKey: 'Отраслевое ПО' },
+        { id: 'soft_office', translationKey: 'Офисное ПО' },
+        { id: 'soft_sales', translationKey: 'Продажи и маркетинг' },
+        { id: 'soft_hr', translationKey: 'Управление персоналом и обучение' },
+        { id: 'soft_erp', translationKey: 'Управление предприятием и производством' },
+        { id: 'soft_it', translationKey: 'Управление IT инфраструктурой' },
+      ]
+    },
   ],
 };
 
