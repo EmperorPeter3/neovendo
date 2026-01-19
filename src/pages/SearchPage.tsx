@@ -128,6 +128,7 @@ const SearchPage = () => {
 const [searchParams, setSearchParams] = useSearchParams();
   const [showFilters, setShowFilters] = useState(true); // Default open
   const [expandedSubcategories, setExpandedSubcategories] = useState<Record<string, boolean>>({}); // Track expanded subcategories
+  const [openAccordionValue, setOpenAccordionValue] = useState<string | undefined>(undefined); // Controlled accordion state
 
   const query = searchParams.get('q') || '';
   const categoryParam = searchParams.get('category') as Category | null;
@@ -385,8 +386,31 @@ const [searchParams, setSearchParams] = useSearchParams();
     });
   };
 
-  // Find current category for accordion default value
-  const defaultAccordionValue = selectedCategory || undefined;
+  // Auto-expand accordion and subcategories based on URL params
+  useEffect(() => {
+    if (selectedCategory) {
+      setOpenAccordionValue(selectedCategory);
+      
+      // Also expand parent subcategory if a child is selected
+      if (selectedSubcategory) {
+        const categoryData = subcategoriesData[selectedCategory];
+        if (categoryData) {
+          for (const sub of categoryData) {
+            if (sub.children) {
+              const isChildSelected = sub.children.some(child => child.id === selectedSubcategory);
+              if (isChildSelected) {
+                setExpandedSubcategories(prev => ({
+                  ...prev,
+                  [sub.id]: true
+                }));
+                break;
+              }
+            }
+          }
+        }
+      }
+    }
+  }, [selectedCategory, selectedSubcategory]);
 
   return (
     <Layout>
@@ -496,7 +520,8 @@ const [searchParams, setSearchParams] = useSearchParams();
                       <Accordion 
                         type="single" 
                         collapsible 
-                        defaultValue={defaultAccordionValue}
+                        value={openAccordionValue}
+                        onValueChange={setOpenAccordionValue}
                         className="space-y-1"
                       >
                         {categories.map(category => {
@@ -658,7 +683,8 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <Accordion 
                     type="single" 
                     collapsible 
-                    defaultValue={defaultAccordionValue}
+                    value={openAccordionValue}
+                    onValueChange={setOpenAccordionValue}
                     className="space-y-1"
                   >
                     {categories.map(category => {
