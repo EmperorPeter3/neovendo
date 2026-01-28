@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters, MotoQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -38,6 +38,7 @@ import { AtvFilters, AtvFiltersState, defaultAtvFilters } from '@/components/fil
 import { KartingFilters, KartingFiltersState, defaultKartingFilters } from '@/components/filters/KartingFilters';
 import { QuadFilters, QuadFiltersState, defaultQuadFilters } from '@/components/filters/QuadFilters';
 import { MopedFilters, MopedFiltersState, defaultMopedFilters } from '@/components/filters/MopedFilters';
+import { MotoFilters, MotoFiltersState, defaultMotoFilters } from '@/components/filters/MotoFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 
@@ -146,6 +147,7 @@ const [searchParams, setSearchParams] = useSearchParams();
   const [kartingFilters, setKartingFilters] = useState<KartingFiltersState>(defaultKartingFilters);
   const [quadFilters, setQuadFilters] = useState<QuadFiltersState>(defaultQuadFilters);
   const [mopedFilters, setMopedFilters] = useState<MopedFiltersState>(defaultMopedFilters);
+  const [motoFilters, setMotoFilters] = useState<MotoFiltersState>(defaultMotoFilters);
   
   // Local state for price inputs with debounce
   const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
@@ -409,6 +411,56 @@ const [searchParams, setSearchParams] = useSearchParams();
     return Object.keys(result).length > 0 ? result : undefined;
   };
 
+  // Convert MotoFiltersState to MotoQueryFilters for the query
+  const convertMotoFilters = (filters: MotoFiltersState): MotoQueryFilters | undefined => {
+    if (selectedSubcategory !== 'motorbikes') return undefined;
+
+    const result: MotoQueryFilters = {};
+
+    const types: string[] = [];
+    if (filters.typeCruiserChopper) types.push('cruiser_chopper');
+    if (filters.typeSportbike) types.push('sportbike');
+    if (filters.typeTouring) types.push('touring');
+    if (filters.typeSportTouring) types.push('sport_touring');
+    if (filters.typeTourEnduro) types.push('tour_enduro');
+    if (filters.typeTrike) types.push('trike');
+    if (filters.typeNaked) types.push('naked');
+    if (filters.typeMotard) types.push('motard');
+    if (filters.typeEnduro) types.push('enduro');
+    if (filters.typeCross) types.push('cross');
+    if (filters.typePitbike) types.push('pitbike');
+    if (filters.typeTrial) types.push('trial');
+    if (filters.typeKids) types.push('kids');
+    if (filters.typeCustom) types.push('custom');
+    if (types.length > 0) result.types = types;
+
+    if (filters.brand) result.brand = filters.brand;
+    if (filters.originCountries.length > 0) result.originCountries = filters.originCountries;
+    if (filters.yearFrom) result.yearFrom = Number(filters.yearFrom);
+    if (filters.yearTo) result.yearTo = Number(filters.yearTo);
+    if (filters.condition !== 'all') result.condition = filters.condition;
+
+    const engineTypes: string[] = [];
+    if (filters.enginePetrol) engineTypes.push('petrol');
+    if (filters.engineElectric) engineTypes.push('electric');
+    if (engineTypes.length > 0) result.engineTypes = engineTypes;
+
+    if (filters.engineVolumeFrom) result.engineVolumeFrom = Number(filters.engineVolumeFrom);
+    if (filters.engineVolumeTo) result.engineVolumeTo = Number(filters.engineVolumeTo);
+    if (filters.powerHpFrom) result.powerHpFrom = Number(filters.powerHpFrom);
+    if (filters.powerHpTo) result.powerHpTo = Number(filters.powerHpTo);
+    if (filters.powerWattFrom) result.powerWattFrom = Number(filters.powerWattFrom);
+    if (filters.powerWattTo) result.powerWattTo = Number(filters.powerWattTo);
+    if (filters.fuelDelivery) result.fuelDelivery = filters.fuelDelivery;
+    if (filters.strokes) result.strokes = Number(filters.strokes);
+    if (filters.transmission.length > 0) result.transmissions = filters.transmission;
+    if (filters.mileageFrom) result.mileageFrom = Number(filters.mileageFrom);
+    if (filters.mileageTo) result.mileageTo = Number(filters.mileageTo);
+    if (filters.descriptionSearch) result.descriptionSearch = filters.descriptionSearch;
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -466,6 +518,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     karting: convertKartingFilters(kartingFilters),
     quads: convertQuadFilters(quadFilters),
     mopeds: convertMopedFilters(mopedFilters),
+    motos: convertMotoFilters(motoFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -798,6 +851,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <>
                     <Separator className="my-4" />
                     <MopedFilters filters={mopedFilters} onChange={setMopedFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'motorbikes' && (
+                  <>
+                    <Separator className="my-4" />
+                    <MotoFilters filters={motoFilters} onChange={setMotoFilters} />
                   </>
                 )}
 

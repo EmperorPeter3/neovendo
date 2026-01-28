@@ -68,6 +68,20 @@ export interface ListingWithOwner {
   moped_engine_volume: number | null;
   moped_power: number | null;
   moped_mileage: number | null;
+  // Motorcycle-specific fields
+  moto_type: string | null;
+  moto_brand: string | null;
+  moto_origin_country: string | null;
+  moto_year: number | null;
+  moto_condition: string | null;
+  moto_engine_type: string | null;
+  moto_engine_volume: number | null;
+  moto_power_hp: number | null;
+  moto_power_watt: number | null;
+  moto_fuel_delivery: string | null;
+  moto_strokes: number | null;
+  moto_transmission: string | null;
+  moto_mileage: number | null;
   owner: {
     id: string;
     name: string;
@@ -164,6 +178,28 @@ export interface MopedQueryFilters {
   descriptionSearch?: string;
 }
 
+export interface MotoQueryFilters {
+  types?: string[];
+  brand?: string;
+  originCountries?: string[];
+  yearFrom?: number;
+  yearTo?: number;
+  condition?: 'new' | 'used' | 'for_parts';
+  engineTypes?: string[];
+  engineVolumeFrom?: number;
+  engineVolumeTo?: number;
+  powerHpFrom?: number;
+  powerHpTo?: number;
+  powerWattFrom?: number;
+  powerWattTo?: number;
+  fuelDelivery?: string;
+  strokes?: number;
+  transmissions?: string[];
+  mileageFrom?: number;
+  mileageTo?: number;
+  descriptionSearch?: string;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -178,6 +214,7 @@ export const useListings = (filters?: {
   karting?: KartingQueryFilters;
   quads?: QuadQueryFilters;
   mopeds?: MopedQueryFilters;
+  motos?: MotoQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -448,6 +485,68 @@ export const useListings = (filters?: {
         }
         if (mopeds.descriptionSearch) {
           query = query.ilike('description', `%${mopeds.descriptionSearch}%`);
+        }
+      }
+
+      // Motorcycle-specific filters
+      const motos = filters?.motos;
+      if (motos) {
+        if (motos.types && motos.types.length > 0) {
+          query = query.in('moto_type', motos.types);
+        }
+        if (motos.brand) {
+          query = query.ilike('moto_brand', `%${motos.brand}%`);
+        }
+        if (motos.originCountries && motos.originCountries.length > 0) {
+          query = query.in('moto_origin_country', motos.originCountries);
+        }
+        if (motos.yearFrom !== undefined) {
+          query = query.gte('moto_year', motos.yearFrom);
+        }
+        if (motos.yearTo !== undefined) {
+          query = query.lte('moto_year', motos.yearTo);
+        }
+        if (motos.condition) {
+          query = query.eq('moto_condition', motos.condition);
+        }
+        if (motos.engineTypes && motos.engineTypes.length > 0) {
+          query = query.in('moto_engine_type', motos.engineTypes);
+        }
+        if (motos.engineVolumeFrom !== undefined) {
+          query = query.gte('moto_engine_volume', motos.engineVolumeFrom);
+        }
+        if (motos.engineVolumeTo !== undefined) {
+          query = query.lte('moto_engine_volume', motos.engineVolumeTo);
+        }
+        if (motos.powerHpFrom !== undefined) {
+          query = query.gte('moto_power_hp', motos.powerHpFrom);
+        }
+        if (motos.powerHpTo !== undefined) {
+          query = query.lte('moto_power_hp', motos.powerHpTo);
+        }
+        if (motos.powerWattFrom !== undefined) {
+          query = query.gte('moto_power_watt', motos.powerWattFrom);
+        }
+        if (motos.powerWattTo !== undefined) {
+          query = query.lte('moto_power_watt', motos.powerWattTo);
+        }
+        if (motos.fuelDelivery) {
+          query = query.eq('moto_fuel_delivery', motos.fuelDelivery);
+        }
+        if (motos.strokes !== undefined) {
+          query = query.eq('moto_strokes', motos.strokes);
+        }
+        if (motos.transmissions && motos.transmissions.length > 0) {
+          query = query.in('moto_transmission', motos.transmissions);
+        }
+        if (motos.mileageFrom !== undefined) {
+          query = query.gte('moto_mileage', motos.mileageFrom);
+        }
+        if (motos.mileageTo !== undefined) {
+          query = query.lte('moto_mileage', motos.mileageTo);
+        }
+        if (motos.descriptionSearch) {
+          query = query.ilike('description', `%${motos.descriptionSearch}%`);
         }
       }
 

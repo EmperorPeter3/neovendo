@@ -16,6 +16,7 @@ import { AtvFieldsForm, AtvFieldsData, defaultAtvFields } from '@/components/Atv
 import KartingFieldsForm, { KartingFieldsData, defaultKartingFields } from '@/components/KartingFieldsForm';
 import QuadFieldsForm, { QuadFieldsData, defaultQuadFields } from '@/components/QuadFieldsForm';
 import MopedFieldsForm, { MopedFieldsData, defaultMopedFields } from '@/components/MopedFieldsForm';
+import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/MotoFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 
 const CreateListing = () => {
@@ -42,6 +43,7 @@ const CreateListing = () => {
   const [kartingFields, setKartingFields] = useState<KartingFieldsData>(defaultKartingFields);
   const [quadFields, setQuadFields] = useState<QuadFieldsData>(defaultQuadFields);
   const [mopedFields, setMopedFields] = useState<MopedFieldsData>(defaultMopedFields);
+  const [motoFields, setMotoFields] = useState<MotoFieldsData>(defaultMotoFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
 
   const isCarListing = subcategory === 'cars';
@@ -49,6 +51,7 @@ const CreateListing = () => {
   const isKartingListing = subcategory === 'karting';
   const isQuadListing = subcategory === 'quads_buggies';
   const isMopedListing = subcategory === 'mopeds_scooters';
+  const isMotoListing = subcategory === 'motorbikes';
 
   const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
     setCategory(newCategory);
@@ -374,6 +377,11 @@ const CreateListing = () => {
             {/* Moped-specific fields */}
             {isMopedListing && (
               <MopedFieldsForm data={mopedFields} onChange={setMopedFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Motorcycle-specific fields */}
+            {isMotoListing && (
+              <MotoFieldsForm data={motoFields} onChange={setMotoFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}

@@ -123,6 +123,19 @@ export type Database = {
           moped_power: number | null
           moped_type: string | null
           moped_year: number | null
+          moto_brand: string | null
+          moto_condition: string | null
+          moto_engine_type: string | null
+          moto_engine_volume: number | null
+          moto_fuel_delivery: string | null
+          moto_mileage: number | null
+          moto_origin_country: string | null
+          moto_power_hp: number | null
+          moto_power_watt: number | null
+          moto_strokes: number | null
+          moto_transmission: string | null
+          moto_type: string | null
+          moto_year: number | null
           owner_id: string
           price: number
           quad_brand: string | null
@@ -184,6 +197,19 @@ export type Database = {
           moped_power?: number | null
           moped_type?: string | null
           moped_year?: number | null
+          moto_brand?: string | null
+          moto_condition?: string | null
+          moto_engine_type?: string | null
+          moto_engine_volume?: number | null
+          moto_fuel_delivery?: string | null
+          moto_mileage?: number | null
+          moto_origin_country?: string | null
+          moto_power_hp?: number | null
+          moto_power_watt?: number | null
+          moto_strokes?: number | null
+          moto_transmission?: string | null
+          moto_type?: string | null
+          moto_year?: number | null
           owner_id: string
           price: number
           quad_brand?: string | null
@@ -245,6 +271,19 @@ export type Database = {
           moped_power?: number | null
           moped_type?: string | null
           moped_year?: number | null
+          moto_brand?: string | null
+          moto_condition?: string | null
+          moto_engine_type?: string | null
+          moto_engine_volume?: number | null
+          moto_fuel_delivery?: string | null
+          moto_mileage?: number | null
+          moto_origin_country?: string | null
+          moto_power_hp?: number | null
+          moto_power_watt?: number | null
+          moto_strokes?: number | null
+          moto_transmission?: string | null
+          moto_type?: string | null
+          moto_year?: number | null
           owner_id?: string
           price?: number
           quad_brand?: string | null
