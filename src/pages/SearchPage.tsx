@@ -41,6 +41,7 @@ import { MopedFilters, MopedFiltersState, defaultMopedFilters } from '@/componen
 import { MotoFilters, MotoFiltersState, defaultMotoFilters } from '@/components/filters/MotoFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
+import { MobileCategorySelector } from '@/components/MobileCategorySelector';
 
 const categories: Category[] = [
   'transport',
@@ -893,150 +894,19 @@ const [searchParams, setSearchParams] = useSearchParams();
           )}
 
           {/* Mobile Category Filter - Fullscreen */}
-          {showMobileCategories && (
-            <div className="md:hidden fixed inset-0 bg-background z-50 flex flex-col">
-              <div className="flex items-center justify-between p-4 border-b border-border">
-                <h3 className="font-display font-semibold text-foreground">{t('category')}</h3>
-                <button
-                  onClick={() => setShowMobileCategories(false)}
-                  className="p-2 hover:bg-secondary rounded-full transition-colors"
-                >
-                  <X className="w-5 h-5 text-muted-foreground" />
-                </button>
-              </div>
-
-              <div className="flex-1 overflow-y-auto p-4">
-                {/* All categories option */}
-                <button
-                  onClick={() => {
-                    handleCategoryFilterSelect('');
-                    setShowMobileCategories(false);
-                  }}
-                  className={cn(
-                    "w-full text-left px-4 py-3 rounded-lg text-base transition-colors flex items-center gap-3 mb-2",
-                    !selectedCategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
-                  )}
-                >
-                  {(() => {
-                    const AllIcon = categoryIcons[''];
-                    return <AllIcon className="w-5 h-5" />;
-                  })()}
-                  {t('all')}
-                </button>
-
-                <Accordion 
-                  type="single" 
-                  collapsible 
-                  value={openAccordionValue}
-                  onValueChange={setOpenAccordionValue}
-                  className="space-y-1"
-                >
-                  {categories.map(category => {
-                    const Icon = categoryIcons[category];
-                    const subcategories = subcategoriesData[category];
-                    
-                    // Check if this category is a parent of the selected subcategory
-                    const isParentOfSelected = selectedCategory === category && selectedSubcategory;
-                    
-                    // Helper to check if a subcategory is a parent of the selected one
-                    const isParentSubcategory = (sub: Subcategory): boolean => {
-                      if (!selectedSubcategory || selectedCategory !== category) return false;
-                      if (sub.children) {
-                        return sub.children.some(child => child.id === selectedSubcategory);
-                      }
-                      return false;
-                    };
-                    
-                    return (
-                      <AccordionItem 
-                        key={category} 
-                        value={category}
-                        className="border-none"
-                      >
-                        <AccordionTrigger 
-                          className={cn(
-                            "w-full text-left px-4 py-3 rounded-lg text-base transition-colors flex items-center gap-3 hover:no-underline",
-                            isParentOfSelected 
-                              ? 'bg-muted text-foreground font-medium'
-                              : 'bg-secondary hover:bg-secondary/80'
-                          )}
-                        >
-                          <Icon className="w-5 h-5" />
-                          <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
-                        </AccordionTrigger>
-                        <AccordionContent className="pb-0 pt-1">
-                          <div className="pl-8 space-y-1">
-                            {subcategories.map(subcategory => {
-                              const hasChildren = subcategory.children && subcategory.children.length > 0;
-                              const isExpanded = expandedSubcategories[subcategory.id] ?? false;
-                              const isSelected = selectedCategory === category && selectedSubcategory === subcategory.id;
-                              const isParent = isParentSubcategory(subcategory);
-                              
-                              return (
-                                <div key={subcategory.id}>
-                                  <button
-                                    onClick={() => {
-                                      if (hasChildren) {
-                                        setExpandedSubcategories(prev => ({
-                                          ...prev,
-                                          [subcategory.id]: !prev[subcategory.id]
-                                        }));
-                                      } else {
-                                        handleSubcategoryFilterSelect(category, subcategory.id);
-                                        setShowMobileCategories(false);
-                                      }
-                                    }}
-                                    className={cn(
-                                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between",
-                                      isSelected
-                                        ? 'bg-primary/20 text-primary font-medium'
-                                        : isParent
-                                          ? 'bg-muted/60 text-foreground font-medium'
-                                          : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
-                                      hasChildren && !isSelected && !isParent && 'font-medium text-foreground'
-                                    )}
-                                  >
-                                    <span>{t(subcategory.id as TranslationKey)}</span>
-                                    {hasChildren && (
-                                      isExpanded 
-                                        ? <ChevronDown className="w-4 h-4 shrink-0" />
-                                        : <ChevronRight className="w-4 h-4 shrink-0" />
-                                    )}
-                                  </button>
-                                  {/* Render nested children - collapsible */}
-                                  {hasChildren && isExpanded && (
-                                    <div className="pl-4 space-y-1 mt-1">
-                                      {subcategory.children!.map(child => (
-                                        <button
-                                          key={child.id}
-                                          onClick={() => {
-                                            handleSubcategoryFilterSelect(category, child.id);
-                                            setShowMobileCategories(false);
-                                          }}
-                                          className={cn(
-                                            "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
-                                            selectedCategory === category && selectedSubcategory === child.id
-                                              ? 'bg-primary/20 text-primary font-medium'
-                                              : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
-                                          )}
-                                        >
-                                          {t(child.id as TranslationKey)}
-                                        </button>
-                                      ))}
-                                    </div>
-                                  )}
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </AccordionContent>
-                      </AccordionItem>
-                    );
-                  })}
-                </Accordion>
-              </div>
-            </div>
-          )}
+          <MobileCategorySelector
+            isOpen={showMobileCategories}
+            onClose={() => setShowMobileCategories(false)}
+            selectedCategory={selectedCategory as Category | ''}
+            selectedSubcategory={selectedSubcategory}
+            onSelectCategory={(category, subcategory) => {
+              if (subcategory) {
+                handleSubcategoryFilterSelect(category as Category, subcategory);
+              } else {
+                handleCategoryFilterSelect(category);
+              }
+            }}
+          />
 
           {/* Mobile Additional Filters - Fullscreen */}
           {showMobileFilters && (

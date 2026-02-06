@@ -1,9 +1,10 @@
 import { Layout } from '@/components/Layout';
 import { CategoryModal } from '@/components/CategoryModal';
+import { MobileCategorySelector } from '@/components/MobileCategorySelector';
 import { RegionSelector } from '@/components/RegionSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
-import { ArrowRight, MapPin, Search } from 'lucide-react';
+import { ArrowRight, MapPin, Search, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,7 @@ import { TranslationKey } from '@/i18n/translations';
 import { useState } from 'react';
 import { Category } from '@/types/listing';
 import { categoryIcons } from '@/data/subcategories';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
   const { t } = useLanguage();
@@ -70,12 +72,14 @@ const ListingCardSkeleton = () => (
 const Index = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const { data: listings, isLoading } = useListings({ limit: 8 });
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>();
   const [selectedRegion, setSelectedRegion] = useState<{ country?: string; city?: string }>({});
+  const [showMobileCategories, setShowMobileCategories] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -103,6 +107,9 @@ const Index = () => {
     }
   };
 
+  // Get the icon for selected category
+  const SelectedIcon = categoryIcons[selectedCategory] || categoryIcons[''];
+
   return (
     <Layout>
       {/* Search Section */}
@@ -110,11 +117,30 @@ const Index = () => {
         <div className="container">
           <form onSubmit={handleSearch}>
             <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full">
-              {/* Category Modal */}
-              <CategoryModal 
-                value={selectedCategory} 
-                onChange={handleCategoryChange} 
-              />
+              {/* Category - Desktop: Modal, Mobile: Button that opens fullscreen selector */}
+              {isMobile ? (
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowMobileCategories(true)}
+                  className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap justify-start"
+                >
+                  <SelectedIcon className="w-5 h-5 text-emerald-600" />
+                  <span className="truncate flex-1 text-left">
+                    {selectedSubcategory 
+                      ? t(selectedSubcategory as TranslationKey)
+                      : selectedCategory 
+                        ? t(selectedCategory as TranslationKey) 
+                        : t('allCategories')}
+                  </span>
+                  <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+                </Button>
+              ) : (
+                <CategoryModal 
+                  value={selectedCategory} 
+                  onChange={handleCategoryChange} 
+                />
+              )}
               
               {/* Search Input with Button inside */}
               <div className="flex-1 relative flex">
@@ -145,6 +171,15 @@ const Index = () => {
           </form>
         </div>
       </section>
+
+      {/* Mobile Category Selector */}
+      <MobileCategorySelector
+        isOpen={showMobileCategories}
+        onClose={() => setShowMobileCategories(false)}
+        selectedCategory={selectedCategory}
+        selectedSubcategory={selectedSubcategory || ''}
+        onSelectCategory={handleCategoryChange}
+      />
 
       {/* Recent Listings Section */}
       <section className="py-12 md:py-16">
