@@ -132,7 +132,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     lng: number;
     address: string;
   } | null>(null);
-  const [radius, setRadius] = useState(5);
+  const [radius, setRadius] = useState(1);
   const [initialCenter, setInitialCenter] = useState<[number, number] | null>(null);
   const [flyToLocation, setFlyToLocation] = useState<{ lat: number; lng: number } | null>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -323,7 +323,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     setFlyToLocation(null);
     setSearchQuery('');
     setSuggestions([]);
-    setRadius(5);
+    setRadius(1);
     setOpen(false);
   };
 
@@ -333,7 +333,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     setFlyToLocation(null);
     setSearchQuery('');
     setSuggestions([]);
-    setRadius(5);
+    setRadius(1);
   };
 
   const displayValue = value?.address 
@@ -347,8 +347,23 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     return { main: mainPart, secondary: secondaryPart };
   };
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    setOpen(nextOpen);
+
+    if (!nextOpen) {
+      // Ensure we never reopen with a stale map center (react-leaflet doesn't auto-recenter on prop changes)
+      setSuggestions([]);
+      setIsSearching(false);
+      setSelectedLocation(null);
+      setInitialCenter(null);
+      setFlyToLocation(null);
+      setSearchQuery('');
+      setRadius(1);
+    }
+  };
+
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
         <Button
           variant="outline"
