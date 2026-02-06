@@ -631,35 +631,105 @@ const [searchParams, setSearchParams] = useSearchParams();
               />
             </div>
 
-            {/* Mobile: Category, Filter and Region buttons */}
-            <div className="flex gap-2 md:hidden">
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowMobileCategories(true)}
-                className="h-12 px-3 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary"
-              >
-                <SlidersHorizontal className="w-5 h-5" />
-                {t('category')}
-              </Button>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={() => setShowMobileFilters(true)}
-                className="h-12 px-3 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary"
-              >
-                <SlidersHorizontal className="w-5 h-5" />
-                {t('filters')}
-              </Button>
+            {/* Mobile: Reorganized layout - Region, then Category+Filters, then Search */}
+            <div className="flex flex-col gap-3 md:hidden w-full">
+              {/* 1. Region Selector - Full width */}
               <RegionSelector 
                 value={selectedRegion}
                 onChange={handleRegionChange}
-                className="flex-1"
+                className="w-full"
               />
+              
+              {/* 2. Category and Filters buttons - Side by side */}
+              <div className="flex gap-2 w-full">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowMobileCategories(true)}
+                  className="h-12 px-3 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary flex-1 min-w-0"
+                >
+                  <SlidersHorizontal className="w-5 h-5 shrink-0" />
+                  <span className="truncate">{t('category')}</span>
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={() => setShowMobileFilters(true)}
+                  className="h-12 px-3 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary flex-1 min-w-0"
+                >
+                  <SlidersHorizontal className="w-5 h-5 shrink-0" />
+                  <span className="truncate">{t('filters')}</span>
+                </Button>
+              </div>
+              
+              {/* 3. Search Input with Button - Full width */}
+              <div className="relative flex w-full">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
+                  <Search className="w-5 h-5" />
+                </div>
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t('searchPlaceholder')}
+                  className="h-12 pl-12 pr-4 text-base rounded-xl rounded-r-none border-2 border-r-0 border-border bg-card flex-1 min-w-0"
+                />
+                <Button
+                  type="submit"
+                  className="h-12 px-4 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity rounded-xl rounded-l-none shrink-0"
+                >
+                  {t('search')}
+                </Button>
+              </div>
+              
+              {/* 4. Category path - Clickable, shows when category is selected */}
+              {(selectedCategory || selectedSubcategory) && (
+                <button
+                  type="button"
+                  onClick={() => setShowMobileCategories(true)}
+                  className="text-left text-sm text-primary hover:underline flex items-center gap-1 flex-wrap"
+                >
+                  {selectedCategory && (
+                    <>
+                      <span>{t(selectedCategory as TranslationKey)}</span>
+                      {selectedSubcategory && (
+                        <>
+                          <ChevronRight className="w-3 h-3 shrink-0" />
+                          {(() => {
+                            // Find the subcategory name
+                            const subs = subcategoriesData[selectedCategory as Category];
+                            if (subs) {
+                              for (const sub of subs) {
+                                if (sub.id === selectedSubcategory) {
+                                  return <span>{t(sub.translationKey as TranslationKey)}</span>;
+                                }
+                                if (sub.children) {
+                                  for (const child of sub.children) {
+                                    if (child.id === selectedSubcategory) {
+                                      return (
+                                        <>
+                                          <span>{t(sub.translationKey as TranslationKey)}</span>
+                                          <ChevronRight className="w-3 h-3 shrink-0" />
+                                          <span>{t(child.translationKey as TranslationKey)}</span>
+                                        </>
+                                      );
+                                    }
+                                  }
+                                }
+                              }
+                            }
+                            return <span>{selectedSubcategory}</span>;
+                          })()}
+                        </>
+                      )}
+                    </>
+                  )}
+                </button>
+              )}
             </div>
 
-            {/* Search Input with Button inside */}
-            <div className="flex-1 relative flex">
+            {/* Desktop: Search Input with Button inside */}
+            <div className="flex-1 relative hidden md:flex">
               <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
                 <Search className="w-5 h-5" />
               </div>
