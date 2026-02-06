@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
+  // Avoid pre-bundling react-leaflet to prevent context/consumer runtime issues
+  optimizeDeps: {
+    exclude: ["react-leaflet", "@react-leaflet/core", "leaflet"],
+  },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
     alias: {
