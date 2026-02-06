@@ -319,14 +319,14 @@ export const MotoFilters = ({ filters, onChange }: MotoFiltersProps) => {
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('moto.fuelDelivery' as TranslationKey)}</Label>
         <Select
-          value={filters.fuelDelivery}
-          onValueChange={(value) => updateFilter('fuelDelivery', value)}
+          value={filters.fuelDelivery || 'all'}
+          onValueChange={(value) => updateFilter('fuelDelivery', value === 'all' ? '' : value)}
         >
           <SelectTrigger className="h-9">
             <SelectValue placeholder={t('all')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{t('all')}</SelectItem>
+            <SelectItem value="all">{t('all')}</SelectItem>
             {motoFuelDelivery.map(fd => (
               <SelectItem key={fd} value={fd}>
                 {t(`moto.fuelDelivery.${fd}` as TranslationKey)}
@@ -340,14 +340,14 @@ export const MotoFilters = ({ filters, onChange }: MotoFiltersProps) => {
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('moto.strokes' as TranslationKey)}</Label>
         <Select
-          value={filters.strokes}
-          onValueChange={(value) => updateFilter('strokes', value)}
+          value={filters.strokes || 'all'}
+          onValueChange={(value) => updateFilter('strokes', value === 'all' ? '' : value)}
         >
           <SelectTrigger className="h-9">
             <SelectValue placeholder={t('all')} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="">{t('all')}</SelectItem>
+            <SelectItem value="all">{t('all')}</SelectItem>
             {motoStrokes.map(s => (
               <SelectItem key={s} value={String(s)}>
                 {t(`moto.strokes.${s}` as TranslationKey)}
