@@ -84,8 +84,10 @@ export const translations = {
     seeMore: "See more",
     all: "All",
     allRegions: "All regions",
-    selectRegion: "Select region",
+    selectRegion: "Select location",
     allCategories: "All categories",
+    searchRadius: "Search radius",
+    enterAddress: "Enter address...",
     
     // Transport subcategories
     cars: "Cars",
@@ -4952,8 +4954,10 @@ export const translations = {
     seeMore: "Показать ещё",
     all: "Все",
     allRegions: "Все регионы",
-    selectRegion: "Выберите регион",
+    selectRegion: "Выберите местоположение",
     allCategories: "Все категории",
+    searchRadius: "Радиус поиска",
+    enterAddress: "Введите адрес...",
     
     // Transport subcategories
     cars: "Автомобили",
