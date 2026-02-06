@@ -95,7 +95,17 @@ export const MobileCategorySelector = ({
     }
   }, [isOpen, selectedCategory, selectedSubcategory]);
 
-  if (!isOpen) return null;
+  // Prevent body scroll when modal is open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isOpen]);
 
   // Helper to check if a subcategory is a parent of the selected one
   const isParentSubcategory = (sub: Subcategory, category: Category): boolean => {
@@ -116,8 +126,10 @@ export const MobileCategorySelector = ({
     onClose();
   };
 
+  if (!isOpen) return null;
+
   return (
-    <div className="fixed inset-0 bg-background z-50 flex flex-col">
+    <div className="fixed inset-0 bg-background z-50 flex flex-col overflow-hidden">
       <div className="flex items-center justify-between p-4 border-b border-border shrink-0">
         <h3 className="font-display font-semibold text-foreground">{t('categories')}</h3>
         <button
@@ -128,7 +140,7 @@ export const MobileCategorySelector = ({
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto overscroll-contain p-4">
         {/* All categories option */}
         <button
           onClick={() => handleCategorySelect('')}
