@@ -212,14 +212,14 @@ const Index = () => {
       {/* Recent Listings Section */}
       <section className="py-12 md:py-16">
         <div className="container">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="font-display text-2xl font-bold text-foreground">
+          <div className="flex items-center justify-between mb-6 gap-2">
+            <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
               {t('recentListings')}
             </h2>
             <Link to="/search">
-              <Button variant="ghost" className="gap-2 text-primary hover:text-primary/80">
+              <Button variant="ghost" className="gap-1 text-primary hover:text-primary/80 text-xs md:text-sm px-2 md:px-4 shrink-0">
                 {t('viewAll')}
-                <ArrowRight className="w-4 h-4" />
+                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
               </Button>
             </Link>
           </div>
