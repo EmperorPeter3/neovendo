@@ -4,7 +4,7 @@ import { MobileCategorySelector } from '@/components/MobileCategorySelector';
 import { RegionSelector } from '@/components/RegionSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
-import { ArrowRight, MapPin, Search, ChevronDown } from 'lucide-react';
+import { ChevronRight, MapPin, Search, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -210,7 +210,7 @@ const Index = () => {
       />
 
       {/* Recent Listings Section */}
-      <section className="py-12 md:py-16">
+      <section className="py-6 md:py-10">
         <div className="container">
           <div className="flex items-center justify-between mb-6 gap-2">
             <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
@@ -219,7 +219,7 @@ const Index = () => {
             <Link to="/search">
               <Button variant="ghost" className="gap-1 text-primary hover:text-primary/80 text-xs md:text-sm px-2 md:px-4 shrink-0">
                 {t('viewAll')}
-                <ArrowRight className="w-3 h-3 md:w-4 md:h-4" />
+                <ChevronRight className="w-4 h-4" />
               </Button>
             </Link>
           </div>
