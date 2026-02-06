@@ -212,9 +212,32 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     setSuggestions([]);
   };
 
-  const handleMapCenterChange = useCallback((lat: number, lng: number) => {
+  const handleMapCenterChange = useCallback(async (lat: number, lng: number) => {
     if (selectedLocation) {
       setSelectedLocation(prev => prev ? { ...prev, lat, lng } : null);
+      
+      // Reverse geocode to get address for new position
+      try {
+        const response = await fetch(
+          `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
+          {
+            headers: {
+              'Accept-Language': 'ru,en',
+            },
+          }
+        );
+        const data = await response.json();
+        const newAddress = data.display_name || `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        
+        setSelectedLocation(prev => prev ? { ...prev, address: newAddress } : null);
+        setSearchQuery(newAddress);
+      } catch (error) {
+        console.error('Error reverse geocoding:', error);
+        // Keep coordinates as address fallback
+        const fallbackAddress = `${lat.toFixed(6)}, ${lng.toFixed(6)}`;
+        setSelectedLocation(prev => prev ? { ...prev, address: fallbackAddress } : null);
+        setSearchQuery(fallbackAddress);
+      }
     }
   }, [selectedLocation]);
 
