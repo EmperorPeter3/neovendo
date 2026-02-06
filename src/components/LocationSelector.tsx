@@ -437,9 +437,9 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
               </Button>
             </div>
 
-            {/* Suggestions List */}
-            {suggestions.length > 0 && !selectedLocation && (
-              <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg">
+            {/* Suggestions List - z-index must be above map (z-[1000]) */}
+            {suggestions.length > 0 && (
+              <div className="absolute z-[1100] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg">
                 <ScrollArea className="max-h-[200px]">
                   {suggestions.map((result) => {
                     const formatted = formatSuggestion(result);
@@ -459,7 +459,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
             )}
 
             {isSearching && (
-              <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 flex items-center justify-center">
+              <div className="absolute z-[1100] w-full mt-1 bg-popover border border-border rounded-lg shadow-lg p-4 flex items-center justify-center">
                 <Loader2 className="w-5 h-5 animate-spin text-muted-foreground" />
               </div>
             )}
