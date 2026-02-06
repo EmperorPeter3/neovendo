@@ -592,13 +592,15 @@ export const useListings = (filters?: {
         };
 
         result = result.filter(listing => {
-          // If listing has no coordinates, exclude it from geo-filtered results
-          if (listing.lat === null || listing.lat === undefined || 
-              listing.lng === null || listing.lng === undefined) {
-            return false;
+          // If listing has coordinates, use Haversine distance
+          if (listing.lat !== null && listing.lat !== undefined && 
+              listing.lng !== null && listing.lng !== undefined) {
+            const distance = haversineDistance(userLat, userLng, listing.lat, listing.lng);
+            return distance <= radiusKm;
           }
-          const distance = haversineDistance(userLat, userLng, listing.lat, listing.lng);
-          return distance <= radiusKm;
+          // Fallback: listings without coordinates are included (legacy data)
+          // They match text/category filters but can't be geo-filtered accurately
+          return true;
         });
       }
 
