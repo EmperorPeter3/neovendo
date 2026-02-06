@@ -12,9 +12,11 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
   },
-  // Avoid pre-bundling react-leaflet to prevent context/consumer runtime issues
+  // Leaflet deps can be fragile with prebundling; keep them excluded,
+  // but make sure react-dom is optimized so named exports like createPortal work.
   optimizeDeps: {
     exclude: ["react-leaflet", "@react-leaflet/core", "leaflet"],
+    include: ["react-dom", "react-dom/client"],
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
   resolve: {
