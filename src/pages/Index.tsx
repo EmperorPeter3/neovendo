@@ -116,31 +116,12 @@ const Index = () => {
       <section className="py-8 md:py-12 bg-secondary/30">
         <div className="container">
           <form onSubmit={handleSearch}>
-            <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center w-full">
-              {/* Category - Desktop: Modal, Mobile: Button that opens fullscreen selector */}
-              {isMobile ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => setShowMobileCategories(true)}
-                  className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap justify-start"
-                >
-                  <SelectedIcon className="w-5 h-5 text-emerald-600" />
-                  <span className="truncate flex-1 text-left">
-                    {selectedSubcategory 
-                      ? t(selectedSubcategory as TranslationKey)
-                      : selectedCategory 
-                        ? t(selectedCategory as TranslationKey) 
-                        : t('allCategories')}
-                  </span>
-                  <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                </Button>
-              ) : (
-                <CategoryModal 
-                  value={selectedCategory} 
-                  onChange={handleCategoryChange} 
-                />
-              )}
+            {/* Desktop layout: Category | Search | Region */}
+            <div className="hidden md:flex flex-row gap-3 items-center w-full">
+              <CategoryModal 
+                value={selectedCategory} 
+                onChange={handleCategoryChange} 
+              />
               
               {/* Search Input with Button inside */}
               <div className="flex-1 relative flex">
@@ -162,11 +143,58 @@ const Index = () => {
                 </Button>
               </div>
               
-              {/* Region Selector */}
               <RegionSelector 
                 value={selectedRegion}
                 onChange={setSelectedRegion}
               />
+            </div>
+
+            {/* Mobile layout: Region -> Category -> Search (vertical) */}
+            <div className="flex md:hidden flex-col gap-3 w-full">
+              {/* 1. Region Selector - Full width */}
+              <RegionSelector 
+                value={selectedRegion}
+                onChange={setSelectedRegion}
+                className="w-full"
+              />
+              
+              {/* 2. Category Button - Full width */}
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowMobileCategories(true)}
+                className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary whitespace-nowrap justify-start w-full"
+              >
+                <SelectedIcon className="w-5 h-5 text-emerald-600" />
+                <span className="truncate flex-1 text-left">
+                  {selectedSubcategory 
+                    ? t(selectedSubcategory as TranslationKey)
+                    : selectedCategory 
+                      ? t(selectedCategory as TranslationKey) 
+                      : t('allCategories')}
+                </span>
+                <ChevronDown className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+              </Button>
+              
+              {/* 3. Search Input with Button - Full width */}
+              <div className="relative flex w-full">
+                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-muted-foreground z-10">
+                  <Search className="w-5 h-5" />
+                </div>
+                <Input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={t('searchPlaceholder')}
+                  className="h-12 pl-12 pr-4 text-base rounded-xl rounded-r-none border-2 border-r-0 border-border bg-card flex-1 min-w-0"
+                />
+                <Button
+                  type="submit"
+                  className="h-12 px-4 gradient-hero text-primary-foreground hover:opacity-90 transition-opacity rounded-xl rounded-l-none shrink-0"
+                >
+                  {t('search')}
+                </Button>
+              </div>
             </div>
           </form>
         </div>
