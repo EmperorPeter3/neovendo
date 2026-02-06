@@ -138,9 +138,11 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
   const [flyToLocation, setFlyToLocation] = useState<{ lat: number; lng: number } | null>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Initialize with existing value
+  // Initialize with existing value when value changes externally (not from open/close)
+  const prevValueRef = useRef(value);
   useEffect(() => {
-    if (value && open) {
+    // Only update if value reference actually changed (external update)
+    if (value && value !== prevValueRef.current && open) {
       setSelectedLocation({
         lat: value.lat,
         lng: value.lng,
@@ -149,7 +151,9 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
       setInitialCenter([value.lat, value.lng]);
       setRadius(value.radius);
       setSearchQuery(value.address);
+      setMapSessionKey((k) => k + 1);
     }
+    prevValueRef.current = value;
   }, [value, open]);
 
   // Debounced search
@@ -349,23 +353,32 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
   };
 
   const handleOpenChange = (nextOpen: boolean) => {
-    setOpen(nextOpen);
-
     if (nextOpen) {
-      // Force remount of MapContainer on every open.
-      // Radix keeps content mounted during close/open animations, which can cause Leaflet
-      // to reuse the previous internal map state if reopened quickly.
-      setMapSessionKey((k) => k + 1);
-    } else {
-      // Ensure we never reopen with a stale map center (react-leaflet doesn't auto-recenter on prop changes)
+      // Initialize state BEFORE setting open=true so the first render has correct data
+      if (value) {
+        setSelectedLocation({
+          lat: value.lat,
+          lng: value.lng,
+          address: value.address,
+        });
+        setInitialCenter([value.lat, value.lng]);
+        setRadius(value.radius);
+        setSearchQuery(value.address);
+      } else {
+        // No existing value - reset to empty state
+        setSelectedLocation(null);
+        setInitialCenter(null);
+        setSearchQuery('');
+        setRadius(1);
+      }
+      setFlyToLocation(null);
       setSuggestions([]);
       setIsSearching(false);
-      setSelectedLocation(null);
-      setInitialCenter(null);
-      setFlyToLocation(null);
-      setSearchQuery('');
-      setRadius(1);
+      // Force remount of MapContainer on every open
+      setMapSessionKey((k) => k + 1);
     }
+    
+    setOpen(nextOpen);
   };
 
   return (
