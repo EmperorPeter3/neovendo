@@ -18,6 +18,7 @@ import QuadFieldsForm, { QuadFieldsData, defaultQuadFields } from '@/components/
 import MopedFieldsForm, { MopedFieldsData, defaultMopedFields } from '@/components/MopedFieldsForm';
 import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/MotoFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
+import { LocationPicker, LocationPickerValue } from '@/components/LocationPicker';
 
 const CreateListing = () => {
   const { t } = useLanguage();
@@ -33,8 +34,7 @@ const CreateListing = () => {
   const [category, setCategory] = useState<Category | ''>('');
   const [subcategory, setSubcategory] = useState('');
   const [price, setPrice] = useState('');
-  const [city, setCity] = useState('');
-  const [country, setCountry] = useState('');
+  const [locationValue, setLocationValue] = useState<LocationPickerValue | null>(null);
   const [imageFiles, setImageFiles] = useState<File[]>([]);
   const [imagePreviews, setImagePreviews] = useState<string[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -180,8 +180,7 @@ const CreateListing = () => {
     if (!description) requiredErrors.description = true;
     if (!category) requiredErrors.category = true;
     if (!price) requiredErrors.price = true;
-    if (!city) requiredErrors.city = true;
-    if (!country) requiredErrors.country = true;
+    if (!locationValue) requiredErrors.location = true;
 
     if (Object.keys(requiredErrors).length > 0) {
       setFieldErrors(requiredErrors);
@@ -223,8 +222,8 @@ const CreateListing = () => {
         category: category as Category,
         subcategory: subcategory || undefined,
         price: parseFloat(price),
-        city,
-        country,
+        city: locationValue?.city || locationValue?.address.split(',')[0] || '',
+        country: locationValue?.country || '',
         images: uploadedUrls,
       };
 
@@ -401,29 +400,19 @@ const CreateListing = () => {
             </div>
 
             {/* Location */}
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {t('city')} *
-                </label>
-                <Input
-                  value={city}
-                  onChange={(e) => setCity(e.target.value)}
-                  placeholder="e.g., Berlin"
-                  className="h-12"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-foreground mb-2">
-                  {t('country')} *
-                </label>
-                <Input
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  placeholder="e.g., Germany"
-                  className="h-12"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-foreground mb-2">
+                {t('location')} *
+              </label>
+              <LocationPicker
+                value={locationValue}
+                onChange={(val) => {
+                  setLocationValue(val);
+                  clearFieldError('location');
+                }}
+                error={fieldErrors.location}
+                className="w-full"
+              />
             </div>
 
             {/* Description */}
