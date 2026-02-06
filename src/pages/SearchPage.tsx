@@ -716,7 +716,18 @@ const [searchParams, setSearchParams] = useSearchParams();
                         {categories.map(category => {
                           const Icon = categoryIcons[category];
                           const subcategories = subcategoriesData[category];
-                          const isActive = selectedCategory === category;
+                          
+                          // Check if this category is a parent of the selected subcategory
+                          const isParentOfSelected = selectedCategory === category && selectedSubcategory;
+                          
+                          // Helper to check if a subcategory is a parent of the selected one
+                          const isParentSubcategory = (sub: Subcategory): boolean => {
+                            if (!selectedSubcategory || selectedCategory !== category) return false;
+                            if (sub.children) {
+                              return sub.children.some(child => child.id === selectedSubcategory);
+                            }
+                            return false;
+                          };
                           
                           return (
                             <AccordionItem 
@@ -727,7 +738,9 @@ const [searchParams, setSearchParams] = useSearchParams();
                               <AccordionTrigger 
                                 className={cn(
                                   "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
-                                  'hover:bg-secondary'
+                                  isParentOfSelected 
+                                    ? 'bg-muted text-foreground font-medium'
+                                    : 'hover:bg-secondary'
                                 )}
                               >
                                 <Icon className="w-4 h-4" />
@@ -738,6 +751,8 @@ const [searchParams, setSearchParams] = useSearchParams();
                                   {subcategories.map(subcategory => {
                                     const hasChildren = subcategory.children && subcategory.children.length > 0;
                                     const isExpanded = expandedSubcategories[subcategory.id] ?? false;
+                                    const isSelected = selectedCategory === category && selectedSubcategory === subcategory.id;
+                                    const isParent = isParentSubcategory(subcategory);
                                     
                                     return (
                                       <div key={subcategory.id}>
@@ -754,10 +769,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                                           }}
                                           className={cn(
                                             "w-full text-left px-2 py-1 rounded-lg text-xs transition-colors flex items-center justify-between",
-                                            selectedCategory === category && selectedSubcategory === subcategory.id
+                                            isSelected
                                               ? 'bg-primary/20 text-primary font-medium'
-                                              : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
-                                            hasChildren && 'font-medium text-foreground'
+                                              : isParent
+                                                ? 'bg-muted/60 text-foreground font-medium'
+                                                : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
+                                            hasChildren && !isSelected && !isParent && 'font-medium text-foreground'
                                           )}
                                         >
                                           <span>{t(subcategory.id as TranslationKey)}</span>
