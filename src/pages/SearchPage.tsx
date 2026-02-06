@@ -131,7 +131,9 @@ const SearchPage = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
 const [searchParams, setSearchParams] = useSearchParams();
-  const [showFilters, setShowFilters] = useState(true); // Default open
+  const [showFilters, setShowFilters] = useState(true); // Default open for desktop
+  const [showMobileCategories, setShowMobileCategories] = useState(false); // Mobile category selector
+  const [showMobileFilters, setShowMobileFilters] = useState(false); // Mobile additional filters
   const [expandedSubcategories, setExpandedSubcategories] = useState<Record<string, boolean>>({}); // Track expanded subcategories
   const [openAccordionValue, setOpenAccordionValue] = useState<string | undefined>(undefined); // Controlled accordion state
 
@@ -628,13 +630,22 @@ const [searchParams, setSearchParams] = useSearchParams();
               />
             </div>
 
-            {/* Mobile: Filter and Region buttons */}
-            <div className="flex gap-3 md:hidden">
+            {/* Mobile: Category, Filter and Region buttons */}
+            <div className="flex gap-2 md:hidden">
               <Button
                 type="button"
                 variant="outline"
-                onClick={() => setShowFilters(!showFilters)}
-                className="h-12 px-4 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary flex-1"
+                onClick={() => setShowMobileCategories(true)}
+                className="h-12 px-3 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary"
+              >
+                <SlidersHorizontal className="w-5 h-5" />
+                {t('category')}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setShowMobileFilters(true)}
+                className="h-12 px-3 gap-2 rounded-xl border-2 border-border bg-card hover:bg-secondary"
               >
                 <SlidersHorizontal className="w-5 h-5" />
                 {t('filters')}
@@ -881,105 +892,132 @@ const [searchParams, setSearchParams] = useSearchParams();
             </div>
           )}
 
-          {/* Mobile Filters */}
-          {showFilters && (
-            <div className="md:hidden fixed inset-0 bg-background/80 backdrop-blur-sm z-50">
-              <div className="absolute inset-x-4 top-20 bg-card rounded-2xl shadow-card p-6 max-h-[70vh] overflow-y-auto">
-                <div className="flex items-center justify-between mb-6">
-                  <h3 className="font-display font-semibold text-foreground">{t('filters')}</h3>
-                  <button
-                    onClick={() => setShowFilters(false)}
-                    className="p-1 hover:bg-secondary rounded-full transition-colors"
-                  >
-                    <X className="w-5 h-5 text-muted-foreground" />
-                  </button>
-                </div>
+          {/* Mobile Category Filter - Fullscreen */}
+          {showMobileCategories && (
+            <div className="md:hidden fixed inset-0 bg-background z-50 flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-border">
+                <h3 className="font-display font-semibold text-foreground">{t('category')}</h3>
+                <button
+                  onClick={() => setShowMobileCategories(false)}
+                  className="p-2 hover:bg-secondary rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </div>
 
-                {/* Category Filter with Accordion */}
-                <div className="mb-6">
-                  <label className="block text-sm font-medium text-foreground mb-3">
-                    {t('category')}
-                  </label>
-                  
-                  {/* All categories option */}
-                  <button
-                    onClick={() => handleCategoryFilterSelect('')}
-                    className={cn(
-                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 mb-2",
-                      !selectedCategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
-                    )}
-                  >
-                    {(() => {
-                      const AllIcon = categoryIcons[''];
-                      return <AllIcon className="w-4 h-4" />;
-                    })()}
-                    {t('all')}
-                  </button>
+              <div className="flex-1 overflow-y-auto p-4">
+                {/* All categories option */}
+                <button
+                  onClick={() => {
+                    handleCategoryFilterSelect('');
+                    setShowMobileCategories(false);
+                  }}
+                  className={cn(
+                    "w-full text-left px-4 py-3 rounded-lg text-base transition-colors flex items-center gap-3 mb-2",
+                    !selectedCategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
+                  )}
+                >
+                  {(() => {
+                    const AllIcon = categoryIcons[''];
+                    return <AllIcon className="w-5 h-5" />;
+                  })()}
+                  {t('all')}
+                </button>
 
-                  <Accordion 
-                    type="single" 
-                    collapsible 
-                    value={openAccordionValue}
-                    onValueChange={setOpenAccordionValue}
-                    className="space-y-1"
-                  >
-                    {categories.map(category => {
-                      const Icon = categoryIcons[category];
-                      const subcategories = subcategoriesData[category];
-                      const isActive = selectedCategory === category;
-                      
-                      return (
-                        <AccordionItem 
-                          key={category} 
-                          value={category}
-                          className="border-none"
+                <Accordion 
+                  type="single" 
+                  collapsible 
+                  value={openAccordionValue}
+                  onValueChange={setOpenAccordionValue}
+                  className="space-y-1"
+                >
+                  {categories.map(category => {
+                    const Icon = categoryIcons[category];
+                    const subcategories = subcategoriesData[category];
+                    
+                    // Check if this category is a parent of the selected subcategory
+                    const isParentOfSelected = selectedCategory === category && selectedSubcategory;
+                    
+                    // Helper to check if a subcategory is a parent of the selected one
+                    const isParentSubcategory = (sub: Subcategory): boolean => {
+                      if (!selectedSubcategory || selectedCategory !== category) return false;
+                      if (sub.children) {
+                        return sub.children.some(child => child.id === selectedSubcategory);
+                      }
+                      return false;
+                    };
+                    
+                    return (
+                      <AccordionItem 
+                        key={category} 
+                        value={category}
+                        className="border-none"
+                      >
+                        <AccordionTrigger 
+                          className={cn(
+                            "w-full text-left px-4 py-3 rounded-lg text-base transition-colors flex items-center gap-3 hover:no-underline",
+                            isParentOfSelected 
+                              ? 'bg-muted text-foreground font-medium'
+                              : 'bg-secondary hover:bg-secondary/80'
+                          )}
                         >
-                          <AccordionTrigger 
-                            className={cn(
-                              "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center gap-2 hover:no-underline",
-                              isActive && !selectedSubcategory ? 'bg-primary text-primary-foreground' : 'bg-secondary hover:bg-secondary/80'
-                            )}
-                            onClick={(e) => {
-                              if (!(e.target as HTMLElement).closest('svg.lucide-chevron-down')) {
-                                handleCategoryFilterSelect(category);
-                              }
-                            }}
-                          >
-                            <Icon className="w-4 h-4" />
-                            <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
-                          </AccordionTrigger>
-                          <AccordionContent className="pb-0 pt-1">
-                            <div className="pl-6 space-y-1">
-                              {subcategories.map(subcategory => (
+                          <Icon className="w-5 h-5" />
+                          <span className="flex-1 text-left">{t(category as TranslationKey)}</span>
+                        </AccordionTrigger>
+                        <AccordionContent className="pb-0 pt-1">
+                          <div className="pl-8 space-y-1">
+                            {subcategories.map(subcategory => {
+                              const hasChildren = subcategory.children && subcategory.children.length > 0;
+                              const isExpanded = expandedSubcategories[subcategory.id] ?? false;
+                              const isSelected = selectedCategory === category && selectedSubcategory === subcategory.id;
+                              const isParent = isParentSubcategory(subcategory);
+                              
+                              return (
                                 <div key={subcategory.id}>
                                   <button
                                     onClick={() => {
-                                      if (!subcategory.children || subcategory.children.length === 0) {
+                                      if (hasChildren) {
+                                        setExpandedSubcategories(prev => ({
+                                          ...prev,
+                                          [subcategory.id]: !prev[subcategory.id]
+                                        }));
+                                      } else {
                                         handleSubcategoryFilterSelect(category, subcategory.id);
+                                        setShowMobileCategories(false);
                                       }
                                     }}
                                     className={cn(
-                                      "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
-                                      selectedCategory === category && selectedSubcategory === subcategory.id
+                                      "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors flex items-center justify-between",
+                                      isSelected
                                         ? 'bg-primary/20 text-primary font-medium'
-                                        : 'text-muted-foreground hover:text-foreground',
-                                      subcategory.children && subcategory.children.length > 0 && 'font-medium text-foreground cursor-default'
+                                        : isParent
+                                          ? 'bg-muted/60 text-foreground font-medium'
+                                          : 'hover:bg-secondary text-muted-foreground hover:text-foreground',
+                                      hasChildren && !isSelected && !isParent && 'font-medium text-foreground'
                                     )}
                                   >
-                                    {t(subcategory.id as TranslationKey)}
+                                    <span>{t(subcategory.id as TranslationKey)}</span>
+                                    {hasChildren && (
+                                      isExpanded 
+                                        ? <ChevronDown className="w-4 h-4 shrink-0" />
+                                        : <ChevronRight className="w-4 h-4 shrink-0" />
+                                    )}
                                   </button>
-                                  {/* Render nested children */}
-                                  {subcategory.children && subcategory.children.length > 0 && (
+                                  {/* Render nested children - collapsible */}
+                                  {hasChildren && isExpanded && (
                                     <div className="pl-4 space-y-1 mt-1">
-                                      {subcategory.children.map(child => (
+                                      {subcategory.children!.map(child => (
                                         <button
                                           key={child.id}
-                                          onClick={() => handleSubcategoryFilterSelect(category, child.id)}
+                                          onClick={() => {
+                                            handleSubcategoryFilterSelect(category, child.id);
+                                            setShowMobileCategories(false);
+                                          }}
                                           className={cn(
-                                            "w-full text-left px-3 py-1.5 rounded-lg text-xs transition-colors",
+                                            "w-full text-left px-3 py-2 rounded-lg text-sm transition-colors",
                                             selectedCategory === category && selectedSubcategory === child.id
                                               ? 'bg-primary/20 text-primary font-medium'
-                                              : 'text-muted-foreground hover:text-foreground'
+                                              : 'hover:bg-secondary text-muted-foreground hover:text-foreground'
                                           )}
                                         >
                                           {t(child.id as TranslationKey)}
@@ -988,15 +1026,32 @@ const [searchParams, setSearchParams] = useSearchParams();
                                     </div>
                                   )}
                                 </div>
-                              ))}
-                            </div>
-                          </AccordionContent>
-                        </AccordionItem>
-                      );
-                    })}
-                  </Accordion>
-                </div>
+                              );
+                            })}
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    );
+                  })}
+                </Accordion>
+              </div>
+            </div>
+          )}
 
+          {/* Mobile Additional Filters - Fullscreen */}
+          {showMobileFilters && (
+            <div className="md:hidden fixed inset-0 bg-background z-50 flex flex-col">
+              <div className="flex items-center justify-between p-4 border-b border-border">
+                <h3 className="font-display font-semibold text-foreground">{t('filters')}</h3>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="p-2 hover:bg-secondary rounded-full transition-colors"
+                >
+                  <X className="w-5 h-5 text-muted-foreground" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-4">
                 {/* Price Filter */}
                 <div className="mb-6">
                   <label className="block text-sm font-medium text-foreground mb-3">
@@ -1033,7 +1088,40 @@ const [searchParams, setSearchParams] = useSearchParams();
                     <AtvFilters filters={atvFilters} onChange={setAtvFilters} />
                   </>
                 )}
+                {selectedSubcategory === 'karting' && (
+                  <>
+                    <Separator className="my-4" />
+                    <KartingFilters filters={kartingFilters} onChange={setKartingFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'quads_buggies' && (
+                  <>
+                    <Separator className="my-4" />
+                    <QuadFilters filters={quadFilters} onChange={setQuadFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'mopeds_scooters' && (
+                  <>
+                    <Separator className="my-4" />
+                    <MopedFilters filters={mopedFilters} onChange={setMopedFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'motorbikes' && (
+                  <>
+                    <Separator className="my-4" />
+                    <MotoFilters filters={motoFilters} onChange={setMotoFilters} />
+                  </>
+                )}
+              </div>
 
+              {/* Apply button */}
+              <div className="p-4 border-t border-border">
+                <Button 
+                  onClick={() => setShowMobileFilters(false)}
+                  className="w-full gradient-hero text-primary-foreground"
+                >
+                  {t('applyFilters')}
+                </Button>
               </div>
             </div>
           )}
