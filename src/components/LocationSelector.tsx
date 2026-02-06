@@ -323,7 +323,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-hidden flex flex-col gap-4">
+        <div className="flex-1 overflow-hidden flex flex-col gap-4 px-1 pt-1">
           {/* Search Input */}
           <div className="relative">
             <div className="flex gap-2">
