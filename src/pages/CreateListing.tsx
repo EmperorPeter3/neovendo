@@ -225,6 +225,8 @@ const CreateListing = () => {
         city: locationValue?.city || locationValue?.address.split(',')[0] || '',
         country: locationValue?.country || '',
         images: uploadedUrls,
+        lat: locationValue?.lat,
+        lng: locationValue?.lng,
       };
 
       // Add car-specific fields if it's a car listing
