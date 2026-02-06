@@ -1,7 +1,7 @@
 import { Layout } from '@/components/Layout';
 import { CategoryModal } from '@/components/CategoryModal';
 import { MobileCategorySelector } from '@/components/MobileCategorySelector';
-import { RegionSelector } from '@/components/RegionSelector';
+import { LocationSelector } from '@/components/LocationSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
 import { ChevronRight, MapPin, Search, ChevronDown } from 'lucide-react';
@@ -13,7 +13,6 @@ import { useState } from 'react';
 import { Category } from '@/types/listing';
 import { categoryIcons } from '@/data/subcategories';
 import { useIsMobile } from '@/hooks/use-mobile';
-
 const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
   const { t } = useLanguage();
   
@@ -78,7 +77,12 @@ const Index = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
   const [selectedSubcategory, setSelectedSubcategory] = useState<string | undefined>();
-  const [selectedRegion, setSelectedRegion] = useState<{ country?: string; city?: string }>({});
+  const [selectedLocation, setSelectedLocation] = useState<{
+    lat: number;
+    lng: number;
+    address: string;
+    radius: number;
+  } | null>(null);
   const [showMobileCategories, setShowMobileCategories] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -87,8 +91,11 @@ const Index = () => {
     if (searchQuery) params.set('q', searchQuery);
     if (selectedCategory) params.set('category', selectedCategory);
     if (selectedSubcategory) params.set('subcategory', selectedSubcategory);
-    if (selectedRegion.country) params.set('country', selectedRegion.country);
-    if (selectedRegion.city) params.set('city', selectedRegion.city);
+    if (selectedLocation) {
+      params.set('lat', selectedLocation.lat.toString());
+      params.set('lng', selectedLocation.lng.toString());
+      params.set('radius', selectedLocation.radius.toString());
+    }
     navigate(`/search?${params.toString()}`);
   };
 
@@ -101,8 +108,11 @@ const Index = () => {
       const params = new URLSearchParams();
       if (cat) params.set('category', cat);
       params.set('subcategory', subcategory);
-      if (selectedRegion.country) params.set('country', selectedRegion.country);
-      if (selectedRegion.city) params.set('city', selectedRegion.city);
+      if (selectedLocation) {
+        params.set('lat', selectedLocation.lat.toString());
+        params.set('lng', selectedLocation.lng.toString());
+        params.set('radius', selectedLocation.radius.toString());
+      }
       navigate(`/search?${params.toString()}`);
     }
   };
@@ -143,18 +153,18 @@ const Index = () => {
                 </Button>
               </div>
               
-              <RegionSelector 
-                value={selectedRegion}
-                onChange={setSelectedRegion}
+              <LocationSelector 
+                value={selectedLocation}
+                onChange={setSelectedLocation}
               />
             </div>
 
             {/* Mobile layout: Region -> Category -> Search (vertical) */}
             <div className="flex md:hidden flex-col gap-3 w-full">
-              {/* 1. Region Selector - Full width */}
-              <RegionSelector 
-                value={selectedRegion}
-                onChange={setSelectedRegion}
+              {/* 1. Location Selector - Full width */}
+              <LocationSelector 
+                value={selectedLocation}
+                onChange={setSelectedLocation}
                 className="w-full"
               />
               
