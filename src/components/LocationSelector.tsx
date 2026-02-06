@@ -345,7 +345,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
           <span className="truncate max-w-[120px]">{displayValue}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg max-h-[90vh] overflow-hidden flex flex-col">
+      <DialogContent className="w-[95vw] h-[100dvh] max-w-none sm:w-[80vw] sm:h-[70vh] sm:max-h-[70vh] overflow-hidden flex flex-col rounded-none sm:rounded-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>{t('selectRegion')}</span>
@@ -361,7 +361,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
                   value={searchQuery}
                   onChange={(e) => handleSearchChange(e.target.value)}
                   placeholder={t('searchPlaceholder') || 'Введите адрес...'}
-                  className="pr-10"
+                  className="pr-10 focus-visible:ring-primary"
                 />
                 {searchQuery && (
                   <button
