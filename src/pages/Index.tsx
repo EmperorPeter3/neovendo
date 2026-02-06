@@ -95,6 +95,7 @@ const Index = () => {
       params.set('lat', selectedLocation.lat.toString());
       params.set('lng', selectedLocation.lng.toString());
       params.set('radius', selectedLocation.radius.toString());
+      params.set('address', selectedLocation.address);
     }
     navigate(`/search?${params.toString()}`);
   };
@@ -112,6 +113,7 @@ const Index = () => {
         params.set('lat', selectedLocation.lat.toString());
         params.set('lng', selectedLocation.lng.toString());
         params.set('radius', selectedLocation.radius.toString());
+        params.set('address', selectedLocation.address);
       }
       navigate(`/search?${params.toString()}`);
     }

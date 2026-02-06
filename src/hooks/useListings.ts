@@ -17,6 +17,8 @@ export interface ListingWithOwner {
   status: 'active' | 'deleted';
   created_at: string;
   updated_at: string;
+  lat: number | null;
+  lng: number | null;
   // Car-specific fields
   car_condition: string | null;
   car_brand: string | null;
@@ -209,6 +211,9 @@ export const useListings = (filters?: {
   country?: string;
   search?: string;
   limit?: number;
+  lat?: number;
+  lng?: number;
+  radius?: number; // in km
   cars?: CarsQueryFilters;
   atvs?: AtvQueryFilters;
   karting?: KartingQueryFilters;
@@ -563,10 +568,41 @@ export const useListings = (filters?: {
 
       const ownersMap = new Map(owners?.map(o => [o.user_id, o]) || []);
 
-      return (listings || []).map(listing => ({
+      let result = (listings || []).map(listing => ({
         ...listing,
         owner: ownersMap.get(listing.owner_id) || null,
       })) as ListingWithOwner[];
+
+      // Client-side geo filtering using Haversine formula
+      if (filters?.lat !== undefined && filters?.lng !== undefined && filters?.radius !== undefined) {
+        const userLat = filters.lat;
+        const userLng = filters.lng;
+        const radiusKm = filters.radius;
+
+        // Haversine formula to calculate distance between two points
+        const haversineDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+          const R = 6371; // Earth's radius in km
+          const dLat = (lat2 - lat1) * Math.PI / 180;
+          const dLng = (lng2 - lng1) * Math.PI / 180;
+          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          return R * c;
+        };
+
+        result = result.filter(listing => {
+          // If listing has no coordinates, exclude it from geo-filtered results
+          if (listing.lat === null || listing.lat === undefined || 
+              listing.lng === null || listing.lng === undefined) {
+            return false;
+          }
+          const distance = haversineDistance(userLat, userLng, listing.lat, listing.lng);
+          return distance <= radiusKm;
+        });
+      }
+
+      return result;
     },
   });
 };
@@ -634,6 +670,8 @@ export const useCreateListing = () => {
       city: string;
       country: string;
       images: string[];
+      lat?: number;
+      lng?: number;
     } & CarListingData) => {
       if (!user) throw new Error('Not authenticated');
 

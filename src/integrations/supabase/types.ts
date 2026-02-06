@@ -114,6 +114,8 @@ export type Database = {
           id: string
           images: string[] | null
           kart_condition: string | null
+          lat: number | null
+          lng: number | null
           moped_brand: string | null
           moped_condition: string | null
           moped_engine_type: string | null
@@ -188,6 +190,8 @@ export type Database = {
           id?: string
           images?: string[] | null
           kart_condition?: string | null
+          lat?: number | null
+          lng?: number | null
           moped_brand?: string | null
           moped_condition?: string | null
           moped_engine_type?: string | null
@@ -262,6 +266,8 @@ export type Database = {
           id?: string
           images?: string[] | null
           kart_condition?: string | null
+          lat?: number | null
+          lng?: number | null
           moped_brand?: string | null
           moped_condition?: string | null
           moped_engine_type?: string | null

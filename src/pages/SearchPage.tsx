@@ -25,7 +25,7 @@ import {
   CarFront,
 } from 'lucide-react';
 
-import { RegionSelector } from '@/components/RegionSelector';
+import { LocationSelector } from '@/components/LocationSelector';
 import {
   Accordion,
   AccordionContent,
@@ -141,8 +141,10 @@ const [searchParams, setSearchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
   const categoryParam = searchParams.get('category') as Category | null;
   const subcategoryParam = searchParams.get('subcategory') || '';
-  const countryParam = searchParams.get('country') || '';
-  const cityParam = searchParams.get('city') || '';
+  const latParam = searchParams.get('lat');
+  const lngParam = searchParams.get('lng');
+  const radiusParam = searchParams.get('radius');
+  const addressParam = searchParams.get('address') || '';
   
   const [searchQuery, setSearchQuery] = useState(query);
   const [carsFilters, setCarsFilters] = useState<CarsFiltersState>(defaultCarsFilters);
@@ -161,10 +163,14 @@ const [searchParams, setSearchParams] = useSearchParams();
   const selectedSubcategory = subcategoryParam;
   const minPrice = searchParams.get('minPrice') || '';
   const maxPrice = searchParams.get('maxPrice') || '';
-  const selectedRegion = {
-    country: countryParam || undefined,
-    city: cityParam || undefined,
-  };
+  
+  // Location state derived from URL params
+  const selectedLocation = latParam && lngParam ? {
+    lat: parseFloat(latParam),
+    lng: parseFloat(lngParam),
+    address: addressParam,
+    radius: radiusParam ? parseFloat(radiusParam) : 1,
+  } : null;
 
   // Convert CarsFiltersState to CarsQueryFilters for the query
   const convertCarsFilters = (filters: CarsFiltersState): CarsQueryFilters | undefined => {
@@ -514,8 +520,9 @@ const [searchParams, setSearchParams] = useSearchParams();
     subcategory: selectedSubcategory || undefined,
     minPrice: minPrice ? Number(minPrice) : undefined,
     maxPrice: maxPrice ? Number(maxPrice) : undefined,
-    country: selectedRegion.country || undefined,
-    city: selectedRegion.city || undefined,
+    lat: selectedLocation?.lat,
+    lng: selectedLocation?.lng,
+    radius: selectedLocation?.radius,
     cars: convertCarsFilters(carsFilters),
     atvs: convertAtvFilters(atvFilters),
     karting: convertKartingFilters(kartingFilters),
@@ -554,11 +561,20 @@ const [searchParams, setSearchParams] = useSearchParams();
     setSearchParams(params, { replace: false });
   };
 
-  const handleRegionChange = (region: { country?: string; city?: string }) => {
-    updateFilters({
-      country: region.country || undefined,
-      city: region.city || undefined,
-    });
+  const handleLocationChange = (location: { lat: number; lng: number; address: string; radius: number } | null) => {
+    const params = new URLSearchParams(searchParams);
+    if (location) {
+      params.set('lat', location.lat.toString());
+      params.set('lng', location.lng.toString());
+      params.set('radius', location.radius.toString());
+      params.set('address', location.address);
+    } else {
+      params.delete('lat');
+      params.delete('lng');
+      params.delete('radius');
+      params.delete('address');
+    }
+    setSearchParams(params, { replace: true });
   };
 
   const handlePriceChange = (type: 'min' | 'max', value: string) => {
@@ -623,20 +639,20 @@ const [searchParams, setSearchParams] = useSearchParams();
                 {t('filters')}
               </Button>
 
-              {/* Region Selector */}
-              <RegionSelector 
-                value={selectedRegion}
-                onChange={handleRegionChange}
+              {/* Location Selector */}
+              <LocationSelector 
+                value={selectedLocation}
+                onChange={handleLocationChange}
                 className="flex-1"
               />
             </div>
 
-            {/* Mobile: Reorganized layout - Region, then Category+Filters, then Search */}
+            {/* Mobile: Reorganized layout - Location, then Category+Filters, then Search */}
             <div className="flex flex-col gap-3 md:hidden w-full">
-              {/* 1. Region Selector - Full width */}
-              <RegionSelector 
-                value={selectedRegion}
-                onChange={handleRegionChange}
+              {/* 1. Location Selector - Full width */}
+              <LocationSelector 
+                value={selectedLocation}
+                onChange={handleLocationChange}
                 className="w-full"
               />
               
