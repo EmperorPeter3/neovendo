@@ -123,6 +123,7 @@ const MapInnerContent = ({
 export const LocationSelector = ({ value, onChange, className }: LocationSelectorProps) => {
   const { t } = useLanguage();
   const [open, setOpen] = useState(false);
+  const [mapSessionKey, setMapSessionKey] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState<NominatimResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -350,7 +351,12 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
   const handleOpenChange = (nextOpen: boolean) => {
     setOpen(nextOpen);
 
-    if (!nextOpen) {
+    if (nextOpen) {
+      // Force remount of MapContainer on every open.
+      // Radix keeps content mounted during close/open animations, which can cause Leaflet
+      // to reuse the previous internal map state if reopened quickly.
+      setMapSessionKey((k) => k + 1);
+    } else {
       // Ensure we never reopen with a stale map center (react-leaflet doesn't auto-recenter on prop changes)
       setSuggestions([]);
       setIsSearching(false);
@@ -458,6 +464,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
               </div>
               
               <MapContainer
+                key={mapSessionKey}
                 center={initialCenter}
                 zoom={14}
                 className="h-full w-full"
