@@ -62,40 +62,60 @@ interface LocationSelectorProps {
 
 const RADIUS_OPTIONS = [1, 2, 3, 5, 10, 25, 50, 100];
 
-// Dynamic circle that follows map center
-const DynamicCircle = ({ 
-  lat, 
-  lng, 
-  radius 
+// Component that contains all map-related children - must be inside MapContainer
+const MapInnerContent = ({ 
+  selectedLocation,
+  radius,
+  mapCenter,
+  onCenterChange
 }: { 
-  lat: number; 
-  lng: number; 
+  selectedLocation: { lat: number; lng: number; address: string };
   radius: number;
+  mapCenter: [number, number];
+  onCenterChange: (lat: number, lng: number) => void;
 }) => {
   const map = useMap();
-  const [center, setCenter] = useState<[number, number]>([lat, lng]);
+  const [circleCenter, setCircleCenter] = useState<[number, number]>([selectedLocation.lat, selectedLocation.lng]);
+  const hasInitialized = useRef(false);
 
+  // Handle map movement - update circle center
   useEffect(() => {
     const handleMove = () => {
       const newCenter = map.getCenter();
-      setCenter([newCenter.lat, newCenter.lng]);
+      setCircleCenter([newCenter.lat, newCenter.lng]);
+    };
+
+    const handleMoveEnd = () => {
+      const newCenter = map.getCenter();
+      onCenterChange(newCenter.lat, newCenter.lng);
     };
 
     map.on('move', handleMove);
+    map.on('moveend', handleMoveEnd);
+    
     return () => {
       map.off('move', handleMove);
+      map.off('moveend', handleMoveEnd);
     };
-  }, [map]);
+  }, [map, onCenterChange]);
 
-  // Update center when lat/lng props change (e.g., new search)
+  // Set initial view only once
   useEffect(() => {
-    setCenter([lat, lng]);
-  }, [lat, lng]);
+    if (!hasInitialized.current) {
+      hasInitialized.current = true;
+      map.setView(mapCenter, 14);
+    }
+  }, [map, mapCenter]);
+
+  // Update circle center when selected location changes from external search
+  useEffect(() => {
+    setCircleCenter([selectedLocation.lat, selectedLocation.lng]);
+  }, [selectedLocation.lat, selectedLocation.lng]);
 
   return (
     <Circle
-      center={center}
-      radius={radius}
+      center={circleCenter}
+      radius={radius * 1000}
       pathOptions={{
         color: 'hsl(160, 84%, 39%)',
         fillColor: 'hsl(160, 84%, 39%)',
@@ -104,50 +124,6 @@ const DynamicCircle = ({
       }}
     />
   );
-};
-
-// Component to handle map center updates
-const MapCenterHandler = ({ 
-  center, 
-  onCenterChange 
-}: { 
-  center: [number, number]; 
-  onCenterChange: (lat: number, lng: number) => void;
-}) => {
-  const map = useMap();
-  const isInitialMount = useRef(true);
-
-  useEffect(() => {
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      map.setView(center, map.getZoom());
-    }
-  }, [map, center]);
-
-  useEffect(() => {
-    const handleMoveEnd = () => {
-      const newCenter = map.getCenter();
-      onCenterChange(newCenter.lat, newCenter.lng);
-    };
-
-    map.on('moveend', handleMoveEnd);
-    return () => {
-      map.off('moveend', handleMoveEnd);
-    };
-  }, [map, onCenterChange]);
-
-  return null;
-};
-
-// Component to update map view when center changes from search
-const MapViewUpdater = ({ center }: { center: [number, number] }) => {
-  const map = useMap();
-  
-  useEffect(() => {
-    map.setView(center, 14);
-  }, [map, center]);
-  
-  return null;
 };
 
 export const LocationSelector = ({ value, onChange, className }: LocationSelectorProps) => {
@@ -164,7 +140,6 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
   } | null>(null);
   const [radius, setRadius] = useState(5);
   const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
-  const [shouldUpdateView, setShouldUpdateView] = useState(false);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize with existing value
@@ -230,7 +205,6 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
       address: result.display_name,
     });
     setMapCenter([lat, lng]);
-    setShouldUpdateView(true);
     setSearchQuery(result.display_name);
     setSuggestions([]);
   };
@@ -239,7 +213,6 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     if (selectedLocation) {
       setSelectedLocation(prev => prev ? { ...prev, lat, lng } : null);
     }
-    setShouldUpdateView(false);
   }, [selectedLocation]);
 
   const handleGetCurrentLocation = async () => {
@@ -271,7 +244,6 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
             address: data.display_name || `${latitude}, ${longitude}`,
           });
           setMapCenter([latitude, longitude]);
-          setShouldUpdateView(true);
           setSearchQuery(data.display_name || `${latitude}, ${longitude}`);
         } catch (error) {
           console.error('Error reverse geocoding:', error);
@@ -281,7 +253,6 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
             address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
           });
           setMapCenter([latitude, longitude]);
-          setShouldUpdateView(true);
         }
         setIsLocating(false);
       },
@@ -430,6 +401,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
               </div>
               
               <MapContainer
+                key={`${mapCenter[0]}-${mapCenter[1]}`}
                 center={mapCenter}
                 zoom={14}
                 className="h-full w-full"
@@ -439,16 +411,12 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
                   attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                <DynamicCircle
-                  lat={selectedLocation.lat}
-                  lng={selectedLocation.lng}
-                  radius={radius * 1000}
+                <MapInnerContent 
+                  selectedLocation={selectedLocation}
+                  radius={radius}
+                  mapCenter={mapCenter}
+                  onCenterChange={handleMapCenterChange}
                 />
-                <MapCenterHandler 
-                  center={mapCenter} 
-                  onCenterChange={handleMapCenterChange} 
-                />
-                {shouldUpdateView && <MapViewUpdater center={mapCenter} />}
               </MapContainer>
             </div>
           )}
