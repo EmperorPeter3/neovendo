@@ -66,17 +66,24 @@ const RADIUS_OPTIONS = [1, 2, 3, 5, 10, 25, 50, 100];
 const MapInnerContent = ({ 
   selectedLocation,
   radius,
-  mapCenter,
-  onCenterChange
+  onCenterChange,
+  flyToLocation
 }: { 
   selectedLocation: { lat: number; lng: number; address: string };
   radius: number;
-  mapCenter: [number, number];
   onCenterChange: (lat: number, lng: number) => void;
+  flyToLocation: { lat: number; lng: number } | null;
 }) => {
   const map = useMap();
   const [circleCenter, setCircleCenter] = useState<[number, number]>([selectedLocation.lat, selectedLocation.lng]);
-  const hasInitialized = useRef(false);
+
+  // Fly to new location when it changes from search
+  useEffect(() => {
+    if (flyToLocation) {
+      map.flyTo([flyToLocation.lat, flyToLocation.lng], 14, { duration: 0.5 });
+      setCircleCenter([flyToLocation.lat, flyToLocation.lng]);
+    }
+  }, [map, flyToLocation]);
 
   // Handle map movement - update circle center
   useEffect(() => {
@@ -98,19 +105,6 @@ const MapInnerContent = ({
       map.off('moveend', handleMoveEnd);
     };
   }, [map, onCenterChange]);
-
-  // Set initial view only once
-  useEffect(() => {
-    if (!hasInitialized.current) {
-      hasInitialized.current = true;
-      map.setView(mapCenter, 14);
-    }
-  }, [map, mapCenter]);
-
-  // Update circle center when selected location changes from external search
-  useEffect(() => {
-    setCircleCenter([selectedLocation.lat, selectedLocation.lng]);
-  }, [selectedLocation.lat, selectedLocation.lng]);
 
   return (
     <Circle
@@ -139,7 +133,8 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     address: string;
   } | null>(null);
   const [radius, setRadius] = useState(5);
-  const [mapCenter, setMapCenter] = useState<[number, number] | null>(null);
+  const [initialCenter, setInitialCenter] = useState<[number, number] | null>(null);
+  const [flyToLocation, setFlyToLocation] = useState<{ lat: number; lng: number } | null>(null);
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   // Initialize with existing value
@@ -150,7 +145,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
         lng: value.lng,
         address: value.address,
       });
-      setMapCenter([value.lat, value.lng]);
+      setInitialCenter([value.lat, value.lng]);
       setRadius(value.radius);
       setSearchQuery(value.address);
     }
@@ -199,12 +194,20 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     const lat = parseFloat(result.lat);
     const lng = parseFloat(result.lon);
     
+    const isFirstSelection = !selectedLocation;
+    
     setSelectedLocation({
       lat,
       lng,
       address: result.display_name,
     });
-    setMapCenter([lat, lng]);
+    
+    if (isFirstSelection) {
+      setInitialCenter([lat, lng]);
+    } else {
+      setFlyToLocation({ lat, lng });
+    }
+    
     setSearchQuery(result.display_name);
     setSuggestions([]);
   };
@@ -237,22 +240,36 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
             }
           );
           const data = await response.json();
+          const isFirstSelection = !selectedLocation;
           
           setSelectedLocation({
             lat: latitude,
             lng: longitude,
             address: data.display_name || `${latitude}, ${longitude}`,
           });
-          setMapCenter([latitude, longitude]);
+          
+          if (isFirstSelection) {
+            setInitialCenter([latitude, longitude]);
+          } else {
+            setFlyToLocation({ lat: latitude, lng: longitude });
+          }
+          
           setSearchQuery(data.display_name || `${latitude}, ${longitude}`);
         } catch (error) {
           console.error('Error reverse geocoding:', error);
+          const isFirstSelection = !selectedLocation;
+          
           setSelectedLocation({
             lat: latitude,
             lng: longitude,
             address: `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`,
           });
-          setMapCenter([latitude, longitude]);
+          
+          if (isFirstSelection) {
+            setInitialCenter([latitude, longitude]);
+          } else {
+            setFlyToLocation({ lat: latitude, lng: longitude });
+          }
         }
         setIsLocating(false);
       },
@@ -279,7 +296,8 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
   const handleClear = () => {
     onChange?.(null);
     setSelectedLocation(null);
-    setMapCenter(null);
+    setInitialCenter(null);
+    setFlyToLocation(null);
     setSearchQuery('');
     setSuggestions([]);
     setRadius(5);
@@ -288,7 +306,8 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
 
   const handleReset = () => {
     setSelectedLocation(null);
-    setMapCenter(null);
+    setInitialCenter(null);
+    setFlyToLocation(null);
     setSearchQuery('');
     setSuggestions([]);
     setRadius(5);
@@ -390,7 +409,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
           </div>
 
           {/* Map */}
-          {selectedLocation && mapCenter && (
+          {selectedLocation && initialCenter && (
             <div className="flex-1 min-h-[300px] rounded-lg overflow-hidden border border-border relative">
               {/* Center marker indicator (fixed in center) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1000]">
@@ -401,8 +420,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
               </div>
               
               <MapContainer
-                key={`${mapCenter[0]}-${mapCenter[1]}`}
-                center={mapCenter}
+                center={initialCenter}
                 zoom={14}
                 className="h-full w-full"
                 zoomControl={true}
@@ -414,8 +432,8 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
                 <MapInnerContent 
                   selectedLocation={selectedLocation}
                   radius={radius}
-                  mapCenter={mapCenter}
                   onCenterChange={handleMapCenterChange}
+                  flyToLocation={flyToLocation}
                 />
               </MapContainer>
             </div>
