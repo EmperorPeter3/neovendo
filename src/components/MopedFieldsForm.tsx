@@ -21,6 +21,7 @@ export interface MopedFieldsData {
   engineType: string;
   engineVolume: string;
   power: string;
+  powerWatt: string;
   mileage: string;
 }
 
@@ -33,6 +34,7 @@ export const defaultMopedFields: MopedFieldsData = {
   engineType: '',
   engineVolume: '',
   power: '',
+  powerWatt: '',
   mileage: '',
 };
 
@@ -190,7 +192,7 @@ const MopedFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError }: Mop
 
       {/* Engine Volume */}
       <div>
-        <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.engineVolume' as TranslationKey)} (cc)</Label>
+        <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.engineVolume' as TranslationKey)} (cm³)</Label>
         <Input
           type="number"
           value={data.engineVolume}
@@ -202,18 +204,32 @@ const MopedFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError }: Mop
         />
       </div>
 
-      {/* Power */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.power' as TranslationKey)} (hp)</Label>
-        <Input
-          type="number"
-          value={data.power}
-          onChange={(e) => updateField('power', e.target.value)}
-          placeholder="1-100"
-          min="0"
-          max="10000"
-          className={`h-10 ${fieldErrors.mopedPower ? 'border-destructive' : ''}`}
-        />
+      {/* Power HP & Power Watt */}
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label className="text-sm font-medium mb-2 block">{t('powerHp' as TranslationKey)}</Label>
+          <Input
+            type="number"
+            value={data.power}
+            onChange={(e) => updateField('power', e.target.value)}
+            placeholder="1-100"
+            min="0"
+            max="10000"
+            className={`h-10 ${fieldErrors.mopedPower ? 'border-destructive' : ''}`}
+          />
+        </div>
+
+        <div>
+          <Label className="text-sm font-medium mb-2 block">{t('powerWatt' as TranslationKey)}</Label>
+          <Input
+            type="number"
+            value={data.powerWatt}
+            onChange={(e) => updateField('powerWatt', e.target.value)}
+            placeholder="0"
+            min="0"
+            className={`h-10 ${fieldErrors.mopedPowerWatt ? 'border-destructive' : ''}`}
+          />
+        </div>
       </div>
 
       {/* Mileage */}

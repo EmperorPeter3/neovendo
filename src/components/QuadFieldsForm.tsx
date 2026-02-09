@@ -16,6 +16,7 @@ export interface QuadFieldsData {
   engineType: string;
   engineVolume: string;
   power: string;
+  powerWatt: string;
   mileage: string;
   maxPassengers: string;
 }
@@ -29,6 +30,7 @@ export const defaultQuadFields: QuadFieldsData = {
   engineType: '',
   engineVolume: '',
   power: '',
+  powerWatt: '',
   mileage: '',
   maxPassengers: '',
 };
@@ -163,7 +165,7 @@ export function QuadFieldsForm({ data, onChange, fieldErrors = {}, onClearError 
 
       {/* Engine Volume */}
       <div className="space-y-2">
-        <Label className="text-sm font-medium">{safeT('quadFilters.engineVolume')} ({safeT('carFilters.cc')})</Label>
+        <Label className="text-sm font-medium">{safeT('quadFilters.engineVolume')} (cm³)</Label>
         <Input
           type="number"
           placeholder="0"
@@ -173,16 +175,29 @@ export function QuadFieldsForm({ data, onChange, fieldErrors = {}, onClearError 
         />
       </div>
 
-      {/* Power */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">{safeT('quadFilters.power')} ({safeT('units.hp')})</Label>
-        <Input
-          type="number"
-          placeholder="0"
-          value={data.power}
-          onChange={(e) => handleChange('power', e.target.value)}
-          className={getInputClass('power')}
-        />
+      {/* Power HP & Power Watt */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">{safeT('powerHp')}</Label>
+          <Input
+            type="number"
+            placeholder="0"
+            value={data.power}
+            onChange={(e) => handleChange('power', e.target.value)}
+            className={getInputClass('power')}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">{safeT('powerWatt')}</Label>
+          <Input
+            type="number"
+            placeholder="0"
+            value={data.powerWatt}
+            onChange={(e) => handleChange('powerWatt', e.target.value)}
+            className={getInputClass('powerWatt')}
+          />
+        </div>
       </div>
 
       {/* Mileage */}

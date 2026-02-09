@@ -26,6 +26,7 @@ export interface CarFieldsData {
   engineVolume: string;
   fuelConsumption: string;
   power: string;
+  powerWatt: string;
   bodyCondition: string;
   bodyType: string;
   seats: string;
@@ -45,6 +46,7 @@ export const defaultCarFields: CarFieldsData = {
   engineVolume: '',
   fuelConsumption: '',
   power: '',
+  powerWatt: '',
   bodyCondition: '',
   bodyType: '',
   seats: '',
@@ -67,13 +69,19 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
   const { t } = useLanguage();
   const yearOptions = useMemo(() => getYearOptions(), []);
 
+  const sortedBrands = useMemo(() => [...carBrands].sort((a, b) => a.name.localeCompare(b.name)), []);
+
   const selectedBrand = useMemo(() => {
     return carBrands.find(b => b.id === data.brand);
   }, [data.brand]);
 
+  const sortedModels = useMemo(() => {
+    if (!selectedBrand) return [];
+    return [...selectedBrand.models].sort((a, b) => a.name.localeCompare(b.name));
+  }, [selectedBrand]);
+
   const handleChange = <K extends keyof CarFieldsData>(key: K, value: CarFieldsData[K]) => {
     const newData = { ...data, [key]: value };
-    // Reset model when brand changes
     if (key === 'brand' && value !== data.brand) {
       newData.model = '';
     }
@@ -115,7 +123,7 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
               <SelectValue placeholder={safeT(t, 'carFilters.selectBrand') || 'Select brand'} />
             </SelectTrigger>
             <SelectContent>
-              {carBrands.map(brand => (
+              {sortedBrands.map(brand => (
                 <SelectItem key={brand.id} value={brand.id}>{brand.name}</SelectItem>
               ))}
             </SelectContent>
@@ -133,7 +141,7 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
               <SelectValue placeholder={safeT(t, 'carFilters.selectModel') || 'Select model'} />
             </SelectTrigger>
             <SelectContent>
-              {selectedBrand?.models.map(model => (
+              {sortedModels.map(model => (
                 <SelectItem key={model.id} value={model.id}>{model.name}</SelectItem>
               ))}
             </SelectContent>
@@ -218,8 +226,8 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </Select>
       </div>
 
-      {/* Engine Volume, Power, Fuel Consumption */}
-      <div className="grid grid-cols-3 gap-4">
+      {/* Engine Volume & Fuel Consumption */}
+      <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label className="text-sm font-medium">{safeT(t, 'carFilters.engineVolume')}</Label>
           <Input
@@ -234,7 +242,23 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </div>
 
         <div className="space-y-2">
-          <Label className="text-sm font-medium">{safeT(t, 'carFilters.power')}</Label>
+          <Label className="text-sm font-medium">{safeT(t, 'carFilters.fuelConsumption')}</Label>
+          <Input
+            type="number"
+            placeholder="0.0"
+            value={data.fuelConsumption}
+            onChange={(e) => handleChange('fuelConsumption', e.target.value)}
+            min="0"
+            step="0.1"
+            className={getInputClass('fuelConsumption')}
+          />
+        </div>
+      </div>
+
+      {/* Power HP & Power Watt */}
+      <div className="grid grid-cols-2 gap-4">
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">{safeT(t, 'powerHp')}</Label>
           <Input
             type="number"
             placeholder="0"
@@ -246,15 +270,14 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </div>
 
         <div className="space-y-2">
-          <Label className="text-sm font-medium">{safeT(t, 'carFilters.fuelConsumption')}</Label>
+          <Label className="text-sm font-medium">{safeT(t, 'powerWatt')}</Label>
           <Input
             type="number"
-            placeholder="0.0"
-            value={data.fuelConsumption}
-            onChange={(e) => handleChange('fuelConsumption', e.target.value)}
+            placeholder="0"
+            value={data.powerWatt}
+            onChange={(e) => handleChange('powerWatt', e.target.value)}
             min="0"
-            step="0.1"
-            className={getInputClass('fuelConsumption')}
+            className={getInputClass('powerWatt')}
           />
         </div>
       </div>
