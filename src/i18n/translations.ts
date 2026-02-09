@@ -88,6 +88,7 @@ export const translations = {
     allCategories: "All categories",
     searchRadius: "Search radius",
     enterAddress: "Enter address...",
+    currentLocation: "Current location",
     
     // Transport subcategories
     cars: "Cars",
@@ -4958,6 +4959,7 @@ export const translations = {
     allCategories: "Все категории",
     searchRadius: "Радиус поиска",
     enterAddress: "Введите адрес...",
+    currentLocation: "Текущее местоположение",
     
     // Transport subcategories
     cars: "Автомобили",
