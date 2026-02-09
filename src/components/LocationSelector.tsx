@@ -168,7 +168,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
     setIsSearching(true);
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=8&featuretype=city`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=8`,
         {
           headers: {
             'Accept-Language': nominatimLang,
