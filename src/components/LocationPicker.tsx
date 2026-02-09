@@ -90,7 +90,8 @@ const MapEventHandler = ({
 };
 
 export const LocationPicker = ({ value, onChange, className, error }: LocationPickerProps) => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const nominatimLang = language === 'ru' ? 'ru,en' : `${language},en`;
   const [open, setOpen] = useState(false);
   const [mapSessionKey, setMapSessionKey] = useState(0);
   const [searchQuery, setSearchQuery] = useState('');
@@ -136,10 +137,10 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
     setIsSearching(true);
     try {
       const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=8`,
+        `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(query)}&addressdetails=1&limit=8&featuretype=city`,
         {
           headers: {
-            'Accept-Language': 'ru,en',
+            'Accept-Language': nominatimLang,
           },
         }
       );
@@ -151,7 +152,7 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
     } finally {
       setIsSearching(false);
     }
-  }, []);
+  }, [nominatimLang]);
 
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
@@ -207,7 +208,7 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
           `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&addressdetails=1`,
           {
             headers: {
-              'Accept-Language': 'ru,en',
+              'Accept-Language': nominatimLang,
             },
           }
         );
@@ -243,7 +244,7 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
             `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`,
             {
               headers: {
-                'Accept-Language': 'ru,en',
+                'Accept-Language': nominatimLang,
               },
             }
           );
@@ -404,16 +405,17 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
               </div>
               <Button
                 variant="outline"
-                size="icon"
+                
                 onClick={handleGetCurrentLocation}
                 disabled={isLocating}
-                title="Определить местоположение"
+                className="gap-2 shrink-0"
               >
                 {isLocating ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : (
                   <Navigation className="w-4 h-4" />
                 )}
+                <span className="hidden sm:inline">{t('currentLocation')}</span>
               </Button>
             </div>
 
