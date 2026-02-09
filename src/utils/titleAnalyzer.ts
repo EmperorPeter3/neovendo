@@ -54,12 +54,13 @@ const categoryKeywords: { keywords: string[]; suggestion: CategorySuggestion }[]
 ];
 
 export function analyzeTitleForCategory(title: string): CategorySuggestion | null {
-  const lower = ` ${title.toLowerCase()} `;
+  const lower = title.toLowerCase();
+  const padded = ` ${lower} `;
 
   // Check moto brands first
   for (const brand of motoBrands) {
     if (lower.includes(brand)) {
-      const hasCarKeyword = ['car ', 'auto ', 'авто ', 'машин', 'автомобиль'].some(k => lower.includes(k));
+      const hasCarKeyword = ['car ', 'auto ', 'авто ', 'машин', 'автомобиль'].some(k => padded.includes(k));
       if (!hasCarKeyword) {
         const hasMopedKeyword = ['scooter', 'скутер', 'мопед', 'moped'].some(k => lower.includes(k));
         if (hasMopedKeyword) {
@@ -72,7 +73,9 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
 
   // Check car brands
   for (const brand of carBrands) {
-    if (lower.includes(` ${brand.name.toLowerCase()} `) || lower.includes(` ${brand.id} `)) {
+    const brandName = brand.name.toLowerCase();
+    const brandId = brand.id.toLowerCase();
+    if (lower.includes(brandName) || padded.includes(` ${brandId} `)) {
       const hasMotoKeyword = ['motorcycle', 'мотоцикл', 'байк', 'мото ', 'bike'].some(k => lower.includes(k));
       if (!hasMotoKeyword) {
         return { category: 'transport', subcategory: 'cars' };
@@ -83,14 +86,14 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
   // Keyword-based detection
   for (const entry of categoryKeywords) {
     for (const keyword of entry.keywords) {
-      if (lower.includes(keyword)) {
+      if (padded.includes(keyword)) {
         return entry.suggestion;
       }
     }
   }
 
   // Generic "moto" keyword
-  if (lower.includes('moto') || lower.includes('мото')) {
+  if (padded.includes('moto') || padded.includes('мото')) {
     return { category: 'transport', subcategory: 'motorbikes', parentSubcategory: 'motorcycles' };
   }
 

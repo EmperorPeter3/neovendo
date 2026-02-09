@@ -449,7 +449,7 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
 
           {/* Map */}
           {selectedLocation && initialCenter && (
-            <div className="flex-1 min-h-[300px] rounded-lg overflow-hidden border border-border relative">
+            <div className="flex-1 min-h-[300px] rounded-lg overflow-hidden border border-border relative z-0">
               {/* Center marker indicator (fixed in center) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1000]">
                 <div className="flex flex-col items-center">
