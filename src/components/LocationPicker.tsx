@@ -382,7 +382,7 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
 
         <div className="flex-1 overflow-hidden flex flex-col gap-4 px-1 pt-1">
           {/* Search Input */}
-          <div className="relative">
+          <div className="relative z-[100]">
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <Input
@@ -420,7 +420,7 @@ export const LocationPicker = ({ value, onChange, className, error }: LocationPi
             </div>
 
             {/* Suggestions List */}
-            {suggestions.length > 0 && !selectedLocation && (
+            {suggestions.length > 0 && (
               <div className="absolute z-50 w-full mt-1 bg-popover border border-border rounded-lg shadow-lg">
                 <ScrollArea className="max-h-[200px]">
                   {suggestions.map((result) => {

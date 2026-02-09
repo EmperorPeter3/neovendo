@@ -88,6 +88,7 @@ export type Database = {
           atv_mileage: number | null
           atv_origin_country: string | null
           atv_power: number | null
+          atv_power_watt: number | null
           atv_type: string | null
           atv_year: number | null
           car_body_condition: string | null
@@ -101,6 +102,7 @@ export type Database = {
           car_mileage: number | null
           car_model: string | null
           car_power: number | null
+          car_power_watt: number | null
           car_seats: number | null
           car_steering_position: string | null
           car_transmission: string | null
@@ -123,6 +125,7 @@ export type Database = {
           moped_mileage: number | null
           moped_origin_country: string | null
           moped_power: number | null
+          moped_power_watt: number | null
           moped_type: string | null
           moped_year: number | null
           moto_brand: string | null
@@ -148,6 +151,7 @@ export type Database = {
           quad_mileage: number | null
           quad_origin_country: string | null
           quad_power: number | null
+          quad_power_watt: number | null
           quad_type: string | null
           quad_year: number | null
           status: Database["public"]["Enums"]["listing_status"]
@@ -164,6 +168,7 @@ export type Database = {
           atv_mileage?: number | null
           atv_origin_country?: string | null
           atv_power?: number | null
+          atv_power_watt?: number | null
           atv_type?: string | null
           atv_year?: number | null
           car_body_condition?: string | null
@@ -177,6 +182,7 @@ export type Database = {
           car_mileage?: number | null
           car_model?: string | null
           car_power?: number | null
+          car_power_watt?: number | null
           car_seats?: number | null
           car_steering_position?: string | null
           car_transmission?: string | null
@@ -199,6 +205,7 @@ export type Database = {
           moped_mileage?: number | null
           moped_origin_country?: string | null
           moped_power?: number | null
+          moped_power_watt?: number | null
           moped_type?: string | null
           moped_year?: number | null
           moto_brand?: string | null
@@ -224,6 +231,7 @@ export type Database = {
           quad_mileage?: number | null
           quad_origin_country?: string | null
           quad_power?: number | null
+          quad_power_watt?: number | null
           quad_type?: string | null
           quad_year?: number | null
           status?: Database["public"]["Enums"]["listing_status"]
@@ -240,6 +248,7 @@ export type Database = {
           atv_mileage?: number | null
           atv_origin_country?: string | null
           atv_power?: number | null
+          atv_power_watt?: number | null
           atv_type?: string | null
           atv_year?: number | null
           car_body_condition?: string | null
@@ -253,6 +262,7 @@ export type Database = {
           car_mileage?: number | null
           car_model?: string | null
           car_power?: number | null
+          car_power_watt?: number | null
           car_seats?: number | null
           car_steering_position?: string | null
           car_transmission?: string | null
@@ -275,6 +285,7 @@ export type Database = {
           moped_mileage?: number | null
           moped_origin_country?: string | null
           moped_power?: number | null
+          moped_power_watt?: number | null
           moped_type?: string | null
           moped_year?: number | null
           moto_brand?: string | null
@@ -300,6 +311,7 @@ export type Database = {
           quad_mileage?: number | null
           quad_origin_country?: string | null
           quad_power?: number | null
+          quad_power_watt?: number | null
           quad_type?: string | null
           quad_year?: number | null
           status?: Database["public"]["Enums"]["listing_status"]

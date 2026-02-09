@@ -162,7 +162,7 @@ export const MotoFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError 
 
       {/* Engine Volume */}
       <div>
-        <Label className="text-sm font-medium mb-2 block">{t('engineVolumeCc' as TranslationKey)}</Label>
+        <Label className="text-sm font-medium mb-2 block">{t('carFilters.engineVolume' as TranslationKey)}</Label>
         <Input
           type="number"
           value={data.engineVolume}

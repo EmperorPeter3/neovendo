@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
@@ -19,6 +19,7 @@ import MopedFieldsForm, { MopedFieldsData, defaultMopedFields } from '@/componen
 import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/MotoFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 import { LocationPicker, LocationPickerValue } from '@/components/LocationPicker';
+import { analyzeTitleForCategory, analyzeTitleForBrand, CategorySuggestion, BrandModelSuggestion } from '@/utils/titleAnalyzer';
 
 const CreateListing = () => {
   const { t } = useLanguage();
@@ -45,6 +46,9 @@ const CreateListing = () => {
   const [mopedFields, setMopedFields] = useState<MopedFieldsData>(defaultMopedFields);
   const [motoFields, setMotoFields] = useState<MotoFieldsData>(defaultMotoFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
+  const [categorySuggestion, setCategorySuggestion] = useState<CategorySuggestion | null>(null);
+  const [brandSuggestion, setBrandSuggestion] = useState<BrandModelSuggestion | null>(null);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const isCarListing = subcategory === 'cars';
   const isAtvListing = subcategory === 'atvs';
@@ -57,14 +61,66 @@ const CreateListing = () => {
     setCategory(newCategory);
     setSubcategory(newSubcategory || '');
     clearFieldError('category');
+    setBrandSuggestion(null);
   };
 
-  // Clear field error when user starts typing
   const clearFieldError = (field: string) => {
     if (fieldErrors[field]) {
       setFieldErrors(prev => ({ ...prev, [field]: false }));
     }
   };
+
+  const handleTitleBlur = () => {
+    if (title.trim().length < 3) {
+      setCategorySuggestion(null);
+      return;
+    }
+    const suggestion = analyzeTitleForCategory(title);
+    if (suggestion && (suggestion.category !== category || suggestion.subcategory !== subcategory)) {
+      setCategorySuggestion(suggestion);
+    } else {
+      setCategorySuggestion(null);
+    }
+  };
+
+  const applyCategorySuggestion = () => {
+    if (!categorySuggestion) return;
+    const { category: sugCat, subcategory: sugSub } = categorySuggestion;
+    handleCategoryChange(sugCat, sugSub);
+    setCategorySuggestion(null);
+
+    // Check for brand suggestion
+    const brandResult = analyzeTitleForBrand(title, sugSub);
+    if (brandResult) {
+      setBrandSuggestion(brandResult);
+    }
+  };
+
+  const applyBrandSuggestion = () => {
+    if (!brandSuggestion) return;
+    if (brandSuggestion.vehicleType === 'cars') {
+      const newFields = { ...carFields, brand: brandSuggestion.brand };
+      if (brandSuggestion.model) newFields.model = brandSuggestion.model;
+      setCarFields(newFields);
+    } else if (brandSuggestion.vehicleType === 'motorbikes') {
+      setMotoFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
+    } else if (brandSuggestion.vehicleType === 'mopeds_scooters') {
+      setMopedFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
+    } else if (brandSuggestion.vehicleType === 'quads_buggies') {
+      setQuadFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
+    } else if (brandSuggestion.vehicleType === 'atvs') {
+      setAtvFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
+    }
+    setBrandSuggestion(null);
+  };
+
+  const scrollToFirstError = () => {
+    setTimeout(() => {
+      const el = formRef.current?.querySelector('.border-destructive');
+      el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 100);
+  };
+
   // Redirect to login if not authenticated
   if (!authLoading && !user) {
     return (
@@ -105,7 +161,6 @@ const CreateListing = () => {
     setImagePreviews(prev => prev.filter((_, i) => i !== index));
   };
 
-  // Validation helper for numeric fields - returns list of invalid fields
   const validateNumericFields = (): { valid: boolean; errors: Record<string, boolean>; message?: string } => {
     const errors: Record<string, boolean> = {};
     let message: string | undefined;
@@ -174,7 +229,6 @@ const CreateListing = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Check required fields and collect errors
     const requiredErrors: Record<string, boolean> = {};
     if (!title) requiredErrors.title = true;
     if (!description) requiredErrors.description = true;
@@ -189,10 +243,10 @@ const CreateListing = () => {
         description: t('validation.requiredFields'),
         variant: 'destructive',
       });
+      scrollToFirstError();
       return;
     }
 
-    // Validate numeric fields
     const validation = validateNumericFields();
     if (!validation.valid) {
       setFieldErrors(validation.errors);
@@ -201,6 +255,7 @@ const CreateListing = () => {
         description: validation.message,
         variant: 'destructive',
       });
+      scrollToFirstError();
       return;
     }
 
@@ -208,14 +263,12 @@ const CreateListing = () => {
     setIsSubmitting(true);
 
     try {
-      // Upload images first
       const uploadedUrls: string[] = [];
       for (const file of imageFiles) {
         const url = await uploadImage.mutateAsync(file);
         uploadedUrls.push(url);
       }
 
-      // Build listing data with validated numbers
       const listingData: Parameters<typeof createListing.mutateAsync>[0] = {
         title,
         description,
@@ -229,7 +282,6 @@ const CreateListing = () => {
         lng: locationValue?.lng,
       };
 
-      // Add car-specific fields if it's a car listing
       if (isCarListing) {
         if (carFields.condition) listingData.car_condition = carFields.condition;
         if (carFields.brand) listingData.car_brand = carFields.brand;
@@ -247,9 +299,9 @@ const CreateListing = () => {
         if (carFields.seats) listingData.car_seats = parseInt(carFields.seats);
         if (carFields.trunkVolume) listingData.car_trunk_volume = parseInt(carFields.trunkVolume);
         if (carFields.steeringPosition) listingData.car_steering_position = carFields.steeringPosition;
+        if (carFields.powerWatt) (listingData as any).car_power_watt = parseInt(carFields.powerWatt);
       }
 
-      // Create listing
       await createListing.mutateAsync(listingData);
 
       toast({
@@ -259,7 +311,6 @@ const CreateListing = () => {
 
       navigate('/');
     } catch (error: any) {
-      // Parse database errors for better user messages
       let errorMessage = t('listing.createError');
       if (error.message?.includes('numeric field overflow')) {
         errorMessage = t('validation.numericOverflow');
@@ -280,7 +331,6 @@ const CreateListing = () => {
   return (
     <Layout>
       <div className="container py-6 md:py-8">
-        {/* Back Button */}
         <Link to="/" className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground mb-6 transition-colors">
           <ArrowLeft className="w-4 h-4" />
           {t('back')}
@@ -291,7 +341,7 @@ const CreateListing = () => {
             {t('createListing')}
           </h1>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
             {/* Images */}
             <div>
               <label className="block text-sm font-medium text-foreground mb-3">
@@ -334,12 +384,25 @@ const CreateListing = () => {
               </label>
               <Input
                 value={title}
-                onChange={(e) => { setTitle(e.target.value); clearFieldError('title'); }}
+                onChange={(e) => { setTitle(e.target.value); clearFieldError('title'); setCategorySuggestion(null); }}
+                onBlur={handleTitleBlur}
                 placeholder="e.g., iPhone 15 Pro Max - Like New"
                 maxLength={100}
                 className={`h-12 ${fieldErrors.title ? 'border-destructive ring-destructive' : ''}`}
               />
               <p className="text-xs text-muted-foreground mt-1">{title.length}/100</p>
+              {categorySuggestion && (
+                <button
+                  type="button"
+                  onClick={applyCategorySuggestion}
+                  className="text-sm text-primary hover:underline cursor-pointer mt-1 text-left"
+                >
+                  {t('suggestedCategory' as TranslationKey)}: {t(categorySuggestion.category as TranslationKey)}
+                  {categorySuggestion.parentSubcategory && ` → ${t(categorySuggestion.parentSubcategory as TranslationKey)}`}
+                  {` → ${t(categorySuggestion.subcategory as TranslationKey)}`}
+                  {`. ${t('applySuggestion' as TranslationKey)}?`}
+                </button>
+              )}
             </div>
 
             {/* Category */}
@@ -353,7 +416,23 @@ const CreateListing = () => {
                 onChange={handleCategoryChange}
                 showPath={true}
               />
+              {fieldErrors.category && (
+                <p className="text-sm text-destructive mt-1">{t('validation.requiredFields' as TranslationKey)}</p>
+              )}
             </div>
+
+            {/* Brand suggestion */}
+            {brandSuggestion && (
+              <button
+                type="button"
+                onClick={applyBrandSuggestion}
+                className="text-sm text-primary hover:underline cursor-pointer text-left"
+              >
+                {t('suggestedBrand' as TranslationKey)}: {brandSuggestion.brandName}
+                {brandSuggestion.modelName && ` ${brandSuggestion.modelName}`}
+                {`. ${t('applySuggestion' as TranslationKey)}?`}
+              </button>
+            )}
 
             {/* Car-specific fields */}
             {isCarListing && (
@@ -424,10 +503,10 @@ const CreateListing = () => {
               </label>
               <Textarea
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(e) => { setDescription(e.target.value); clearFieldError('description'); }}
                 placeholder="Describe your item in detail..."
                 rows={5}
-                className="resize-none"
+                className={`resize-none ${fieldErrors.description ? 'border-destructive ring-destructive' : ''}`}
               />
             </div>
 

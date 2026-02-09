@@ -22,6 +22,7 @@ export interface AtvFieldsData {
   engineType: string;
   engineVolume: string;
   power: string;
+  powerWatt: string;
   mileage: string;
   maxPassengers: string;
 }
@@ -35,6 +36,7 @@ export const defaultAtvFields: AtvFieldsData = {
   engineType: '',
   engineVolume: '',
   power: '',
+  powerWatt: '',
   mileage: '',
   maxPassengers: '',
 };
@@ -155,28 +157,26 @@ export function AtvFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </Select>
       </div>
 
-      {/* Engine Volume & Power */}
+      {/* Engine Volume */}
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">
+          {safeT(t, 'atvFilters.engineVolume')}
+          <span className="text-muted-foreground ml-1">(cm³)</span>
+        </Label>
+        <Input
+          type="number"
+          placeholder="0"
+          value={data.engineVolume}
+          onChange={(e) => handleChange('engineVolume', e.target.value)}
+          min="0"
+          className={getInputClass('engineVolume')}
+        />
+      </div>
+
+      {/* Power HP & Power Watt */}
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label className="text-sm font-medium">
-            {safeT(t, 'atvFilters.engineVolume')}
-            <span className="text-muted-foreground ml-1">(cc)</span>
-          </Label>
-          <Input
-            type="number"
-            placeholder="0"
-            value={data.engineVolume}
-            onChange={(e) => handleChange('engineVolume', e.target.value)}
-            min="0"
-            className={getInputClass('engineVolume')}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">
-            {safeT(t, 'atvFilters.power')}
-            <span className="text-muted-foreground ml-1">({safeT(t, 'units.hp')})</span>
-          </Label>
+          <Label className="text-sm font-medium">{safeT(t, 'powerHp')}</Label>
           <Input
             type="number"
             placeholder="0"
@@ -184,6 +184,18 @@ export function AtvFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
             onChange={(e) => handleChange('power', e.target.value)}
             min="0"
             className={getInputClass('power')}
+          />
+        </div>
+
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">{safeT(t, 'powerWatt')}</Label>
+          <Input
+            type="number"
+            placeholder="0"
+            value={data.powerWatt}
+            onChange={(e) => handleChange('powerWatt', e.target.value)}
+            min="0"
+            className={getInputClass('powerWatt')}
           />
         </div>
       </div>
