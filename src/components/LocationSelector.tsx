@@ -392,14 +392,14 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
           <span className="truncate max-w-[120px]">{displayValue}</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] h-[100dvh] max-w-none sm:w-[80vw] sm:h-[70vh] sm:max-h-[70vh] overflow-hidden flex flex-col rounded-none sm:rounded-lg">
+      <DialogContent className="w-[95vw] h-[100dvh] max-w-none sm:w-[80vw] sm:h-[85vh] sm:max-h-[85vh] overflow-hidden flex flex-col rounded-none sm:rounded-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center justify-between">
             <span>{t('selectRegion')}</span>
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex-1 overflow-hidden flex flex-col gap-4 px-1 pt-1">
+        <div className="flex-1 overflow-y-auto flex flex-col gap-4 px-1 pt-1">
           {/* Search Input */}
           <div className="relative">
             <div className="flex gap-2">
@@ -467,7 +467,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
 
           {/* Map */}
           {selectedLocation && initialCenter && (
-            <div className="flex-1 min-h-[300px] rounded-lg overflow-hidden border border-border relative">
+            <div className="flex-1 min-h-[200px] sm:min-h-[300px] rounded-lg overflow-hidden border border-border relative">
               {/* Center marker indicator (fixed in center) */}
               <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-[1000]">
                 <div className="flex flex-col items-center">
@@ -522,7 +522,7 @@ export const LocationSelector = ({ value, onChange, className }: LocationSelecto
           )}
 
           {/* Actions */}
-          <div className="flex gap-2 pt-2">
+          <div className="flex gap-2 pt-2 pb-2 sticky bottom-0 bg-background">
             {selectedLocation ? (
               <>
                 <Button variant="outline" onClick={handleReset} className="flex-1">
