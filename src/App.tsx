@@ -9,6 +9,7 @@ import Index from "./pages/Index";
 import ListingDetail from "./pages/ListingDetail";
 import SearchPage from "./pages/SearchPage";
 import CreateListing from "./pages/CreateListing";
+import EditListing from "./pages/EditListing";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import ForgotPassword from "./pages/ForgotPassword";
@@ -36,6 +37,7 @@ const App = () => (
               <Route path="/listing/:id" element={<ListingDetail />} />
               <Route path="/search" element={<SearchPage />} />
               <Route path="/create" element={<CreateListing />} />
+              <Route path="/edit-listing/:id" element={<EditListing />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/forgot-password" element={<ForgotPassword />} />

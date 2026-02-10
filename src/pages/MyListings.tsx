@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Layout } from '@/components/Layout';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -8,7 +7,6 @@ import { Button } from '@/components/ui/button';
 import { ArrowLeft, Plus, Edit, Trash2, Eye } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
-import { EditListingDialog } from '@/components/EditListingDialog';
 import { Category } from '@/types/listing';
 
 const categoryIcons: Record<Category, string> = {
@@ -31,8 +29,6 @@ const MyListings = () => {
   const { data: listings, isLoading } = useMyListings();
   const deleteListing = useDeleteListing();
   const { toast } = useToast();
-
-  const [editingListing, setEditingListing] = useState<typeof listings extends (infer T)[] | undefined ? T | null : null>(null);
 
   if (!authLoading && !user) {
     return (
@@ -173,13 +169,11 @@ const MyListings = () => {
                               <Eye className="w-4 h-4" />
                             </Button>
                           </Link>
-                          <Button 
-                            variant="outline" 
-                            size="icon"
-                            onClick={() => setEditingListing(listing)}
-                          >
-                            <Edit className="w-4 h-4" />
-                          </Button>
+                          <Link to={`/edit-listing/${listing.id}`}>
+                            <Button variant="outline" size="icon">
+                              <Edit className="w-4 h-4" />
+                            </Button>
+                          </Link>
                           <Button 
                             variant="outline" 
                             size="icon"
@@ -235,23 +229,6 @@ const MyListings = () => {
               </div>
             )}
           </div>
-        )}
-
-        {/* Edit Dialog */}
-        {editingListing && (
-          <EditListingDialog
-            listing={{
-              id: editingListing.id,
-              title: editingListing.title,
-              description: editingListing.description || '',
-              category: editingListing.category as Category,
-              price: editingListing.price,
-              city: editingListing.city,
-              country: editingListing.country,
-            }}
-            open={!!editingListing}
-            onOpenChange={(open) => !open && setEditingListing(null)}
-          />
         )}
       </div>
     </Layout>
