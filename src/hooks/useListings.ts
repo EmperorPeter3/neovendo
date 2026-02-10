@@ -262,10 +262,32 @@ export const useListings = (filters?: {
           query = query.eq('car_condition', cars.condition);
         }
         if (cars.brands && cars.brands.length > 0) {
-          query = query.in('car_brand', cars.brands);
-        }
-        if (cars.models && cars.models.length > 0) {
-          query = query.in('car_model', cars.models);
+          if (cars.models && cars.models.length > 0) {
+            // Group models by brand
+            const modelsByBrand: Record<string, string[]> = {};
+            for (const modelKey of cars.models) {
+              const [brandId, modelId] = modelKey.split(':');
+              if (!modelsByBrand[brandId]) modelsByBrand[brandId] = [];
+              modelsByBrand[brandId].push(modelId);
+            }
+            // Build OR filter: brands with models use AND(brand,model), brands without models just match brand
+            const orParts: string[] = [];
+            for (const brand of cars.brands) {
+              if (modelsByBrand[brand]) {
+                const models = modelsByBrand[brand];
+                if (models.length === 1) {
+                  orParts.push(`and(car_brand.eq.${brand},car_model.eq.${models[0]})`);
+                } else {
+                  orParts.push(`and(car_brand.eq.${brand},car_model.in.(${models.join(',')}))`);
+                }
+              } else {
+                orParts.push(`car_brand.eq.${brand}`);
+              }
+            }
+            query = query.or(orParts.join(','));
+          } else {
+            query = query.in('car_brand', cars.brands);
+          }
         }
         if (cars.yearFrom !== undefined) {
           query = query.gte('car_year', cars.yearFrom);

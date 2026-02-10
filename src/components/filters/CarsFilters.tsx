@@ -110,6 +110,7 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
   const { t } = useLanguage();
   const [brandsOpen, setBrandsOpen] = useState(false);
   const [modelsOpen, setModelsOpen] = useState(false);
+  const [brandSearch, setBrandSearch] = useState('');
   const yearOptions = useMemo(() => getYearOptions(), []);
 
   const selectedBrandsData = useMemo(() => {
@@ -257,7 +258,7 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
       {/* Brand */}
       <div className="space-y-2">
         <Label className="text-sm font-medium">{safeT(t, 'carFilters.brand')}</Label>
-        <Popover open={brandsOpen} onOpenChange={setBrandsOpen}>
+        <Popover open={brandsOpen} onOpenChange={(open) => { setBrandsOpen(open); if (!open) setBrandSearch(''); }}>
           <PopoverTrigger asChild>
             <Button variant="outline" role="combobox" className="w-full justify-between h-auto min-h-9 py-2">
               <div className="flex flex-wrap gap-1 flex-1">
@@ -280,9 +281,20 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
               {brandsOpen ? <ChevronUp className="h-4 w-4 ml-2 shrink-0" /> : <ChevronDown className="h-4 w-4 ml-2 shrink-0" />}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="w-full p-0 max-h-64 overflow-y-auto" align="start">
-            <div className="p-2 grid grid-cols-2 gap-1">
-              {carBrands.map(brand => (
+          <PopoverContent className="w-full p-0" align="start">
+            <div className="p-2 border-b">
+              <Input
+                placeholder={safeT(t, 'carFilters.searchBrands')}
+                value={brandSearch}
+                onChange={(e) => setBrandSearch(e.target.value)}
+                className="h-8 text-sm"
+                autoFocus
+              />
+            </div>
+            <div className="p-2 grid grid-cols-2 gap-1 max-h-56 overflow-y-auto">
+              {carBrands
+                .filter(brand => brand.name.toLowerCase().includes(brandSearch.toLowerCase()))
+                .map(brand => (
                 <div
                   key={brand.id}
                   className={cn("flex items-center space-x-2 p-2 rounded cursor-pointer hover:bg-accent", filters.brands.includes(brand.id) && "bg-accent")}
