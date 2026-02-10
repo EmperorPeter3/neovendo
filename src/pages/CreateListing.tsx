@@ -48,6 +48,7 @@ const CreateListing = () => {
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
   const [categorySuggestion, setCategorySuggestion] = useState<CategorySuggestion | null>(null);
   const [brandSuggestion, setBrandSuggestion] = useState<BrandModelSuggestion | null>(null);
+  const [modelSuggestion, setModelSuggestion] = useState<{ model: string; modelName: string } | null>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
   const isCarListing = subcategory === 'cars';
@@ -62,6 +63,7 @@ const CreateListing = () => {
     setSubcategory(newSubcategory || '');
     clearFieldError('category');
     setBrandSuggestion(null);
+    setModelSuggestion(null);
   };
 
   const clearFieldError = (field: string) => {
@@ -99,9 +101,7 @@ const CreateListing = () => {
   const applyBrandSuggestion = () => {
     if (!brandSuggestion) return;
     if (brandSuggestion.vehicleType === 'cars') {
-      const newFields = { ...carFields, brand: brandSuggestion.brand };
-      if (brandSuggestion.model) newFields.model = brandSuggestion.model;
-      setCarFields(newFields);
+      setCarFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
     } else if (brandSuggestion.vehicleType === 'motorbikes') {
       setMotoFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
     } else if (brandSuggestion.vehicleType === 'mopeds_scooters') {
@@ -111,7 +111,19 @@ const CreateListing = () => {
     } else if (brandSuggestion.vehicleType === 'atvs') {
       setAtvFields(prev => ({ ...prev, brand: brandSuggestion.brand }));
     }
+    // Show model suggestion separately if detected
+    if (brandSuggestion.model && brandSuggestion.modelName) {
+      setModelSuggestion({ model: brandSuggestion.model, modelName: brandSuggestion.modelName });
+    }
     setBrandSuggestion(null);
+  };
+
+  const applyModelSuggestion = () => {
+    if (!modelSuggestion) return;
+    if (subcategory === 'cars') {
+      setCarFields(prev => ({ ...prev, model: modelSuggestion.model }));
+    }
+    setModelSuggestion(null);
   };
 
   const scrollToFirstError = () => {
@@ -384,7 +396,7 @@ const CreateListing = () => {
               </label>
               <Input
                 value={title}
-                onChange={(e) => { setTitle(e.target.value); clearFieldError('title'); setCategorySuggestion(null); }}
+                onChange={(e) => { setTitle(e.target.value); clearFieldError('title'); setCategorySuggestion(null); setModelSuggestion(null); }}
                 onBlur={handleTitleBlur}
                 placeholder="e.g., iPhone 15 Pro Max - Like New"
                 maxLength={100}
@@ -429,7 +441,18 @@ const CreateListing = () => {
                 className="text-sm text-primary hover:underline cursor-pointer text-left"
               >
                 {t('suggestedBrand' as TranslationKey)}: {brandSuggestion.brandName}
-                {brandSuggestion.modelName && ` ${brandSuggestion.modelName}`}
+                {`. ${t('applySuggestion' as TranslationKey)}?`}
+              </button>
+            )}
+
+            {/* Model suggestion */}
+            {modelSuggestion && (
+              <button
+                type="button"
+                onClick={applyModelSuggestion}
+                className="text-sm text-primary hover:underline cursor-pointer text-left"
+              >
+                {t('suggestedModel' as TranslationKey) || 'Предполагаемая модель'}: {modelSuggestion.modelName}
                 {`. ${t('applySuggestion' as TranslationKey)}?`}
               </button>
             )}
