@@ -200,7 +200,7 @@ const CreateListing = () => {
       }
       if (carFields.engineVolume) {
         const engineVolumeNum = parseInt(carFields.engineVolume);
-        if (isNaN(engineVolumeNum) || engineVolumeNum < 0 || engineVolumeNum > 20000) {
+        if (isNaN(engineVolumeNum) || engineVolumeNum < 0 || engineVolumeNum > 30000) {
           errors.engineVolume = true;
           if (!message) message = t('validation.engineVolumeRange');
         }
@@ -261,7 +261,7 @@ const CreateListing = () => {
 
     const validation = validateNumericFields();
     if (!validation.valid) {
-      setFieldErrors(validation.errors);
+      setFieldErrors(prev => ({ ...prev, ...validation.errors }));
       toast({
         title: t('error'),
         description: validation.message,
