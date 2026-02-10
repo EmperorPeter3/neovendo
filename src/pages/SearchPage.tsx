@@ -210,10 +210,9 @@ const [searchParams, setSearchParams] = useSearchParams();
     // Transmissions
     const transmissions: string[] = [];
     if (filters.transmissionManual) transmissions.push('manual');
-    if (filters.transmissionAutomatic === 'checked') transmissions.push('automatic');
     if (filters.transmissionRobot) transmissions.push('robot');
     if (filters.transmissionVariator) transmissions.push('variator');
-    if (filters.transmissionClassic) transmissions.push('classic');
+    if (filters.transmissionClassic) transmissions.push('classic-automatic');
     if (transmissions.length > 0) {
       result.transmissions = transmissions;
     }
