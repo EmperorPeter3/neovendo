@@ -71,11 +71,12 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
     }
   }
 
-  // Check car brands
-  for (const brand of carBrands) {
+  // Check car brands - sort longest first
+  const sortedCarBrands = [...carBrands].sort((a, b) => b.name.length - a.name.length);
+  for (const brand of sortedCarBrands) {
     const brandName = brand.name.toLowerCase();
-    const brandId = brand.id.toLowerCase();
-    if (lower.includes(brandName) || padded.includes(` ${brandId} `)) {
+    const brandMatches = lower.includes(brandName) || matchesWholeWord(padded, brand.id);
+    if (brandMatches) {
       const hasMotoKeyword = ['motorcycle', 'мотоцикл', 'байк', 'мото ', 'bike'].some(k => lower.includes(k));
       if (!hasMotoKeyword) {
         return { category: 'transport', subcategory: 'cars' };
@@ -100,15 +101,40 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
   return null;
 }
 
+// Helper: check if a word/phrase appears as a whole word in text
+function matchesWholeWord(text: string, term: string): boolean {
+  const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const regex = new RegExp(`(?:^|[\\s,.()"'])${escaped}(?:$|[\\s,.()"'])`, 'i');
+  return regex.test(text);
+}
+
 export function analyzeTitleForBrand(title: string, vehicleType: string): BrandModelSuggestion | null {
   const lower = title.toLowerCase();
 
   if (vehicleType === 'cars') {
-    for (const brand of carBrands) {
-      if (lower.includes(brand.name.toLowerCase()) || lower.includes(brand.id)) {
+    // Sort brands longest name first to match "Mercedes-Benz" before "MG"
+    const sortedBrands = [...carBrands].sort((a, b) => b.name.length - a.name.length);
+    
+    for (const brand of sortedBrands) {
+      const brandName = brand.name.toLowerCase();
+      const brandMatches = lower.includes(brandName) || matchesWholeWord(lower, brand.id);
+      
+      if (brandMatches) {
+        // Try to match model - check both full name and class prefix (e.g. "C" for "C-Class")
         for (const model of brand.models) {
-          if (lower.includes(model.name.toLowerCase())) {
+          const modelName = model.name.toLowerCase();
+          if (lower.includes(modelName)) {
             return { brand: brand.id, brandName: brand.name, model: model.id, modelName: model.name, vehicleType: 'cars' };
+          }
+          // Match class-style models: "C-Class" matches "C " or "C200" etc.
+          const classMatch = modelName.match(/^([a-z]+)-class$/);
+          if (classMatch) {
+            const prefix = classMatch[1];
+            // Check for patterns like "C 200", "C200", "C-200"
+            const classRegex = new RegExp(`(?:^|\\s)${prefix}(?:\\s|\\d|-|$)`, 'i');
+            if (classRegex.test(title)) {
+              return { brand: brand.id, brandName: brand.name, model: model.id, modelName: model.name, vehicleType: 'cars' };
+            }
           }
         }
         return { brand: brand.id, brandName: brand.name, vehicleType: 'cars' };
@@ -117,8 +143,10 @@ export function analyzeTitleForBrand(title: string, vehicleType: string): BrandM
   }
 
   if (['motorbikes', 'mopeds_scooters', 'quads_buggies', 'atvs'].includes(vehicleType)) {
-    for (const brand of motoBrands) {
-      if (lower.includes(brand)) {
+    // Sort longest first
+    const sortedMotoBrands = [...motoBrands].sort((a, b) => b.length - a.length);
+    for (const brand of sortedMotoBrands) {
+      if (matchesWholeWord(lower, brand)) {
         const brandName = brand.split(/[\s-]/).map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(brand.includes('-') ? '-' : ' ');
         return { brand: brandName, brandName, vehicleType };
       }
