@@ -83,6 +83,21 @@ const Index = () => {
     address: string;
     radius: number;
   } | null>(null);
+
+  const handleLocationChange = (location: typeof selectedLocation) => {
+    setSelectedLocation(location);
+    if (location) {
+      const params = new URLSearchParams();
+      if (searchQuery) params.set('q', searchQuery);
+      if (selectedCategory) params.set('category', selectedCategory);
+      if (selectedSubcategory) params.set('subcategory', selectedSubcategory);
+      params.set('lat', location.lat.toString());
+      params.set('lng', location.lng.toString());
+      params.set('radius', location.radius.toString());
+      params.set('address', location.address);
+      navigate(`/search?${params.toString()}`);
+    }
+  };
   const [showMobileCategories, setShowMobileCategories] = useState(false);
 
   const handleSearch = (e: React.FormEvent) => {
@@ -157,7 +172,7 @@ const Index = () => {
               
               <LocationSelector 
                 value={selectedLocation}
-                onChange={setSelectedLocation}
+                onChange={handleLocationChange}
               />
             </div>
 
@@ -166,7 +181,7 @@ const Index = () => {
               {/* 1. Location Selector - Full width */}
               <LocationSelector 
                 value={selectedLocation}
-                onChange={setSelectedLocation}
+                onChange={handleLocationChange}
                 className="w-full"
               />
               
