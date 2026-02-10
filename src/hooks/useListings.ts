@@ -724,14 +724,7 @@ export const useUpdateListing = () => {
       ...updates
     }: {
       id: string;
-      title?: string;
-      description?: string;
-      category?: Category;
-      price?: number;
-      city?: string;
-      country?: string;
-      images?: string[];
-      status?: 'active' | 'deleted';
+      [key: string]: any;
     }) => {
       const { data, error } = await supabase
         .from('listings')
@@ -745,6 +738,7 @@ export const useUpdateListing = () => {
     },
     onSuccess: (_, variables) => {
       queryClient.invalidateQueries({ queryKey: ['listings'] });
+      queryClient.invalidateQueries({ queryKey: ['myListings'] });
       queryClient.invalidateQueries({ queryKey: ['listing', variables.id] });
     },
   });
