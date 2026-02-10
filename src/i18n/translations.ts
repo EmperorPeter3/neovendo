@@ -88,6 +88,7 @@ export const translations = {
     allCategories: "All categories",
     suggestedCategory: "Suggested category",
     suggestedBrand: "Suggested brand",
+    suggestedModel: "Suggested model",
     applySuggestion: "Apply",
     searchRadius: "Search radius",
     enterAddress: "Enter address...",
@@ -987,6 +988,7 @@ export const translations = {
     allCategories: "Todas as categorias",
     suggestedCategory: "Categoria sugerida",
     suggestedBrand: "Marca sugerida",
+    suggestedModel: "Modelo sugerido",
     applySuggestion: "Aplicar",
     
     // Transport subcategories
@@ -1785,6 +1787,7 @@ export const translations = {
     allCategories: "Todas las categorías",
     suggestedCategory: "Categoría sugerida",
     suggestedBrand: "Marca sugerida",
+    suggestedModel: "Modelo sugerido",
     applySuggestion: "Aplicar",
     
     // Transport subcategories
@@ -2583,6 +2586,7 @@ export const translations = {
     allCategories: "Alle Kategorien",
     suggestedCategory: "Vorgeschlagene Kategorie",
     suggestedBrand: "Vorgeschlagene Marke",
+    suggestedModel: "Vorgeschlagenes Modell",
     applySuggestion: "Anwenden",
     
     // Transport subcategories
@@ -3381,6 +3385,7 @@ export const translations = {
     allCategories: "Toutes les catégories",
     suggestedCategory: "Catégorie suggérée",
     suggestedBrand: "Marque suggérée",
+    suggestedModel: "Modèle suggéré",
     applySuggestion: "Appliquer",
     
     // Transport subcategories
@@ -4179,6 +4184,7 @@ export const translations = {
     allCategories: "Tutte le categorie",
     suggestedCategory: "Categoria suggerita",
     suggestedBrand: "Marca suggerita",
+    suggestedModel: "Modello suggerito",
     applySuggestion: "Applicare",
     
     // Transport subcategories
@@ -4977,6 +4983,7 @@ export const translations = {
     allCategories: "Все категории",
     suggestedCategory: "Предполагаемая категория",
     suggestedBrand: "Предполагаемый бренд",
+    suggestedModel: "Предполагаемая модель",
     applySuggestion: "Применить",
     searchRadius: "Радиус поиска",
     enterAddress: "Введите адрес...",
