@@ -4,6 +4,7 @@ import { MobileCategorySelector } from '@/components/MobileCategorySelector';
 import { LocationSelector } from '@/components/LocationSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
+import { useForYouListings } from '@/hooks/useForYouListings';
 import { ChevronRight, MapPin, Search, ChevronDown } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -282,7 +283,49 @@ const Index = () => {
         </div>
       </section>
 
+      {/* For You Section */}
+      <ForYouSection />
+
     </Layout>
+  );
+};
+
+const ForYouSection = () => {
+  const { t } = useLanguage();
+  const { data: forYouListings, isLoading: forYouLoading } = useForYouListings(8);
+
+  if (!forYouLoading && (!forYouListings || forYouListings.length === 0)) return null;
+
+  return (
+    <section className="py-6 md:py-10 bg-secondary/20">
+      <div className="container">
+        <div className="flex items-center justify-between mb-6 gap-2">
+          <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
+            {t('forYou' as TranslationKey) || 'Для вас'}
+          </h2>
+        </div>
+
+        {forYouLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(i => (
+              <ListingCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+            {forYouListings!.map((listing, index) => (
+              <div
+                key={listing.id}
+                className="animate-slide-up"
+                style={{ animationDelay: `${index * 50}ms` }}
+              >
+                <ListingCardDB listing={listing} />
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </section>
   );
 };
 

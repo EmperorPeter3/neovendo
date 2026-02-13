@@ -20,7 +20,8 @@ import {
   Loader2
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { addRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
 
@@ -42,6 +43,11 @@ const ListingDetail = () => {
 
   const { data: listing, isLoading, error } = useListing(id || '');
   const createChat = useCreateChat();
+
+  // Track viewed listing
+  useEffect(() => {
+    if (id) addRecentlyViewed(id);
+  }, [id]);
   
 
   const handleContact = async () => {
