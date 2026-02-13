@@ -83,73 +83,68 @@ export const ImageDropZone = ({
         {t('images')} ({totalImages}/{maxImages})
       </label>
 
-      {/* Drop zone — fixed height matching thumbnail */}
-      {canAdd && (
-        <div
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`
-            relative rounded-xl border-2 border-dashed cursor-pointer
-            flex flex-col items-center justify-center transition-colors
-            aspect-square max-h-[140px]
-            ${isDragging
-              ? 'border-primary bg-primary/5'
-              : 'border-border hover:border-primary text-muted-foreground hover:text-primary'
-            }
-          `}
-        >
-          <ImagePlus className="w-8 h-8 mb-2" />
-          <span className="text-sm font-medium text-center px-2">
-            {isDragging ? t('dropImages' as any) || 'Отпустите для загрузки' : t('dragOrClick' as any) || 'Перетащите фото сюда или нажмите'}
-          </span>
-          <span className="text-xs text-muted-foreground mt-1">
-            {t('maxImages' as any) || `Максимум ${maxImages} фото`}
-          </span>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleInputChange}
-            className="hidden"
-          />
-        </div>
-      )}
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
+        {/* Drop zone — same size as thumbnails */}
+        {canAdd && (
+          <div
+            onDragEnter={handleDragEnter}
+            onDragLeave={handleDragLeave}
+            onDragOver={handleDragOver}
+            onDrop={handleDrop}
+            onClick={() => fileInputRef.current?.click()}
+            className={`
+              relative rounded-xl border-2 border-dashed cursor-pointer
+              flex flex-col items-center justify-center transition-colors
+              aspect-square
+              ${isDragging
+                ? 'border-primary bg-primary/5'
+                : 'border-border hover:border-primary text-muted-foreground hover:text-primary'
+              }
+            `}
+          >
+            <ImagePlus className="w-8 h-8 mb-2" />
+            <span className="text-xs font-medium text-center px-2">
+              {isDragging ? t('dropImages' as any) || 'Отпустите' : t('dragOrClick' as any) || 'Добавить фото'}
+            </span>
+            <input
+              ref={fileInputRef}
+              type="file"
+              accept="image/*"
+              multiple
+              onChange={handleInputChange}
+              className="hidden"
+            />
+          </div>
+        )}
 
-      {/* Thumbnails below the drop zone */}
-      {totalImages > 0 && (
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mt-3">
-          {existingImages.map((img, index) => (
-            <div key={`existing-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
-              <img src={img} alt={`Image ${index + 1}`} className="w-full h-full object-cover" />
-              {onRemoveExisting && (
-                <button
-                  type="button"
-                  onClick={() => onRemoveExisting(index)}
-                  className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
-          ))}
-          {newImagePreviews.map((img, index) => (
-            <div key={`new-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
-              <img src={img} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+        {/* Thumbnails in the same grid */}
+        {existingImages.map((img, index) => (
+          <div key={`existing-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+            <img src={img} alt={`Image ${index + 1}`} className="w-full h-full object-cover" />
+            {onRemoveExisting && (
               <button
                 type="button"
-                onClick={() => onRemoveNew(index)}
+                onClick={() => onRemoveExisting(index)}
                 className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
               >
                 <X className="w-4 h-4" />
               </button>
-            </div>
-          ))}
-        </div>
-      )}
+            )}
+          </div>
+        ))}
+        {newImagePreviews.map((img, index) => (
+          <div key={`new-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
+            <img src={img} alt={`Upload ${index + 1}`} className="w-full h-full object-cover" />
+            <button
+              type="button"
+              onClick={() => onRemoveNew(index)}
+              className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
