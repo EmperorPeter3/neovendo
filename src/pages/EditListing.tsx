@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { ImagePlus, X, ArrowLeft, Loader2 } from 'lucide-react';
+import { ArrowLeft, Loader2 } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
 import { useListing, useUpdateListing, useUploadListingImage } from '@/hooks/useListings';
@@ -20,6 +20,7 @@ import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/
 import { CategoryModal } from '@/components/CategoryModal';
 import { LocationPicker, LocationPickerValue } from '@/components/LocationPicker';
 import { Skeleton } from '@/components/ui/skeleton';
+import { ImageDropZone } from '@/components/ImageDropZone';
 
 const EditListing = () => {
   const { id } = useParams<{ id: string }>();
@@ -541,51 +542,18 @@ const EditListing = () => {
 
           <form ref={formRef} onSubmit={handleSubmit} className="space-y-6">
             {/* Images */}
-            <div>
-              <label className="block text-sm font-medium text-foreground mb-3">
-                {t('images')} ({totalImages}/5)
-              </label>
-              <div className="grid grid-cols-3 md:grid-cols-5 gap-3">
-                {existingImages.map((img, index) => (
-                  <div key={`existing-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
-                    <img src={img} alt={`Image ${index + 1}`} className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => removeExistingImage(index)}
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-                {newImagePreviews.map((img, index) => (
-                  <div key={`new-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
-                    <img src={img} alt={`New ${index + 1}`} className="w-full h-full object-cover" />
-                    <button
-                      type="button"
-                      onClick={() => removeNewImage(index)}
-                      className="absolute top-1 right-1 w-6 h-6 rounded-full bg-destructive text-destructive-foreground flex items-center justify-center"
-                    >
-                      <X className="w-4 h-4" />
-                    </button>
-                  </div>
-                ))}
-
-                {totalImages < 5 && (
-                  <label className="aspect-square rounded-xl border-2 border-dashed border-border hover:border-primary cursor-pointer flex flex-col items-center justify-center text-muted-foreground hover:text-primary transition-colors">
-                    <ImagePlus className="w-6 h-6 mb-1" />
-                    <span className="text-xs">Add</span>
-                    <input
-                      type="file"
-                      accept="image/*"
-                      multiple
-                      onChange={handleImageUpload}
-                      className="hidden"
-                    />
-                  </label>
-                )}
-              </div>
-            </div>
+            <ImageDropZone
+              existingImages={existingImages}
+              newImagePreviews={newImagePreviews}
+              onFilesAdded={(files) => {
+                const allowed = files.slice(0, 5 - totalImages);
+                const previews = allowed.map(f => URL.createObjectURL(f));
+                setNewImageFiles(prev => [...prev, ...allowed]);
+                setNewImagePreviews(prev => [...prev, ...previews]);
+              }}
+              onRemoveExisting={removeExistingImage}
+              onRemoveNew={removeNewImage}
+            />
 
             {/* Title */}
             <div>
