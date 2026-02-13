@@ -108,6 +108,7 @@ const EditListing = () => {
         setAtvFields({
           type: (listing as any).atv_type || '',
           brand: (listing as any).atv_brand || '',
+          model: (listing as any).atv_model || '',
           originCountry: (listing as any).atv_origin_country || '',
           year: (listing as any).atv_year?.toString() || '',
           condition: (listing as any).atv_condition || '',
@@ -132,6 +133,7 @@ const EditListing = () => {
         setQuadFields({
           type: (listing as any).quad_type || '',
           brand: (listing as any).quad_brand || '',
+          model: (listing as any).quad_model || '',
           originCountry: (listing as any).quad_origin_country || '',
           year: (listing as any).quad_year?.toString() || '',
           condition: (listing as any).quad_condition || '',
@@ -149,6 +151,7 @@ const EditListing = () => {
         setMopedFields({
           type: (listing as any).moped_type || '',
           brand: (listing as any).moped_brand || '',
+          model: (listing as any).moped_model || '',
           originCountry: (listing as any).moped_origin_country || '',
           year: (listing as any).moped_year?.toString() || '',
           condition: (listing as any).moped_condition || '',
@@ -165,6 +168,7 @@ const EditListing = () => {
         setMotoFields({
           type: (listing as any).moto_type || '',
           brand: (listing as any).moto_brand || '',
+          model: (listing as any).moto_model || '',
           originCountry: (listing as any).moto_origin_country || '',
           year: (listing as any).moto_year?.toString() || '',
           condition: (listing as any).moto_condition || '',
@@ -439,6 +443,7 @@ const EditListing = () => {
       if (isAtvListing) {
         updateData.atv_type = atvFields.type || null;
         updateData.atv_brand = atvFields.brand || null;
+        updateData.atv_model = atvFields.model || null;
         updateData.atv_origin_country = atvFields.originCountry || null;
         updateData.atv_year = atvFields.year ? parseInt(atvFields.year) : null;
         updateData.atv_condition = atvFields.condition || null;
@@ -459,6 +464,7 @@ const EditListing = () => {
       if (isQuadListing) {
         updateData.quad_type = quadFields.type || null;
         updateData.quad_brand = quadFields.brand || null;
+        updateData.quad_model = quadFields.model || null;
         updateData.quad_origin_country = quadFields.originCountry || null;
         updateData.quad_year = quadFields.year ? parseInt(quadFields.year) : null;
         updateData.quad_condition = quadFields.condition || null;
@@ -474,6 +480,7 @@ const EditListing = () => {
       if (isMopedListing) {
         updateData.moped_type = mopedFields.type || null;
         updateData.moped_brand = mopedFields.brand || null;
+        updateData.moped_model = mopedFields.model || null;
         updateData.moped_origin_country = mopedFields.originCountry || null;
         updateData.moped_year = mopedFields.year ? parseInt(mopedFields.year) : null;
         updateData.moped_condition = mopedFields.condition || null;
@@ -488,6 +495,7 @@ const EditListing = () => {
       if (isMotoListing) {
         updateData.moto_type = motoFields.type || null;
         updateData.moto_brand = motoFields.brand || null;
+        updateData.moto_model = motoFields.model || null;
         updateData.moto_origin_country = motoFields.originCountry || null;
         updateData.moto_year = motoFields.year ? parseInt(motoFields.year) : null;
         updateData.moto_condition = motoFields.condition || null;

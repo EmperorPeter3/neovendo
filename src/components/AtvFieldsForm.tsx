@@ -16,6 +16,7 @@ import {
 export interface AtvFieldsData {
   type: string;
   brand: string;
+  model: string;
   originCountry: string;
   year: string;
   condition: 'new' | 'used' | 'for_parts' | '';
@@ -30,6 +31,7 @@ export interface AtvFieldsData {
 export const defaultAtvFields: AtvFieldsData = {
   type: '',
   brand: '',
+  model: '',
   originCountry: '',
   year: '',
   condition: '',
@@ -90,6 +92,17 @@ export function AtvFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
           placeholder={safeT(t, 'atvFilters.brandPlaceholder')}
           value={data.brand}
           onChange={(e) => handleChange('brand', e.target.value)}
+        />
+      </div>
+
+      {/* Model */}
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">{safeT(t, 'model')}</Label>
+        <Input
+          type="text"
+          placeholder={safeT(t, 'enterModel')}
+          value={data.model}
+          onChange={(e) => handleChange('model', e.target.value)}
         />
       </div>
 

@@ -315,6 +315,71 @@ const CreateListing = () => {
         if (carFields.powerWatt) (listingData as any).car_power_watt = parseInt(carFields.powerWatt);
       }
 
+      if (isAtvListing) {
+        if (atvFields.type) (listingData as any).atv_type = atvFields.type;
+        if (atvFields.brand) (listingData as any).atv_brand = atvFields.brand;
+        if (atvFields.model) (listingData as any).atv_model = atvFields.model;
+        if (atvFields.originCountry) (listingData as any).atv_origin_country = atvFields.originCountry;
+        if (atvFields.year) (listingData as any).atv_year = parseInt(atvFields.year);
+        if (atvFields.condition) (listingData as any).atv_condition = atvFields.condition;
+        if (atvFields.engineType) (listingData as any).atv_engine_type = atvFields.engineType;
+        if (atvFields.engineVolume) (listingData as any).atv_engine_volume = parseFloat(atvFields.engineVolume);
+        if (atvFields.power) (listingData as any).atv_power = parseInt(atvFields.power);
+        if (atvFields.powerWatt) (listingData as any).atv_power_watt = parseInt(atvFields.powerWatt);
+        if (atvFields.mileage) (listingData as any).atv_mileage = parseInt(atvFields.mileage);
+        if (atvFields.maxPassengers) (listingData as any).atv_max_passengers = parseInt(atvFields.maxPassengers);
+      }
+
+      if (isKartingListing) {
+        if (kartingFields.condition) (listingData as any).kart_condition = kartingFields.condition;
+      }
+
+      if (isQuadListing) {
+        if (quadFields.type) (listingData as any).quad_type = quadFields.type;
+        if (quadFields.brand) (listingData as any).quad_brand = quadFields.brand;
+        if (quadFields.model) (listingData as any).quad_model = quadFields.model;
+        if (quadFields.originCountry) (listingData as any).quad_origin_country = quadFields.originCountry;
+        if (quadFields.year) (listingData as any).quad_year = parseInt(quadFields.year);
+        if (quadFields.condition) (listingData as any).quad_condition = quadFields.condition;
+        if (quadFields.engineType) (listingData as any).quad_engine_type = quadFields.engineType;
+        if (quadFields.engineVolume) (listingData as any).quad_engine_volume = parseFloat(quadFields.engineVolume);
+        if (quadFields.power) (listingData as any).quad_power = parseInt(quadFields.power);
+        if (quadFields.powerWatt) (listingData as any).quad_power_watt = parseInt(quadFields.powerWatt);
+        if (quadFields.mileage) (listingData as any).quad_mileage = parseInt(quadFields.mileage);
+        if (quadFields.maxPassengers) (listingData as any).quad_max_passengers = parseInt(quadFields.maxPassengers);
+      }
+
+      if (isMopedListing) {
+        if (mopedFields.type) (listingData as any).moped_type = mopedFields.type;
+        if (mopedFields.brand) (listingData as any).moped_brand = mopedFields.brand;
+        if (mopedFields.model) (listingData as any).moped_model = mopedFields.model;
+        if (mopedFields.originCountry) (listingData as any).moped_origin_country = mopedFields.originCountry;
+        if (mopedFields.year) (listingData as any).moped_year = parseInt(mopedFields.year);
+        if (mopedFields.condition) (listingData as any).moped_condition = mopedFields.condition;
+        if (mopedFields.engineType) (listingData as any).moped_engine_type = mopedFields.engineType;
+        if (mopedFields.engineVolume) (listingData as any).moped_engine_volume = parseFloat(mopedFields.engineVolume);
+        if (mopedFields.power) (listingData as any).moped_power = parseInt(mopedFields.power);
+        if (mopedFields.powerWatt) (listingData as any).moped_power_watt = parseInt(mopedFields.powerWatt);
+        if (mopedFields.mileage) (listingData as any).moped_mileage = parseInt(mopedFields.mileage);
+      }
+
+      if (isMotoListing) {
+        if (motoFields.type) (listingData as any).moto_type = motoFields.type;
+        if (motoFields.brand) (listingData as any).moto_brand = motoFields.brand;
+        if (motoFields.model) (listingData as any).moto_model = motoFields.model;
+        if (motoFields.originCountry) (listingData as any).moto_origin_country = motoFields.originCountry;
+        if (motoFields.year) (listingData as any).moto_year = parseInt(motoFields.year);
+        if (motoFields.condition) (listingData as any).moto_condition = motoFields.condition;
+        if (motoFields.engineType) (listingData as any).moto_engine_type = motoFields.engineType;
+        if (motoFields.engineVolume) (listingData as any).moto_engine_volume = parseFloat(motoFields.engineVolume);
+        if (motoFields.powerHp) (listingData as any).moto_power_hp = parseInt(motoFields.powerHp);
+        if (motoFields.powerWatt) (listingData as any).moto_power_watt = parseInt(motoFields.powerWatt);
+        if (motoFields.fuelDelivery) (listingData as any).moto_fuel_delivery = motoFields.fuelDelivery;
+        if (motoFields.strokes) (listingData as any).moto_strokes = parseInt(motoFields.strokes);
+        if (motoFields.transmission) (listingData as any).moto_transmission = motoFields.transmission;
+        if (motoFields.mileage) (listingData as any).moto_mileage = parseInt(motoFields.mileage);
+      }
+
       await createListing.mutateAsync(listingData);
 
       toast({

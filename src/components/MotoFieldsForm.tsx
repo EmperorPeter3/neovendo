@@ -15,6 +15,7 @@ import { motoTypes, motoOriginCountries, motoConditions, motoEngineTypes, motoFu
 export interface MotoFieldsData {
   type: string;
   brand: string;
+  model: string;
   originCountry: string;
   year: string;
   condition: string;
@@ -31,6 +32,7 @@ export interface MotoFieldsData {
 export const defaultMotoFields: MotoFieldsData = {
   type: '',
   brand: '',
+  model: '',
   originCountry: '',
   year: '',
   condition: '',
@@ -91,6 +93,17 @@ export const MotoFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError 
         />
       </div>
 
+      {/* Model */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('model' as TranslationKey)}</Label>
+        <Input
+          value={data.model}
+          onChange={(e) => updateField('model', e.target.value)}
+          placeholder={t('enterModel' as TranslationKey)}
+          className="h-12"
+        />
+      </div>
+
       {/* Origin Country */}
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('originCountry' as TranslationKey)}</Label>
@@ -101,7 +114,7 @@ export const MotoFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError 
           <SelectContent>
             {motoOriginCountries.map(country => (
               <SelectItem key={country} value={country}>
-                {t(`country.${country}` as TranslationKey)}
+                {t(`countries.${country}` as TranslationKey)}
               </SelectItem>
             ))}
           </SelectContent>
