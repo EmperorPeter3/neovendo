@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
@@ -10,10 +11,14 @@ import {
 } from '@/components/ui/select';
 
 export interface KartingFieldsData {
+  brand: string;
+  model: string;
   condition: string;
 }
 
 export const defaultKartingFields: KartingFieldsData = {
+  brand: '',
+  model: '',
   condition: '',
 };
 
@@ -31,28 +36,55 @@ const KartingFieldsForm: React.FC<KartingFieldsFormProps> = ({
   onClearError,
 }) => {
   const { t } = useLanguage();
+  const tAny = (key: string) => t(key as any);
 
   const conditionOptions = [
-    { value: 'new', label: t('kartingFilters.conditionNew') },
-    { value: 'used', label: t('kartingFilters.conditionUsed') },
-    { value: 'for_parts', label: t('kartingFilters.conditionForParts') },
+    { value: 'new', label: tAny('kartingFilters.conditionNew') },
+    { value: 'used', label: tAny('kartingFilters.conditionUsed') },
+    { value: 'for_parts', label: tAny('kartingFilters.conditionForParts') },
   ];
 
-  const handleConditionChange = (value: string) => {
-    onChange({ ...data, condition: value });
-    onClearError?.('kart_condition');
+  const handleChange = (field: keyof KartingFieldsData, value: string) => {
+    onChange({ ...data, [field]: value });
+    if (onClearError && fieldErrors[field]) {
+      onClearError(field);
+    }
   };
+
+  const getInputClass = (field: string) =>
+    fieldErrors[field] ? 'border-destructive ring-destructive' : '';
 
   return (
     <div className="space-y-4">
-      <h3 className="text-lg font-semibold">{t('kartingFilters.title')}</h3>
-      
+      <h3 className="text-lg font-semibold">{tAny('kartingFilters.title')}</h3>
+
+      {/* Brand */}
+      <div className="space-y-2">
+        <Label>{tAny('brand')}</Label>
+        <Input
+          placeholder={tAny('enterBrand')}
+          value={data.brand}
+          onChange={(e) => handleChange('brand', e.target.value)}
+          className={getInputClass('kart_brand')}
+        />
+      </div>
+
+      {/* Model */}
+      <div className="space-y-2">
+        <Label>{tAny('model')}</Label>
+        <Input
+          placeholder={tAny('enterModel')}
+          value={data.model}
+          onChange={(e) => handleChange('model', e.target.value)}
+        />
+      </div>
+
       {/* Condition */}
       <div className="space-y-2">
-        <Label>{t('kartingFilters.condition')}</Label>
-        <Select value={data.condition} onValueChange={handleConditionChange}>
-          <SelectTrigger className={fieldErrors.kart_condition ? 'border-destructive' : ''}>
-            <SelectValue placeholder={t('filters.select')} />
+        <Label>{tAny('kartingFilters.condition')}</Label>
+        <Select value={data.condition} onValueChange={(v) => handleChange('condition', v)}>
+          <SelectTrigger className={getInputClass('kart_condition')}>
+            <SelectValue placeholder={tAny('filters.select')} />
           </SelectTrigger>
           <SelectContent>
             {conditionOptions.map((option) => (

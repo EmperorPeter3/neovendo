@@ -124,6 +124,8 @@ const EditListing = () => {
       // Karting fields
       if (listing.subcategory === 'karting') {
         setKartingFields({
+          brand: (listing as any).kart_brand || '',
+          model: (listing as any).kart_model || '',
           condition: (listing as any).kart_condition || '',
         });
       }
@@ -457,6 +459,8 @@ const EditListing = () => {
 
       // Karting fields
       if (isKartingListing) {
+        updateData.kart_brand = kartingFields.brand || null;
+        updateData.kart_model = kartingFields.model || null;
         updateData.kart_condition = kartingFields.condition || null;
       }
 

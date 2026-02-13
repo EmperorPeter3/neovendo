@@ -218,6 +218,10 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
   function buildKartingSpecs(s: SpecItem[]) {
     const l = listing;
     if (l.kart_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition.label'), conditionMap(l.kart_condition));
+    if ((l as any).kart_brand) {
+      const val = (l as any).kart_model ? `${(l as any).kart_brand} ${(l as any).kart_model}` : (l as any).kart_brand;
+      addSpec(<Car className="w-5 h-5" />, tAny('brand'), val);
+    }
   }
 
   function capitalize(s: string) {
