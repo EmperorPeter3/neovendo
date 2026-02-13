@@ -331,6 +331,8 @@ const CreateListing = () => {
       }
 
       if (isKartingListing) {
+        if (kartingFields.brand) (listingData as any).kart_brand = kartingFields.brand;
+        if (kartingFields.model) (listingData as any).kart_model = kartingFields.model;
         if (kartingFields.condition) (listingData as any).kart_condition = kartingFields.condition;
       }
 

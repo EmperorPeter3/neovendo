@@ -83,9 +83,45 @@ export const ImageDropZone = ({
         {t('images')} ({totalImages}/{maxImages})
       </label>
 
-      {/* Thumbnails */}
+      {/* Drop zone — fixed height matching thumbnail */}
+      {canAdd && (
+        <div
+          onDragEnter={handleDragEnter}
+          onDragLeave={handleDragLeave}
+          onDragOver={handleDragOver}
+          onDrop={handleDrop}
+          onClick={() => fileInputRef.current?.click()}
+          className={`
+            relative rounded-xl border-2 border-dashed cursor-pointer
+            flex flex-col items-center justify-center transition-colors
+            aspect-square max-h-[140px]
+            ${isDragging
+              ? 'border-primary bg-primary/5'
+              : 'border-border hover:border-primary text-muted-foreground hover:text-primary'
+            }
+          `}
+        >
+          <ImagePlus className="w-8 h-8 mb-2" />
+          <span className="text-sm font-medium text-center px-2">
+            {isDragging ? t('dropImages' as any) || 'Отпустите для загрузки' : t('dragOrClick' as any) || 'Перетащите фото сюда или нажмите'}
+          </span>
+          <span className="text-xs text-muted-foreground mt-1">
+            {t('maxImages' as any) || `Максимум ${maxImages} фото`}
+          </span>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleInputChange}
+            className="hidden"
+          />
+        </div>
+      )}
+
+      {/* Thumbnails below the drop zone */}
       {totalImages > 0 && (
-        <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-3">
+        <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mt-3">
           {existingImages.map((img, index) => (
             <div key={`existing-${index}`} className="relative aspect-square rounded-xl overflow-hidden bg-muted">
               <img src={img} alt={`Image ${index + 1}`} className="w-full h-full object-cover" />
@@ -112,41 +148,6 @@ export const ImageDropZone = ({
               </button>
             </div>
           ))}
-        </div>
-      )}
-
-      {/* Drop zone */}
-      {canAdd && (
-        <div
-          onDragEnter={handleDragEnter}
-          onDragLeave={handleDragLeave}
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          onClick={() => fileInputRef.current?.click()}
-          className={`
-            relative rounded-xl border-2 border-dashed cursor-pointer
-            flex flex-col items-center justify-center py-8 transition-colors
-            ${isDragging
-              ? 'border-primary bg-primary/5'
-              : 'border-border hover:border-primary text-muted-foreground hover:text-primary'
-            }
-          `}
-        >
-          <ImagePlus className="w-8 h-8 mb-2" />
-          <span className="text-sm font-medium">
-            {isDragging ? t('dropImages' as any) || 'Отпустите для загрузки' : t('dragOrClick' as any) || 'Перетащите фото сюда или нажмите'}
-          </span>
-          <span className="text-xs text-muted-foreground mt-1">
-            {t('maxImages' as any) || `Максимум ${maxImages} фото`}
-          </span>
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            multiple
-            onChange={handleInputChange}
-            className="hidden"
-          />
         </div>
       )}
     </div>
