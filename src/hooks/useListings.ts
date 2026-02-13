@@ -39,6 +39,7 @@ export interface ListingWithOwner {
   // ATV-specific fields
   atv_type: string | null;
   atv_brand: string | null;
+  atv_model: string | null;
   atv_origin_country: string | null;
   atv_year: number | null;
   atv_condition: string | null;
@@ -52,6 +53,7 @@ export interface ListingWithOwner {
   // Quad-specific fields
   quad_type: string | null;
   quad_brand: string | null;
+  quad_model: string | null;
   quad_origin_country: string | null;
   quad_year: number | null;
   quad_condition: string | null;
@@ -63,6 +65,7 @@ export interface ListingWithOwner {
   // Moped-specific fields
   moped_type: string | null;
   moped_brand: string | null;
+  moped_model: string | null;
   moped_origin_country: string | null;
   moped_year: number | null;
   moped_condition: string | null;
@@ -73,6 +76,7 @@ export interface ListingWithOwner {
   // Motorcycle-specific fields
   moto_type: string | null;
   moto_brand: string | null;
+  moto_model: string | null;
   moto_origin_country: string | null;
   moto_year: number | null;
   moto_condition: string | null;

@@ -8,7 +8,7 @@ import { useListing } from '@/hooks/useListings';
 import { useCreateChat } from '@/hooks/useChats';
 import { FavoriteButton } from '@/components/FavoriteButton';
 import { ShareButton } from '@/components/ShareButton';
-import { CarSpecifications } from '@/components/CarSpecifications';
+import { TransportSpecifications } from '@/components/TransportSpecifications';
 import { 
   ArrowLeft, 
   MapPin, 
@@ -216,8 +216,8 @@ const ListingDetail = () => {
               </p>
             </div>
 
-            {/* Car Specifications */}
-            <CarSpecifications listing={listing} />
+            {/* Transport Specifications */}
+            <TransportSpecifications listing={listing} />
 
           </div>
 
