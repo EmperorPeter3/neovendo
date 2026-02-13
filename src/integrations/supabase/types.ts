@@ -86,6 +86,7 @@ export type Database = {
           atv_engine_volume: number | null
           atv_max_passengers: number | null
           atv_mileage: number | null
+          atv_model: string | null
           atv_origin_country: string | null
           atv_power: number | null
           atv_power_watt: number | null
@@ -123,6 +124,7 @@ export type Database = {
           moped_engine_type: string | null
           moped_engine_volume: number | null
           moped_mileage: number | null
+          moped_model: string | null
           moped_origin_country: string | null
           moped_power: number | null
           moped_power_watt: number | null
@@ -134,6 +136,7 @@ export type Database = {
           moto_engine_volume: number | null
           moto_fuel_delivery: string | null
           moto_mileage: number | null
+          moto_model: string | null
           moto_origin_country: string | null
           moto_power_hp: number | null
           moto_power_watt: number | null
@@ -149,6 +152,7 @@ export type Database = {
           quad_engine_volume: number | null
           quad_max_passengers: number | null
           quad_mileage: number | null
+          quad_model: string | null
           quad_origin_country: string | null
           quad_power: number | null
           quad_power_watt: number | null
@@ -166,6 +170,7 @@ export type Database = {
           atv_engine_volume?: number | null
           atv_max_passengers?: number | null
           atv_mileage?: number | null
+          atv_model?: string | null
           atv_origin_country?: string | null
           atv_power?: number | null
           atv_power_watt?: number | null
@@ -203,6 +208,7 @@ export type Database = {
           moped_engine_type?: string | null
           moped_engine_volume?: number | null
           moped_mileage?: number | null
+          moped_model?: string | null
           moped_origin_country?: string | null
           moped_power?: number | null
           moped_power_watt?: number | null
@@ -214,6 +220,7 @@ export type Database = {
           moto_engine_volume?: number | null
           moto_fuel_delivery?: string | null
           moto_mileage?: number | null
+          moto_model?: string | null
           moto_origin_country?: string | null
           moto_power_hp?: number | null
           moto_power_watt?: number | null
@@ -229,6 +236,7 @@ export type Database = {
           quad_engine_volume?: number | null
           quad_max_passengers?: number | null
           quad_mileage?: number | null
+          quad_model?: string | null
           quad_origin_country?: string | null
           quad_power?: number | null
           quad_power_watt?: number | null
@@ -246,6 +254,7 @@ export type Database = {
           atv_engine_volume?: number | null
           atv_max_passengers?: number | null
           atv_mileage?: number | null
+          atv_model?: string | null
           atv_origin_country?: string | null
           atv_power?: number | null
           atv_power_watt?: number | null
@@ -283,6 +292,7 @@ export type Database = {
           moped_engine_type?: string | null
           moped_engine_volume?: number | null
           moped_mileage?: number | null
+          moped_model?: string | null
           moped_origin_country?: string | null
           moped_power?: number | null
           moped_power_watt?: number | null
@@ -294,6 +304,7 @@ export type Database = {
           moto_engine_volume?: number | null
           moto_fuel_delivery?: string | null
           moto_mileage?: number | null
+          moto_model?: string | null
           moto_origin_country?: string | null
           moto_power_hp?: number | null
           moto_power_watt?: number | null
@@ -309,6 +320,7 @@ export type Database = {
           quad_engine_volume?: number | null
           quad_max_passengers?: number | null
           quad_mileage?: number | null
+          quad_model?: string | null
           quad_origin_country?: string | null
           quad_power?: number | null
           quad_power_watt?: number | null

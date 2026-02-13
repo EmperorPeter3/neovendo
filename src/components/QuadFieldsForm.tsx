@@ -10,6 +10,7 @@ import { quadTypes, quadOriginCountries, quadConditions, quadEngineTypes, getYea
 export interface QuadFieldsData {
   type: string;
   brand: string;
+  model: string;
   originCountry: string;
   year: string;
   condition: string;
@@ -24,6 +25,7 @@ export interface QuadFieldsData {
 export const defaultQuadFields: QuadFieldsData = {
   type: '',
   brand: '',
+  model: '',
   originCountry: '',
   year: '',
   condition: '',
@@ -90,6 +92,16 @@ export function QuadFieldsForm({ data, onChange, fieldErrors = {}, onClearError 
           value={data.brand}
           onChange={(e) => handleChange('brand', e.target.value)}
           className={getInputClass('brand')}
+        />
+      </div>
+
+      {/* Model */}
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">{safeT('model')}</Label>
+        <Input
+          placeholder={safeT('enterModel')}
+          value={data.model}
+          onChange={(e) => handleChange('model', e.target.value)}
         />
       </div>
 

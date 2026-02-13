@@ -15,6 +15,7 @@ import { TranslationKey } from '@/i18n/translations';
 export interface MopedFieldsData {
   type: string;
   brand: string;
+  model: string;
   originCountry: string;
   year: string;
   condition: string;
@@ -28,6 +29,7 @@ export interface MopedFieldsData {
 export const defaultMopedFields: MopedFieldsData = {
   type: '',
   brand: '',
+  model: '',
   originCountry: '',
   year: '',
   condition: '',
@@ -109,6 +111,17 @@ const MopedFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError }: Mop
           onChange={(e) => updateField('brand', e.target.value)}
           placeholder={t('mopedFilters.brandPlaceholder' as TranslationKey)}
           className={`h-10 ${fieldErrors.mopedBrand ? 'border-destructive' : ''}`}
+        />
+      </div>
+
+      {/* Model */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('model' as TranslationKey)}</Label>
+        <Input
+          value={data.model}
+          onChange={(e) => updateField('model', e.target.value)}
+          placeholder={t('enterModel' as TranslationKey)}
+          className="h-10"
         />
       </div>
 
