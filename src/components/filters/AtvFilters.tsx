@@ -263,6 +263,13 @@ export function AtvFilters({ filters, onChange }: AtvFiltersProps) {
         </RadioGroup>
       </div>
 
+      {/* Mileage - right after condition, hidden when new */}
+      {filters.condition !== 'new' && (
+        <>
+          {renderRangeInputs('atvFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo', safeT(t, 'units.km'))}
+        </>
+      )}
+
       <Separator />
 
       {/* Engine Type */}
@@ -306,9 +313,6 @@ export function AtvFilters({ filters, onChange }: AtvFiltersProps) {
 
       {/* Power (W) */}
       {renderRangeInputs('powerWatt', filters.powerWattFrom, filters.powerWattTo, 'powerWattFrom', 'powerWattTo', safeT(t, 'units.watt'))}
-
-      {/* Mileage */}
-      {renderRangeInputs('atvFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo', safeT(t, 'units.km'))}
 
       <Separator />
 

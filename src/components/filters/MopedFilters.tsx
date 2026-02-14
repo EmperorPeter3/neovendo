@@ -237,6 +237,31 @@ export const MopedFilters = ({ filters, onChange }: MopedFiltersProps) => {
         </RadioGroup>
       </div>
 
+      {/* Mileage - right after condition, hidden when new */}
+      {filters.condition !== 'new' && (
+        <div>
+          <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.mileage' as TranslationKey)} (km)</Label>
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              value={filters.mileageFrom}
+              onChange={(e) => updateFilter('mileageFrom', e.target.value)}
+              placeholder={t('mopedFilters.from' as TranslationKey)}
+              className="flex-1 h-10"
+              min="0"
+            />
+            <Input
+              type="number"
+              value={filters.mileageTo}
+              onChange={(e) => updateFilter('mileageTo', e.target.value)}
+              placeholder={t('mopedFilters.to' as TranslationKey)}
+              className="flex-1 h-10"
+              min="0"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Engine Type */}
       <div>
         <Label className="text-sm font-medium mb-3 block">{t('mopedFilters.engineType' as TranslationKey)}</Label>
@@ -328,29 +353,6 @@ export const MopedFilters = ({ filters, onChange }: MopedFiltersProps) => {
             type="number"
             value={filters.powerWattTo}
             onChange={(e) => updateFilter('powerWattTo', e.target.value)}
-            placeholder={t('mopedFilters.to' as TranslationKey)}
-            className="flex-1 h-10"
-            min="0"
-          />
-        </div>
-      </div>
-
-      {/* Mileage Range */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.mileage' as TranslationKey)} (km)</Label>
-        <div className="flex gap-2">
-          <Input
-            type="number"
-            value={filters.mileageFrom}
-            onChange={(e) => updateFilter('mileageFrom', e.target.value)}
-            placeholder={t('mopedFilters.from' as TranslationKey)}
-            className="flex-1 h-10"
-            min="0"
-          />
-          <Input
-            type="number"
-            value={filters.mileageTo}
-            onChange={(e) => updateFilter('mileageTo', e.target.value)}
             placeholder={t('mopedFilters.to' as TranslationKey)}
             className="flex-1 h-10"
             min="0"
