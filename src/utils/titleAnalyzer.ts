@@ -61,7 +61,16 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
   const lower = title.toLowerCase();
   const padded = ` ${lower} `;
 
-  // Check moto brands first
+  // Keyword-based detection FIRST (highest priority)
+  for (const entry of categoryKeywords) {
+    for (const keyword of entry.keywords) {
+      if (padded.includes(keyword)) {
+        return entry.suggestion;
+      }
+    }
+  }
+
+  // Check moto brands
   for (const brand of motoBrands) {
     if (lower.includes(brand)) {
       const hasCarKeyword = ['car ', 'auto ', 'авто ', 'машин', 'автомобиль'].some(k => padded.includes(k));
@@ -75,7 +84,7 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
     }
   }
 
-  // Check car brands - sort longest first
+  // Check car brands
   const sortedCarBrands = [...carBrands].sort((a, b) => b.name.length - a.name.length);
   for (const brand of sortedCarBrands) {
     const brandName = brand.name.toLowerCase();
@@ -84,15 +93,6 @@ export function analyzeTitleForCategory(title: string): CategorySuggestion | nul
       const hasMotoKeyword = ['motorcycle', 'мотоцикл', 'байк', 'мото ', 'bike'].some(k => lower.includes(k));
       if (!hasMotoKeyword) {
         return { category: 'transport', subcategory: 'cars' };
-      }
-    }
-  }
-
-  // Keyword-based detection
-  for (const entry of categoryKeywords) {
-    for (const keyword of entry.keywords) {
-      if (padded.includes(keyword)) {
-        return entry.suggestion;
       }
     }
   }
