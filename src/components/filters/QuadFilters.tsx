@@ -29,9 +29,12 @@ export interface QuadFiltersState {
   engineElectric: boolean;
   engineVolumeFrom: string;
   engineVolumeTo: string;
-  // Power
+  // Power (hp)
   powerFrom: string;
   powerTo: string;
+  // Power (W)
+  powerWattFrom: string;
+  powerWattTo: string;
   // Mileage
   mileageFrom: string;
   mileageTo: string;
@@ -59,6 +62,8 @@ export const defaultQuadFilters: QuadFiltersState = {
   engineVolumeTo: '',
   powerFrom: '',
   powerTo: '',
+  powerWattFrom: '',
+  powerWattTo: '',
   mileageFrom: '',
   mileageTo: '',
   maxPassengersFrom: '',
@@ -255,8 +260,11 @@ export function QuadFilters({ filters, onChange }: QuadFiltersProps) {
       {/* Engine Volume */}
       {renderRangeInputs(`${safeT('quadFilters.engineVolume')} (${safeT('carFilters.cc')})`, 'engineVolumeFrom', 'engineVolumeTo')}
 
-      {/* Power */}
+      {/* Power (hp) */}
       {renderRangeInputs(`${safeT('quadFilters.power')} (${safeT('units.hp')})`, 'powerFrom', 'powerTo')}
+
+      {/* Power (W) */}
+      {renderRangeInputs(`${safeT('powerWatt')} (${safeT('units.watt')})`, 'powerWattFrom', 'powerWattTo')}
 
       {/* Mileage */}
       {renderRangeInputs(`${safeT('quadFilters.mileage')} (${safeT('units.km')})`, 'mileageFrom', 'mileageTo')}

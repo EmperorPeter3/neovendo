@@ -36,9 +36,12 @@ export interface AtvFiltersState {
   // Engine volume range
   engineVolumeFrom: string;
   engineVolumeTo: string;
-  // Power range
+  // Power range (hp)
   powerFrom: string;
   powerTo: string;
+  // Power range (W)
+  powerWattFrom: string;
+  powerWattTo: string;
   // Mileage range
   mileageFrom: string;
   mileageTo: string;
@@ -65,6 +68,8 @@ export const defaultAtvFilters: AtvFiltersState = {
   engineVolumeTo: '',
   powerFrom: '',
   powerTo: '',
+  powerWattFrom: '',
+  powerWattTo: '',
   mileageFrom: '',
   mileageTo: '',
   maxPassengersFrom: '',
@@ -296,8 +301,11 @@ export function AtvFilters({ filters, onChange }: AtvFiltersProps) {
       {/* Engine Volume */}
       {renderRangeInputs('atvFilters.engineVolume', filters.engineVolumeFrom, filters.engineVolumeTo, 'engineVolumeFrom', 'engineVolumeTo', 'cc')}
 
-      {/* Power */}
+      {/* Power (hp) */}
       {renderRangeInputs('atvFilters.power', filters.powerFrom, filters.powerTo, 'powerFrom', 'powerTo', safeT(t, 'units.hp'))}
+
+      {/* Power (W) */}
+      {renderRangeInputs('powerWatt', filters.powerWattFrom, filters.powerWattTo, 'powerWattFrom', 'powerWattTo', safeT(t, 'units.watt'))}
 
       {/* Mileage */}
       {renderRangeInputs('atvFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo', safeT(t, 'units.km'))}

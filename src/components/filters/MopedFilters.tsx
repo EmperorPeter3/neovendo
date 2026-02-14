@@ -37,6 +37,9 @@ export interface MopedFiltersState {
   // Power range (hp)
   powerFrom: string;
   powerTo: string;
+  // Power range (W)
+  powerWattFrom: string;
+  powerWattTo: string;
   // Mileage range (km)
   mileageFrom: string;
   mileageTo: string;
@@ -60,6 +63,8 @@ export const defaultMopedFilters: MopedFiltersState = {
   engineVolumeTo: '',
   powerFrom: '',
   powerTo: '',
+  powerWattFrom: '',
+  powerWattTo: '',
   mileageFrom: '',
   mileageTo: '',
   descriptionSearch: '',
@@ -284,7 +289,7 @@ export const MopedFilters = ({ filters, onChange }: MopedFiltersProps) => {
         </div>
       </div>
 
-      {/* Power Range */}
+      {/* Power Range (hp) */}
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.power' as TranslationKey)} (hp)</Label>
         <div className="flex gap-2">
@@ -300,6 +305,29 @@ export const MopedFilters = ({ filters, onChange }: MopedFiltersProps) => {
             type="number"
             value={filters.powerTo}
             onChange={(e) => updateFilter('powerTo', e.target.value)}
+            placeholder={t('mopedFilters.to' as TranslationKey)}
+            className="flex-1 h-10"
+            min="0"
+          />
+        </div>
+      </div>
+
+      {/* Power Range (W) */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('powerWatt' as TranslationKey)}</Label>
+        <div className="flex gap-2">
+          <Input
+            type="number"
+            value={filters.powerWattFrom}
+            onChange={(e) => updateFilter('powerWattFrom', e.target.value)}
+            placeholder={t('mopedFilters.from' as TranslationKey)}
+            className="flex-1 h-10"
+            min="0"
+          />
+          <Input
+            type="number"
+            value={filters.powerWattTo}
+            onChange={(e) => updateFilter('powerWattTo', e.target.value)}
             placeholder={t('mopedFilters.to' as TranslationKey)}
             className="flex-1 h-10"
             min="0"
