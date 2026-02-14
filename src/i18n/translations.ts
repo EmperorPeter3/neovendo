@@ -127,6 +127,7 @@ export const translations = {
     watercraft_motorboats: "Motorboats & Engines",
     
     // Real Estate subcategories
+    sell_housing: "Sell Housing",
     buy: "Buy Housing",
     buy_all_apartments: "All Apartments",
     buy_secondary: "Resale",
@@ -1155,6 +1156,7 @@ export const translations = {
     watercraft_motorboats: "Barcos a Motor e Motores",
     
     // Real Estate subcategories
+    sell_housing: "Vender Imóvel",
     buy: "Comprar Imóvel",
     buy_all_apartments: "Todos os Apartamentos",
     buy_secondary: "Revenda",
@@ -1960,6 +1962,7 @@ export const translations = {
     watercraft_motorboats: "Lanchas a Motor y Motores",
     
     // Real Estate subcategories
+    sell_housing: "Vender Vivienda",
     buy: "Comprar Vivienda",
     buy_all_apartments: "Todos los Pisos",
     buy_secondary: "Segunda Mano",
@@ -2765,6 +2768,7 @@ export const translations = {
     watercraft_motorboats: "Motorboote und Motoren",
     
     // Real Estate subcategories
+    sell_housing: "Wohnung verkaufen",
     buy: "Wohnung kaufen",
     buy_all_apartments: "Alle Wohnungen",
     buy_secondary: "Gebraucht",
@@ -3570,6 +3574,7 @@ export const translations = {
     watercraft_motorboats: "Bateaux à Moteur et Moteurs",
     
     // Real Estate subcategories
+    sell_housing: "Vendre un Logement",
     buy: "Acheter un Logement",
     buy_all_apartments: "Tous les Appartements",
     buy_secondary: "Ancien",
@@ -4375,6 +4380,7 @@ export const translations = {
     watercraft_motorboats: "Barche a Motore e Motori",
     
     // Real Estate subcategories
+    sell_housing: "Vendere Casa",
     buy: "Acquistare Casa",
     buy_all_apartments: "Tutti gli Appartamenti",
     buy_secondary: "Usato",
@@ -5183,6 +5189,7 @@ export const translations = {
     watercraft_motorboats: "Моторные лодки и моторы",
     
     // Real Estate subcategories
+    sell_housing: "Продать жильё",
     buy: "Купить жильё",
     buy_all_apartments: "Все квартиры",
     buy_secondary: "Вторичка",
