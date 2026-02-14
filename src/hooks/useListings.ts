@@ -257,6 +257,39 @@ export interface SnowmobileQueryFilters {
   descriptionSearch?: string;
 }
 
+export interface ApartmentQueryFilters {
+  rooms?: string[];
+  mortgage?: boolean;
+  pricePerSqmFrom?: number;
+  pricePerSqmTo?: number;
+  areaFrom?: number;
+  areaTo?: number;
+  floorFrom?: number;
+  floorTo?: number;
+  notFirstFloor?: boolean;
+  notLastFloor?: boolean;
+  onlyLastFloor?: boolean;
+  housingType?: string;
+  sellerType?: string;
+  bathroom?: string;
+  windows?: string[];
+  buildYearFrom?: number;
+  buildYearTo?: number;
+  totalFloorsFrom?: number;
+  totalFloorsTo?: number;
+  buildingType?: string;
+  elevators?: string[];
+  parkings?: string[];
+  renovation?: string;
+  kitchenAreaFrom?: number;
+  kitchenAreaTo?: number;
+  roomType?: string;
+  balconies?: string[];
+  ceilingHeightFrom?: number;
+  ceilingHeightTo?: number;
+  photosOnly?: boolean;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -276,6 +309,7 @@ export const useListings = (filters?: {
   mopeds?: MopedQueryFilters;
   motos?: MotoQueryFilters;
   snowmobiles?: SnowmobileQueryFilters;
+  apartments?: ApartmentQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -725,6 +759,102 @@ export const useListings = (filters?: {
         }
         if (snowmobiles.descriptionSearch) {
           query = query.ilike('description', `%${snowmobiles.descriptionSearch}%`);
+        }
+      }
+
+      // Apartment-specific filters
+      const apartments = filters?.apartments;
+      if (apartments) {
+        if (apartments.rooms && apartments.rooms.length > 0) {
+          query = query.in('apt_rooms', apartments.rooms);
+        }
+        if (apartments.mortgage) {
+          query = query.eq('apt_mortgage', true);
+        }
+        if (apartments.pricePerSqmFrom !== undefined) {
+          query = query.gte('apt_price_per_sqm', apartments.pricePerSqmFrom);
+        }
+        if (apartments.pricePerSqmTo !== undefined) {
+          query = query.lte('apt_price_per_sqm', apartments.pricePerSqmTo);
+        }
+        if (apartments.areaFrom !== undefined) {
+          query = query.gte('apt_area', apartments.areaFrom);
+        }
+        if (apartments.areaTo !== undefined) {
+          query = query.lte('apt_area', apartments.areaTo);
+        }
+        if (apartments.floorFrom !== undefined) {
+          query = query.gte('apt_floor', apartments.floorFrom);
+        }
+        if (apartments.floorTo !== undefined) {
+          query = query.lte('apt_floor', apartments.floorTo);
+        }
+        if (apartments.notFirstFloor) {
+          query = query.gt('apt_floor', 1);
+        }
+        if (apartments.notLastFloor) {
+          query = query.not('apt_floor', 'eq', (query as any)._filterBuilder ? undefined : undefined);
+          // Client-side filter needed for "not last floor" - handled below
+        }
+        if (apartments.onlyLastFloor) {
+          // Client-side filter needed - handled below
+        }
+        if (apartments.housingType && apartments.housingType !== 'all') {
+          query = query.eq('apt_housing_type', apartments.housingType);
+        }
+        if (apartments.sellerType && apartments.sellerType !== 'all') {
+          query = query.eq('apt_seller_type', apartments.sellerType);
+        }
+        if (apartments.bathroom) {
+          query = query.eq('apt_bathroom', apartments.bathroom);
+        }
+        if (apartments.windows && apartments.windows.length > 0) {
+          query = query.overlaps('apt_windows', apartments.windows);
+        }
+        if (apartments.buildYearFrom !== undefined) {
+          query = query.gte('apt_build_year', apartments.buildYearFrom);
+        }
+        if (apartments.buildYearTo !== undefined) {
+          query = query.lte('apt_build_year', apartments.buildYearTo);
+        }
+        if (apartments.totalFloorsFrom !== undefined) {
+          query = query.gte('apt_total_floors', apartments.totalFloorsFrom);
+        }
+        if (apartments.totalFloorsTo !== undefined) {
+          query = query.lte('apt_total_floors', apartments.totalFloorsTo);
+        }
+        if (apartments.buildingType && apartments.buildingType !== 'any') {
+          query = query.eq('apt_building_type', apartments.buildingType);
+        }
+        if (apartments.elevators && apartments.elevators.length > 0) {
+          query = query.overlaps('apt_elevator', apartments.elevators);
+        }
+        if (apartments.parkings && apartments.parkings.length > 0) {
+          query = query.overlaps('apt_parking', apartments.parkings);
+        }
+        if (apartments.renovation) {
+          query = query.eq('apt_renovation', apartments.renovation);
+        }
+        if (apartments.kitchenAreaFrom !== undefined) {
+          query = query.gte('apt_kitchen_area', apartments.kitchenAreaFrom);
+        }
+        if (apartments.kitchenAreaTo !== undefined) {
+          query = query.lte('apt_kitchen_area', apartments.kitchenAreaTo);
+        }
+        if (apartments.roomType) {
+          query = query.eq('apt_room_type', apartments.roomType);
+        }
+        if (apartments.balconies && apartments.balconies.length > 0) {
+          query = query.overlaps('apt_balcony', apartments.balconies);
+        }
+        if (apartments.ceilingHeightFrom !== undefined) {
+          query = query.gte('apt_ceiling_height', apartments.ceilingHeightFrom);
+        }
+        if (apartments.ceilingHeightTo !== undefined) {
+          query = query.lte('apt_ceiling_height', apartments.ceilingHeightTo);
+        }
+        if (apartments.photosOnly) {
+          query = query.not('images', 'eq', '{}');
         }
       }
 

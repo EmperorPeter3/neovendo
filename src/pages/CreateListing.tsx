@@ -18,6 +18,7 @@ import QuadFieldsForm, { QuadFieldsData, defaultQuadFields } from '@/components/
 import MopedFieldsForm, { MopedFieldsData, defaultMopedFields } from '@/components/MopedFieldsForm';
 import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/MotoFieldsForm';
 import { SnowmobileFieldsForm, SnowmobileFieldsData, defaultSnowmobileFields } from '@/components/SnowmobileFieldsForm';
+import { ApartmentFieldsForm, ApartmentFieldsData, defaultApartmentFields } from '@/components/ApartmentFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 import { LocationPicker, LocationPickerValue } from '@/components/LocationPicker';
 import { ImageDropZone } from '@/components/ImageDropZone';
@@ -48,6 +49,7 @@ const CreateListing = () => {
   const [mopedFields, setMopedFields] = useState<MopedFieldsData>(defaultMopedFields);
   const [motoFields, setMotoFields] = useState<MotoFieldsData>(defaultMotoFields);
   const [snowmobileFields, setSnowmobileFields] = useState<SnowmobileFieldsData>(defaultSnowmobileFields);
+  const [apartmentFields, setApartmentFields] = useState<ApartmentFieldsData>(defaultApartmentFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
   const [categorySuggestion, setCategorySuggestion] = useState<CategorySuggestion | null>(null);
   const [brandSuggestion, setBrandSuggestion] = useState<BrandModelSuggestion | null>(null);
@@ -61,6 +63,7 @@ const CreateListing = () => {
   const isMopedListing = subcategory === 'mopeds_scooters';
   const isMotoListing = subcategory === 'motorbikes';
   const isSnowmobileListing = subcategory === 'snowmobiles';
+  const isApartmentListing = subcategory === 'buy_all_apartments' || subcategory === 'buy_secondary' || subcategory === 'buy_new';
 
   const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
     setCategory(newCategory);
@@ -562,6 +565,16 @@ const CreateListing = () => {
             {/* Snowmobile-specific fields */}
             {isSnowmobileListing && (
               <SnowmobileFieldsForm data={snowmobileFields} onChange={setSnowmobileFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Apartment-specific fields */}
+            {isApartmentListing && (
+              <ApartmentFieldsForm data={apartmentFields} onChange={setApartmentFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Apartment-specific fields */}
+            {isApartmentListing && (
+              <ApartmentFieldsForm data={apartmentFields} onChange={setApartmentFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}
