@@ -80,6 +80,26 @@ export type Database = {
       }
       listings: {
         Row: {
+          apt_area: number | null
+          apt_balcony: string[] | null
+          apt_bathroom: string | null
+          apt_build_year: number | null
+          apt_building_type: string | null
+          apt_ceiling_height: number | null
+          apt_elevator: string[] | null
+          apt_floor: number | null
+          apt_housing_type: string | null
+          apt_kitchen_area: number | null
+          apt_mortgage: boolean | null
+          apt_parking: string[] | null
+          apt_photos_only: boolean | null
+          apt_price_per_sqm: number | null
+          apt_renovation: string | null
+          apt_room_type: string | null
+          apt_rooms: string | null
+          apt_seller_type: string | null
+          apt_total_floors: number | null
+          apt_windows: string[] | null
           atv_brand: string | null
           atv_condition: string | null
           atv_engine_type: string | null
@@ -183,6 +203,26 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          apt_area?: number | null
+          apt_balcony?: string[] | null
+          apt_bathroom?: string | null
+          apt_build_year?: number | null
+          apt_building_type?: string | null
+          apt_ceiling_height?: number | null
+          apt_elevator?: string[] | null
+          apt_floor?: number | null
+          apt_housing_type?: string | null
+          apt_kitchen_area?: number | null
+          apt_mortgage?: boolean | null
+          apt_parking?: string[] | null
+          apt_photos_only?: boolean | null
+          apt_price_per_sqm?: number | null
+          apt_renovation?: string | null
+          apt_room_type?: string | null
+          apt_rooms?: string | null
+          apt_seller_type?: string | null
+          apt_total_floors?: number | null
+          apt_windows?: string[] | null
           atv_brand?: string | null
           atv_condition?: string | null
           atv_engine_type?: string | null
@@ -286,6 +326,26 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          apt_area?: number | null
+          apt_balcony?: string[] | null
+          apt_bathroom?: string | null
+          apt_build_year?: number | null
+          apt_building_type?: string | null
+          apt_ceiling_height?: number | null
+          apt_elevator?: string[] | null
+          apt_floor?: number | null
+          apt_housing_type?: string | null
+          apt_kitchen_area?: number | null
+          apt_mortgage?: boolean | null
+          apt_parking?: string[] | null
+          apt_photos_only?: boolean | null
+          apt_price_per_sqm?: number | null
+          apt_renovation?: string | null
+          apt_room_type?: string | null
+          apt_rooms?: string | null
+          apt_seller_type?: string | null
+          apt_total_floors?: number | null
+          apt_windows?: string[] | null
           atv_brand?: string | null
           atv_condition?: string | null
           atv_engine_type?: string | null

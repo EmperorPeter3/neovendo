@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters, MotoQueryFilters, SnowmobileQueryFilters } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters, MotoQueryFilters, SnowmobileQueryFilters, ApartmentQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -40,6 +40,7 @@ import { QuadFilters, QuadFiltersState, defaultQuadFilters } from '@/components/
 import { MopedFilters, MopedFiltersState, defaultMopedFilters } from '@/components/filters/MopedFilters';
 import { MotoFilters, MotoFiltersState, defaultMotoFilters } from '@/components/filters/MotoFilters';
 import { SnowmobileFilters, SnowmobileFiltersState, defaultSnowmobileFilters } from '@/components/filters/SnowmobileFilters';
+import { ApartmentFilters, ApartmentFiltersState, defaultApartmentFilters } from '@/components/filters/ApartmentFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 import { MobileCategorySelector } from '@/components/MobileCategorySelector';
@@ -155,6 +156,7 @@ const [searchParams, setSearchParams] = useSearchParams();
   const [mopedFilters, setMopedFilters] = useState<MopedFiltersState>(defaultMopedFilters);
   const [motoFilters, setMotoFilters] = useState<MotoFiltersState>(defaultMotoFilters);
   const [snowmobileFilters, setSnowmobileFilters] = useState<SnowmobileFiltersState>(defaultSnowmobileFilters);
+  const [apartmentFilters, setApartmentFilters] = useState<ApartmentFiltersState>(defaultApartmentFilters);
   
   // Local state for price inputs with debounce
   const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
@@ -523,6 +525,48 @@ const [searchParams, setSearchParams] = useSearchParams();
     return Object.keys(result).length > 0 ? result : undefined;
   };
 
+  // Convert ApartmentFiltersState to ApartmentQueryFilters
+  const isApartmentSubcategory = selectedSubcategory === 'buy_all_apartments' || selectedSubcategory === 'buy_secondary' || selectedSubcategory === 'buy_new';
+  
+  const convertApartmentFilters = (filters: ApartmentFiltersState): ApartmentQueryFilters | undefined => {
+    if (!isApartmentSubcategory) return undefined;
+
+    const result: ApartmentQueryFilters = {};
+
+    if (filters.rooms.length > 0) result.rooms = filters.rooms;
+    if (filters.mortgage) result.mortgage = true;
+    if (filters.pricePerSqmFrom) result.pricePerSqmFrom = Number(filters.pricePerSqmFrom);
+    if (filters.pricePerSqmTo) result.pricePerSqmTo = Number(filters.pricePerSqmTo);
+    if (filters.areaFrom) result.areaFrom = Number(filters.areaFrom);
+    if (filters.areaTo) result.areaTo = Number(filters.areaTo);
+    if (filters.floorFrom) result.floorFrom = Number(filters.floorFrom);
+    if (filters.floorTo) result.floorTo = Number(filters.floorTo);
+    if (filters.notFirstFloor) result.notFirstFloor = true;
+    if (filters.notLastFloor) result.notLastFloor = true;
+    if (filters.onlyLastFloor) result.onlyLastFloor = true;
+    if (filters.housingType !== 'all') result.housingType = filters.housingType;
+    if (filters.sellerType !== 'all') result.sellerType = filters.sellerType;
+    if (filters.bathroom) result.bathroom = filters.bathroom;
+    if (filters.windows.length > 0) result.windows = filters.windows;
+    if (filters.buildYearFrom) result.buildYearFrom = Number(filters.buildYearFrom);
+    if (filters.buildYearTo) result.buildYearTo = Number(filters.buildYearTo);
+    if (filters.totalFloorsFrom) result.totalFloorsFrom = Number(filters.totalFloorsFrom);
+    if (filters.totalFloorsTo) result.totalFloorsTo = Number(filters.totalFloorsTo);
+    if (filters.buildingType !== 'any') result.buildingType = filters.buildingType;
+    if (filters.elevators.length > 0) result.elevators = filters.elevators;
+    if (filters.parkings.length > 0) result.parkings = filters.parkings;
+    if (filters.renovation) result.renovation = filters.renovation;
+    if (filters.kitchenAreaFrom) result.kitchenAreaFrom = Number(filters.kitchenAreaFrom);
+    if (filters.kitchenAreaTo) result.kitchenAreaTo = Number(filters.kitchenAreaTo);
+    if (filters.roomType) result.roomType = filters.roomType;
+    if (filters.balconies.length > 0) result.balconies = filters.balconies;
+    if (filters.ceilingHeightFrom) result.ceilingHeightFrom = Number(filters.ceilingHeightFrom);
+    if (filters.ceilingHeightTo) result.ceilingHeightTo = Number(filters.ceilingHeightTo);
+    if (filters.photosOnly) result.photosOnly = true;
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -583,6 +627,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     mopeds: convertMopedFilters(mopedFilters),
     motos: convertMotoFilters(motoFilters),
     snowmobiles: convertSnowmobileFilters(snowmobileFilters),
+    apartments: convertApartmentFilters(apartmentFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -1034,6 +1079,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                     <SnowmobileFilters filters={snowmobileFilters} onChange={setSnowmobileFilters} />
                   </>
                 )}
+                {isApartmentSubcategory && (
+                  <>
+                    <Separator className="my-4" />
+                    <ApartmentFilters filters={apartmentFilters} onChange={setApartmentFilters} />
+                  </>
+                )}
 
               </div>
             </div>
@@ -1132,6 +1183,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <>
                     <Separator className="my-4" />
                     <SnowmobileFilters filters={snowmobileFilters} onChange={setSnowmobileFilters} />
+                  </>
+                )}
+                {isApartmentSubcategory && (
+                  <>
+                    <Separator className="my-4" />
+                    <ApartmentFilters filters={apartmentFilters} onChange={setApartmentFilters} />
                   </>
                 )}
               </div>
