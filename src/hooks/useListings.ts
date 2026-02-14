@@ -92,6 +92,20 @@ export interface ListingWithOwner {
   moto_gears: number | null;
   moto_cooling: string | null;
   moto_mileage: number | null;
+  // Snowmobile-specific fields
+  snow_type: string | null;
+  snow_brand: string | null;
+  snow_model: string | null;
+  snow_origin_country: string | null;
+  snow_year: number | null;
+  snow_condition: string | null;
+  snow_engine_type: string | null;
+  snow_engine_volume: number | null;
+  snow_power: number | null;
+  snow_power_watt: number | null;
+  snow_mileage: number | null;
+  snow_max_passengers: number | null;
+  snow_track_width: number | null;
   owner: {
     id: string;
     name: string;
@@ -220,6 +234,29 @@ export interface MotoQueryFilters {
   descriptionSearch?: string;
 }
 
+export interface SnowmobileQueryFilters {
+  types?: string[];
+  brand?: string;
+  originCountries?: string[];
+  yearFrom?: number;
+  yearTo?: number;
+  condition?: 'new' | 'used' | 'for_parts';
+  engineTypes?: string[];
+  engineVolumeFrom?: number;
+  engineVolumeTo?: number;
+  powerFrom?: number;
+  powerTo?: number;
+  powerWattFrom?: number;
+  powerWattTo?: number;
+  mileageFrom?: number;
+  mileageTo?: number;
+  maxPassengersFrom?: number;
+  maxPassengersTo?: number;
+  trackWidthFrom?: number;
+  trackWidthTo?: number;
+  descriptionSearch?: string;
+}
+
 export const useListings = (filters?: {
   category?: string;
   subcategory?: string;
@@ -238,6 +275,7 @@ export const useListings = (filters?: {
   quads?: QuadQueryFilters;
   mopeds?: MopedQueryFilters;
   motos?: MotoQueryFilters;
+  snowmobiles?: SnowmobileQueryFilters;
 }) => {
   return useQuery({
     queryKey: ['listings', filters],
@@ -622,6 +660,71 @@ export const useListings = (filters?: {
         }
         if (motos.descriptionSearch) {
           query = query.ilike('description', `%${motos.descriptionSearch}%`);
+        }
+      }
+
+      // Snowmobile-specific filters
+      const snowmobiles = filters?.snowmobiles;
+      if (snowmobiles) {
+        if (snowmobiles.types && snowmobiles.types.length > 0) {
+          query = query.in('snow_type', snowmobiles.types);
+        }
+        if (snowmobiles.brand) {
+          query = query.ilike('snow_brand', `%${snowmobiles.brand}%`);
+        }
+        if (snowmobiles.originCountries && snowmobiles.originCountries.length > 0) {
+          query = query.in('snow_origin_country', snowmobiles.originCountries);
+        }
+        if (snowmobiles.yearFrom !== undefined) {
+          query = query.gte('snow_year', snowmobiles.yearFrom);
+        }
+        if (snowmobiles.yearTo !== undefined) {
+          query = query.lte('snow_year', snowmobiles.yearTo);
+        }
+        if (snowmobiles.condition) {
+          query = query.eq('snow_condition', snowmobiles.condition);
+        }
+        if (snowmobiles.engineTypes && snowmobiles.engineTypes.length > 0) {
+          query = query.in('snow_engine_type', snowmobiles.engineTypes);
+        }
+        if (snowmobiles.engineVolumeFrom !== undefined) {
+          query = query.gte('snow_engine_volume', snowmobiles.engineVolumeFrom);
+        }
+        if (snowmobiles.engineVolumeTo !== undefined) {
+          query = query.lte('snow_engine_volume', snowmobiles.engineVolumeTo);
+        }
+        if (snowmobiles.powerFrom !== undefined) {
+          query = query.gte('snow_power', snowmobiles.powerFrom);
+        }
+        if (snowmobiles.powerTo !== undefined) {
+          query = query.lte('snow_power', snowmobiles.powerTo);
+        }
+        if (snowmobiles.powerWattFrom !== undefined) {
+          query = query.gte('snow_power_watt', snowmobiles.powerWattFrom);
+        }
+        if (snowmobiles.powerWattTo !== undefined) {
+          query = query.lte('snow_power_watt', snowmobiles.powerWattTo);
+        }
+        if (snowmobiles.mileageFrom !== undefined) {
+          query = query.gte('snow_mileage', snowmobiles.mileageFrom);
+        }
+        if (snowmobiles.mileageTo !== undefined) {
+          query = query.lte('snow_mileage', snowmobiles.mileageTo);
+        }
+        if (snowmobiles.maxPassengersFrom !== undefined) {
+          query = query.gte('snow_max_passengers', snowmobiles.maxPassengersFrom);
+        }
+        if (snowmobiles.maxPassengersTo !== undefined) {
+          query = query.lte('snow_max_passengers', snowmobiles.maxPassengersTo);
+        }
+        if (snowmobiles.trackWidthFrom !== undefined) {
+          query = query.gte('snow_track_width', snowmobiles.trackWidthFrom);
+        }
+        if (snowmobiles.trackWidthTo !== undefined) {
+          query = query.lte('snow_track_width', snowmobiles.trackWidthTo);
+        }
+        if (snowmobiles.descriptionSearch) {
+          query = query.ilike('description', `%${snowmobiles.descriptionSearch}%`);
         }
       }
 
