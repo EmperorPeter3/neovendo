@@ -920,6 +920,7 @@ export const translations = {
     // Units
     "units.hp": "hp",
     "units.km": "km",
+    "units.watt": "W",
     // Validation messages
     "validation.requiredFields": "Please fill in all required fields",
     "validation.priceRange": "Price must be between 0 and 999,999,999",
@@ -5873,6 +5874,7 @@ export const translations = {
     // Units
     "units.hp": "л.с.",
     "units.km": "км",
+    "units.watt": "Вт",
     // Validation messages
     "validation.requiredFields": "Пожалуйста, заполните все обязательные поля",
     "validation.priceRange": "Цена должна быть от 0 до 999 999 999",

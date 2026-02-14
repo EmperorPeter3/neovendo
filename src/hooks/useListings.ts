@@ -136,6 +136,8 @@ export interface AtvQueryFilters {
   engineVolumeTo?: number;
   powerFrom?: number;
   powerTo?: number;
+  powerWattFrom?: number;
+  powerWattTo?: number;
   mileageFrom?: number;
   mileageTo?: number;
   maxPassengersFrom?: number;
@@ -160,6 +162,8 @@ export interface QuadQueryFilters {
   engineVolumeTo?: number;
   powerFrom?: number;
   powerTo?: number;
+  powerWattFrom?: number;
+  powerWattTo?: number;
   mileageFrom?: number;
   mileageTo?: number;
   maxPassengersFrom?: number;
@@ -179,6 +183,8 @@ export interface MopedQueryFilters {
   engineVolumeTo?: number;
   powerFrom?: number;
   powerTo?: number;
+  powerWattFrom?: number;
+  powerWattTo?: number;
   mileageFrom?: number;
   mileageTo?: number;
   descriptionSearch?: string;
@@ -391,6 +397,12 @@ export const useListings = (filters?: {
         if (atvs.powerTo !== undefined) {
           query = query.lte('atv_power', atvs.powerTo);
         }
+        if (atvs.powerWattFrom !== undefined) {
+          query = query.gte('atv_power_watt', atvs.powerWattFrom);
+        }
+        if (atvs.powerWattTo !== undefined) {
+          query = query.lte('atv_power_watt', atvs.powerWattTo);
+        }
         if (atvs.mileageFrom !== undefined) {
           query = query.gte('atv_mileage', atvs.mileageFrom);
         }
@@ -455,6 +467,12 @@ export const useListings = (filters?: {
         if (quads.powerTo !== undefined) {
           query = query.lte('quad_power', quads.powerTo);
         }
+        if (quads.powerWattFrom !== undefined) {
+          query = query.gte('quad_power_watt', quads.powerWattFrom);
+        }
+        if (quads.powerWattTo !== undefined) {
+          query = query.lte('quad_power_watt', quads.powerWattTo);
+        }
         if (quads.mileageFrom !== undefined) {
           query = query.gte('quad_mileage', quads.mileageFrom);
         }
@@ -507,6 +525,12 @@ export const useListings = (filters?: {
         }
         if (mopeds.powerTo !== undefined) {
           query = query.lte('moped_power', mopeds.powerTo);
+        }
+        if (mopeds.powerWattFrom !== undefined) {
+          query = query.gte('moped_power_watt', mopeds.powerWattFrom);
+        }
+        if (mopeds.powerWattTo !== undefined) {
+          query = query.lte('moped_power_watt', mopeds.powerWattTo);
         }
         if (mopeds.mileageFrom !== undefined) {
           query = query.gte('moped_mileage', mopeds.mileageFrom);
