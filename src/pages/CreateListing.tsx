@@ -502,6 +502,7 @@ const CreateListing = () => {
                 subcategoryValue={subcategory}
                 onChange={handleCategoryChange}
                 showPath={true}
+                translationOverrides={{ buy: 'sell_housing' }}
               />
               {fieldErrors.category && (
                 <p className="text-sm text-destructive mt-1">{t('validation.requiredFields' as TranslationKey)}</p>

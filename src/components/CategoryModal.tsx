@@ -19,6 +19,7 @@ interface CategoryModalProps {
   subcategoryValue?: string;
   onChange?: (value: Category | '', subcategory?: string) => void;
   showPath?: boolean;
+  translationOverrides?: Record<string, string>;
 }
 
 const categories: Category[] = [
@@ -53,7 +54,9 @@ const findSubcategoryPath = (
   return null;
 };
 
-export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, showPath = false }: CategoryModalProps) => {
+export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, showPath = false, translationOverrides = {} }: CategoryModalProps) => {
+  // Helper to translate with overrides
+  const tOverride = (key: string) => translationOverrides[key] ? t(translationOverrides[key] as TranslationKey) : t(key as TranslationKey);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<Category | null>(
     value ? (value as Category) : 'transport'
@@ -77,12 +80,12 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
       const leafId = subcategoryPath[subcategoryPath.length - 1];
       const fullPath = [value as string, ...subcategoryPath];
       return { 
-        label: t(leafId as TranslationKey), 
-        path: fullPath.map(id => t(id as TranslationKey)).join(' → ')
+        label: tOverride(leafId), 
+        path: fullPath.map(id => tOverride(id)).join(' → ')
       };
     }
     
-    return { label: t(subcategoryValue as TranslationKey), path: `${t(value as TranslationKey)} → ${t(subcategoryValue as TranslationKey)}` };
+    return { label: tOverride(subcategoryValue), path: `${tOverride(value as string)} → ${tOverride(subcategoryValue)}` };
   };
 
   const { label: displayLabel, path: categoryPath } = getDisplayInfo();
@@ -192,7 +195,7 @@ export const CategoryModal = ({ value = '', subcategoryValue = '', onChange, sho
                             expandedSubcategory === subcategory.id && "text-primary"
                           )}
                         >
-                          <span>{t(subcategory.id as TranslationKey)}</span>
+                          <span>{tOverride(subcategory.id)}</span>
                           {subcategory.children && subcategory.children.length > 0 && (
                             <ChevronRight className="w-4 h-4 text-muted-foreground" />
                           )}

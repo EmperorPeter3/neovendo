@@ -55,6 +55,19 @@ const categoryKeywords: { keywords: string[]; suggestion: CategorySuggestion }[]
     keywords: ['truck ', 'грузовик', 'тягач', 'фура', 'экскаватор', 'excavator', 'бульдозер', 'bulldozer', 'погрузчик', 'loader', 'автобус', 'bus ', 'прицеп', 'trailer'],
     suggestion: { category: 'transport', subcategory: 'trucks' },
   },
+  // Real estate - apartments
+  {
+    keywords: ['квартир', 'apartment', 'апартамент', 'студия жильё', 'студию'],
+    suggestion: { category: 'realEstate', subcategory: 'buy_all_apartments', parentSubcategory: 'buy' },
+  },
+  {
+    keywords: ['комнат', 'room '],
+    suggestion: { category: 'realEstate', subcategory: 'buy_rooms', parentSubcategory: 'buy' },
+  },
+  {
+    keywords: ['помещени', 'коммерческ'],
+    suggestion: { category: 'realEstate', subcategory: 'commercial' },
+  },
 ];
 
 export function analyzeTitleForCategory(title: string): CategorySuggestion | null {
