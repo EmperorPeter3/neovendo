@@ -225,6 +225,29 @@ export const MotoFilters = ({ filters, onChange }: MotoFiltersProps) => {
         </RadioGroup>
       </div>
 
+      {/* Mileage - right after condition, hidden when new */}
+      {filters.condition !== 'new' && (
+        <div>
+          <Label className="text-sm font-medium mb-2 block">{t('mileageKm' as TranslationKey)}</Label>
+          <div className="flex gap-2">
+            <Input
+              type="number"
+              value={filters.mileageFrom}
+              onChange={(e) => updateFilter('mileageFrom', e.target.value)}
+              placeholder={t('from' as TranslationKey)}
+              className="h-9 flex-1"
+            />
+            <Input
+              type="number"
+              value={filters.mileageTo}
+              onChange={(e) => updateFilter('mileageTo', e.target.value)}
+              placeholder={t('to' as TranslationKey)}
+              className="h-9 flex-1"
+            />
+          </div>
+        </div>
+      )}
+
       {/* Engine Type */}
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('engineType' as TranslationKey)}</Label>
@@ -373,27 +396,6 @@ export const MotoFilters = ({ filters, onChange }: MotoFiltersProps) => {
               </label>
             </div>
           ))}
-        </div>
-      </div>
-
-      {/* Mileage */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">{t('mileageKm' as TranslationKey)}</Label>
-        <div className="flex gap-2">
-          <Input
-            type="number"
-            value={filters.mileageFrom}
-            onChange={(e) => updateFilter('mileageFrom', e.target.value)}
-            placeholder={t('from' as TranslationKey)}
-            className="h-9 flex-1"
-          />
-          <Input
-            type="number"
-            value={filters.mileageTo}
-            onChange={(e) => updateFilter('mileageTo', e.target.value)}
-            placeholder={t('to' as TranslationKey)}
-            className="h-9 flex-1"
-          />
         </div>
       </div>
 

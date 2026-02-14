@@ -236,6 +236,13 @@ export function QuadFilters({ filters, onChange }: QuadFiltersProps) {
         </RadioGroup>
       </div>
 
+      {/* Mileage - right after condition, hidden when new */}
+      {filters.condition !== 'new' && (
+        <>
+          {renderRangeInputs(`${safeT('quadFilters.mileage')} (${safeT('units.km')})`, 'mileageFrom', 'mileageTo')}
+        </>
+      )}
+
       {/* Engine Type */}
       <div className="space-y-2">
         <Label className="text-sm font-medium">{safeT('quadFilters.engineType')}</Label>
@@ -265,9 +272,6 @@ export function QuadFilters({ filters, onChange }: QuadFiltersProps) {
 
       {/* Power (W) */}
       {renderRangeInputs(`${safeT('powerWatt')} (${safeT('units.watt')})`, 'powerWattFrom', 'powerWattTo')}
-
-      {/* Mileage */}
-      {renderRangeInputs(`${safeT('quadFilters.mileage')} (${safeT('units.km')})`, 'mileageFrom', 'mileageTo')}
 
       {/* Max Passengers */}
       {renderRangeInputs(safeT('quadFilters.maxPassengers'), 'maxPassengersFrom', 'maxPassengersTo')}

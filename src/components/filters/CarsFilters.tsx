@@ -250,8 +250,14 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
             <RadioGroupItem value="used" id="condition-used" />
             <Label htmlFor="condition-used" className="font-normal cursor-pointer">{safeT(t, 'carFilters.conditionUsed')}</Label>
           </div>
-        </RadioGroup>
+      </RadioGroup>
       </div>
+
+      {filters.condition !== 'new' && (
+        <>
+          {renderRangeInputs('carFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo')}
+        </>
+      )}
 
       <Separator />
 
@@ -375,8 +381,6 @@ export function CarsFilters({ filters, onChange }: CarsFiltersProps) {
           {renderYearSelect(filters.yearTo, (v) => onChange({ ...filters, yearTo: v === 'any' ? '' : v }), safeT(t, 'filters.to'))}
         </div>
       </div>
-
-      {renderRangeInputs('carFilters.mileage', filters.mileageFrom, filters.mileageTo, 'mileageFrom', 'mileageTo')}
 
       <Separator />
 
