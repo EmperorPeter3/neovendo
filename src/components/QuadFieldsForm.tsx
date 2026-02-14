@@ -158,6 +158,20 @@ export function QuadFieldsForm({ data, onChange, fieldErrors = {}, onClearError 
         </RadioGroup>
       </div>
 
+      {/* Mileage - after condition, hidden when new */}
+      {data.condition !== 'new' && (
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">{safeT('quadFilters.mileage')} ({safeT('units.km')})</Label>
+          <Input
+            type="number"
+            placeholder="0"
+            value={data.mileage}
+            onChange={(e) => handleChange('mileage', e.target.value)}
+            className={getInputClass('mileage')}
+          />
+        </div>
+      )}
+
       {/* Engine Type */}
       <div className="space-y-2">
         <Label className="text-sm font-medium">{safeT('quadFilters.engineType')}</Label>
@@ -210,18 +224,6 @@ export function QuadFieldsForm({ data, onChange, fieldErrors = {}, onClearError 
             className={getInputClass('powerWatt')}
           />
         </div>
-      </div>
-
-      {/* Mileage */}
-      <div className="space-y-2">
-        <Label className="text-sm font-medium">{safeT('quadFilters.mileage')} ({safeT('units.km')})</Label>
-        <Input
-          type="number"
-          placeholder="0"
-          value={data.mileage}
-          onChange={(e) => handleChange('mileage', e.target.value)}
-          className={getInputClass('mileage')}
-        />
       </div>
 
       {/* Max Passengers */}

@@ -154,6 +154,21 @@ export const MotoFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError 
         </RadioGroup>
       </div>
 
+      {/* Mileage - after condition, hidden when new */}
+      {data.condition !== 'new' && (
+        <div>
+          <Label className="text-sm font-medium mb-2 block">{t('mileageKm' as TranslationKey)}</Label>
+          <Input
+            type="number"
+            value={data.mileage}
+            onChange={(e) => updateField('mileage', e.target.value)}
+            placeholder="10000"
+            min="0"
+            className={`h-12 ${fieldErrors.mileage ? 'border-destructive ring-destructive' : ''}`}
+          />
+        </div>
+      )}
+
       {/* Engine Type */}
       <div>
         <Label className="text-sm font-medium mb-2 block">{t('engineType' as TranslationKey)}</Label>
@@ -267,18 +282,6 @@ export const MotoFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError 
         </Select>
       </div>
 
-      {/* Mileage */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">{t('mileageKm' as TranslationKey)}</Label>
-        <Input
-          type="number"
-          value={data.mileage}
-          onChange={(e) => updateField('mileage', e.target.value)}
-          placeholder="10000"
-          min="0"
-          className={`h-12 ${fieldErrors.mileage ? 'border-destructive ring-destructive' : ''}`}
-        />
-      </div>
     </div>
   );
 };

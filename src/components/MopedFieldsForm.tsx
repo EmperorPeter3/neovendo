@@ -184,6 +184,21 @@ const MopedFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError }: Mop
         </RadioGroup>
       </div>
 
+      {/* Mileage - after condition, hidden when new */}
+      {data.condition !== 'new' && (
+        <div>
+          <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.mileage' as TranslationKey)} (km)</Label>
+          <Input
+            type="number"
+            value={data.mileage}
+            onChange={(e) => updateField('mileage', e.target.value)}
+            placeholder="0"
+            min="0"
+            className={`h-10 ${fieldErrors.mopedMileage ? 'border-destructive' : ''}`}
+          />
+        </div>
+      )}
+
       {/* Engine Type */}
       <div>
         <Label className="text-sm font-medium mb-3 block">{t('mopedFilters.engineType' as TranslationKey)}</Label>
@@ -245,18 +260,6 @@ const MopedFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError }: Mop
         </div>
       </div>
 
-      {/* Mileage */}
-      <div>
-        <Label className="text-sm font-medium mb-2 block">{t('mopedFilters.mileage' as TranslationKey)} (km)</Label>
-        <Input
-          type="number"
-          value={data.mileage}
-          onChange={(e) => updateField('mileage', e.target.value)}
-          placeholder="0"
-          min="0"
-          className={`h-10 ${fieldErrors.mopedMileage ? 'border-destructive' : ''}`}
-        />
-      </div>
     </div>
   );
 };
