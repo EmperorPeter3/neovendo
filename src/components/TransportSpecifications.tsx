@@ -142,7 +142,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
 
   function buildMotoSpecs(s: SpecItem[]) {
     const l = listing;
-    if (l.moto_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition.label'), conditionMap(l.moto_condition));
+    if (l.moto_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap(l.moto_condition));
     if (l.moto_type) addSpec(<Bike className="w-5 h-5" />, tAny('moto.type'), tAny(`moto.type.${l.moto_type}`));
     if (l.moto_brand) {
       const val = l.moto_model ? `${l.moto_brand} ${l.moto_model}` : l.moto_brand;
@@ -150,7 +150,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
     }
     if (l.moto_year) addSpec(<Calendar className="w-5 h-5" />, tAny('carFilters.year'), l.moto_year);
     if (l.moto_mileage != null) addSpec(<Gauge className="w-5 h-5" />, tAny('carFilters.mileage'), `${l.moto_mileage.toLocaleString()} km`);
-    if (l.moto_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engine.type'), engineTypeMap(l.moto_engine_type));
+    if (l.moto_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engineType'), engineTypeMap(l.moto_engine_type));
     if (l.moto_engine_volume) addSpec(<Wrench className="w-5 h-5" />, tAny('carFilters.engineVolume'), `${l.moto_engine_volume} cc`);
     if (l.moto_power_hp) addSpec(<Zap className="w-5 h-5" />, tAny('powerHp'), `${l.moto_power_hp} hp`);
     if (l.moto_transmission) {
@@ -167,7 +167,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
 
   function buildMopedSpecs(s: SpecItem[]) {
     const l = listing;
-    if (l.moped_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition.label'), conditionMap(l.moped_condition));
+    if (l.moped_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap(l.moped_condition));
     if (l.moped_type) addSpec(<Bike className="w-5 h-5" />, tAny('mopedFilters.type'), tAny(`mopedFilters.type${capitalize(l.moped_type)}`));
     if (l.moped_brand) {
       const val = l.moped_model ? `${l.moped_brand} ${l.moped_model}` : l.moped_brand;
@@ -175,7 +175,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
     }
     if (l.moped_year) addSpec(<Calendar className="w-5 h-5" />, tAny('carFilters.year'), l.moped_year);
     if (l.moped_mileage != null) addSpec(<Gauge className="w-5 h-5" />, tAny('carFilters.mileage'), `${l.moped_mileage.toLocaleString()} km`);
-    if (l.moped_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engine.type'), engineTypeMap(l.moped_engine_type));
+    if (l.moped_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engineType'), engineTypeMap(l.moped_engine_type));
     if (l.moped_engine_volume) addSpec(<Wrench className="w-5 h-5" />, tAny('carFilters.engineVolume'), `${l.moped_engine_volume} cc`);
     if (l.moped_power) addSpec(<Zap className="w-5 h-5" />, tAny('powerHp'), `${l.moped_power} hp`);
     if (l.moped_origin_country) addSpec(<Globe className="w-5 h-5" />, tAny('mopedFilters.originCountry'), countryMap(l.moped_origin_country));
@@ -183,7 +183,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
 
   function buildAtvSpecs(s: SpecItem[]) {
     const l = listing;
-    if (l.atv_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition.label'), conditionMap(l.atv_condition));
+    if (l.atv_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap(l.atv_condition));
     if (l.atv_type) addSpec(<Car className="w-5 h-5" />, tAny('atvFilters.type'), tAny(`atvFilters.type${capitalize(l.atv_type)}`));
     if (l.atv_brand) {
       const val = l.atv_model ? `${l.atv_brand} ${l.atv_model}` : l.atv_brand;
@@ -191,7 +191,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
     }
     if (l.atv_year) addSpec(<Calendar className="w-5 h-5" />, tAny('carFilters.year'), l.atv_year);
     if (l.atv_mileage != null) addSpec(<Gauge className="w-5 h-5" />, tAny('carFilters.mileage'), `${l.atv_mileage.toLocaleString()} km`);
-    if (l.atv_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engine.type'), engineTypeMap(l.atv_engine_type));
+    if (l.atv_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engineType'), engineTypeMap(l.atv_engine_type));
     if (l.atv_engine_volume) addSpec(<Wrench className="w-5 h-5" />, tAny('carFilters.engineVolume'), `${l.atv_engine_volume} cc`);
     if (l.atv_power) addSpec(<Zap className="w-5 h-5" />, tAny('powerHp'), `${l.atv_power} hp`);
     if (l.atv_max_passengers) addSpec(<Users className="w-5 h-5" />, tAny('carFilters.seats'), l.atv_max_passengers);
@@ -200,7 +200,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
 
   function buildQuadSpecs(s: SpecItem[]) {
     const l = listing;
-    if (l.quad_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition.label'), conditionMap(l.quad_condition));
+    if (l.quad_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap(l.quad_condition));
     if (l.quad_type) addSpec(<Car className="w-5 h-5" />, tAny('quadFilters.type'), tAny(`quadFilters.type${capitalize(l.quad_type)}`));
     if (l.quad_brand) {
       const val = l.quad_model ? `${l.quad_brand} ${l.quad_model}` : l.quad_brand;
@@ -208,7 +208,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
     }
     if (l.quad_year) addSpec(<Calendar className="w-5 h-5" />, tAny('carFilters.year'), l.quad_year);
     if (l.quad_mileage != null) addSpec(<Gauge className="w-5 h-5" />, tAny('carFilters.mileage'), `${l.quad_mileage.toLocaleString()} km`);
-    if (l.quad_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engine.type'), engineTypeMap(l.quad_engine_type));
+    if (l.quad_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engineType'), engineTypeMap(l.quad_engine_type));
     if (l.quad_engine_volume) addSpec(<Wrench className="w-5 h-5" />, tAny('carFilters.engineVolume'), `${l.quad_engine_volume} cc`);
     if (l.quad_power) addSpec(<Zap className="w-5 h-5" />, tAny('powerHp'), `${l.quad_power} hp`);
     if (l.quad_max_passengers) addSpec(<Users className="w-5 h-5" />, tAny('carFilters.seats'), l.quad_max_passengers);
@@ -217,7 +217,7 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
 
   function buildKartingSpecs(s: SpecItem[]) {
     const l = listing;
-    if (l.kart_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition.label'), conditionMap(l.kart_condition));
+    if (l.kart_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap(l.kart_condition));
     if ((l as any).kart_brand) {
       const val = (l as any).kart_model ? `${(l as any).kart_brand} ${(l as any).kart_model}` : (l as any).kart_brand;
       addSpec(<Car className="w-5 h-5" />, tAny('brand'), val);
