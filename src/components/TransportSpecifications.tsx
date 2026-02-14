@@ -16,6 +16,7 @@ import {
   Bike,
   Globe,
   Cog,
+  Ruler,
 } from 'lucide-react';
 
 interface TransportSpecificationsProps {
@@ -80,6 +81,9 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
   } else if (sub === 'karting') {
     title = tAny('kartingFilters.title');
     buildKartingSpecs(specs);
+  } else if (sub === 'snowmobiles') {
+    title = tAny('snowmobileFilters.title');
+    buildSnowmobileSpecs(specs);
   }
 
   if (specs.length === 0) return null;
@@ -224,6 +228,23 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
     if (l.kart_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap(l.kart_condition));
     if ((l as any).kart_brand) addSpec(<Car className="w-5 h-5" />, tAny('brand'), (l as any).kart_brand);
     if ((l as any).kart_model) addSpec(<Car className="w-5 h-5" />, tAny('model'), (l as any).kart_model);
+  }
+
+  function buildSnowmobileSpecs(s: SpecItem[]) {
+    const l = listing;
+    if ((l as any).snow_condition) addSpec(<CircleDot className="w-5 h-5" />, tAny('condition'), conditionMap((l as any).snow_condition));
+    if ((l as any).snow_type) addSpec(<Car className="w-5 h-5" />, tAny('snowmobileFilters.type'), tAny(`snowmobileFilters.type${capitalize((l as any).snow_type)}`));
+    if ((l as any).snow_brand) addSpec(<Car className="w-5 h-5" />, tAny('brand'), (l as any).snow_brand);
+    if ((l as any).snow_model) addSpec(<Car className="w-5 h-5" />, tAny('model'), (l as any).snow_model);
+    if ((l as any).snow_year) addSpec(<Calendar className="w-5 h-5" />, tAny('carFilters.year'), (l as any).snow_year);
+    if ((l as any).snow_mileage != null) addSpec(<Gauge className="w-5 h-5" />, tAny('carFilters.mileage'), ((l as any).snow_mileage).toLocaleString());
+    if ((l as any).snow_engine_type) addSpec(<Fuel className="w-5 h-5" />, tAny('engineType'), engineTypeMap((l as any).snow_engine_type));
+    if ((l as any).snow_engine_volume) addSpec(<Wrench className="w-5 h-5" />, tAny('carFilters.engineVolume'), (l as any).snow_engine_volume);
+    if ((l as any).snow_power) addSpec(<Zap className="w-5 h-5" />, tAny('powerHp'), (l as any).snow_power);
+    if ((l as any).snow_power_watt) addSpec(<Zap className="w-5 h-5" />, tAny('powerWatt'), (l as any).snow_power_watt);
+    if ((l as any).snow_max_passengers) addSpec(<Users className="w-5 h-5" />, tAny('snowmobileFilters.maxPassengers'), (l as any).snow_max_passengers);
+    if ((l as any).snow_track_width) addSpec(<Ruler className="w-5 h-5" />, tAny('snowmobileFilters.trackWidth'), `${(l as any).snow_track_width}`);
+    if ((l as any).snow_origin_country) addSpec(<Globe className="w-5 h-5" />, tAny('mopedFilters.originCountry'), countryMap((l as any).snow_origin_country));
   }
 
   function capitalize(s: string) {

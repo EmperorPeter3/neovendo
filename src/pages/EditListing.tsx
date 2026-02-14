@@ -17,6 +17,7 @@ import KartingFieldsForm, { KartingFieldsData, defaultKartingFields } from '@/co
 import QuadFieldsForm, { QuadFieldsData, defaultQuadFields } from '@/components/QuadFieldsForm';
 import MopedFieldsForm, { MopedFieldsData, defaultMopedFields } from '@/components/MopedFieldsForm';
 import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/MotoFieldsForm';
+import { SnowmobileFieldsForm, SnowmobileFieldsData, defaultSnowmobileFields } from '@/components/SnowmobileFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 import { LocationPicker, LocationPickerValue } from '@/components/LocationPicker';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -49,6 +50,7 @@ const EditListing = () => {
   const [quadFields, setQuadFields] = useState<QuadFieldsData>(defaultQuadFields);
   const [mopedFields, setMopedFields] = useState<MopedFieldsData>(defaultMopedFields);
   const [motoFields, setMotoFields] = useState<MotoFieldsData>(defaultMotoFields);
+  const [snowmobileFields, setSnowmobileFields] = useState<SnowmobileFieldsData>(defaultSnowmobileFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
   const [initialized, setInitialized] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
@@ -59,6 +61,7 @@ const EditListing = () => {
   const isQuadListing = subcategory === 'quads_buggies';
   const isMopedListing = subcategory === 'mopeds_scooters';
   const isMotoListing = subcategory === 'motorbikes';
+  const isSnowmobileListing = subcategory === 'snowmobiles';
 
   // Pre-fill form when listing data loads
   useEffect(() => {
@@ -186,6 +189,25 @@ const EditListing = () => {
           gears: (listing as any).moto_gears?.toString() || '',
           cooling: (listing as any).moto_cooling || '',
           mileage: (listing as any).moto_mileage?.toString() || '',
+        });
+      }
+
+      // Snowmobile fields
+      if (listing.subcategory === 'snowmobiles') {
+        setSnowmobileFields({
+          type: (listing as any).snow_type || '',
+          brand: (listing as any).snow_brand || '',
+          model: (listing as any).snow_model || '',
+          originCountry: (listing as any).snow_origin_country || '',
+          year: (listing as any).snow_year?.toString() || '',
+          condition: (listing as any).snow_condition || '',
+          engineType: (listing as any).snow_engine_type || '',
+          engineVolume: (listing as any).snow_engine_volume?.toString() || '',
+          power: (listing as any).snow_power?.toString() || '',
+          powerWatt: (listing as any).snow_power_watt?.toString() || '',
+          mileage: (listing as any).snow_mileage?.toString() || '',
+          maxPassengers: (listing as any).snow_max_passengers?.toString() || '',
+          trackWidth: (listing as any).snow_track_width?.toString() || '',
         });
       }
 
@@ -521,6 +543,23 @@ const EditListing = () => {
         updateData.moto_mileage = motoFields.mileage ? parseInt(motoFields.mileage) : null;
       }
 
+      // Snowmobile fields
+      if (isSnowmobileListing) {
+        updateData.snow_type = snowmobileFields.type || null;
+        updateData.snow_brand = snowmobileFields.brand || null;
+        updateData.snow_model = snowmobileFields.model || null;
+        updateData.snow_origin_country = snowmobileFields.originCountry || null;
+        updateData.snow_year = snowmobileFields.year ? parseInt(snowmobileFields.year) : null;
+        updateData.snow_condition = snowmobileFields.condition || null;
+        updateData.snow_engine_type = snowmobileFields.engineType || null;
+        updateData.snow_engine_volume = snowmobileFields.engineVolume ? parseFloat(snowmobileFields.engineVolume) : null;
+        updateData.snow_power = snowmobileFields.power ? parseInt(snowmobileFields.power) : null;
+        updateData.snow_power_watt = snowmobileFields.powerWatt ? parseInt(snowmobileFields.powerWatt) : null;
+        updateData.snow_mileage = snowmobileFields.mileage ? parseInt(snowmobileFields.mileage) : null;
+        updateData.snow_max_passengers = snowmobileFields.maxPassengers ? parseInt(snowmobileFields.maxPassengers) : null;
+        updateData.snow_track_width = snowmobileFields.trackWidth ? parseInt(snowmobileFields.trackWidth) : null;
+      }
+
       await updateListing.mutateAsync(updateData);
 
       toast({
@@ -634,6 +673,11 @@ const EditListing = () => {
             {/* Motorcycle-specific fields */}
             {isMotoListing && (
               <MotoFieldsForm data={motoFields} onChange={setMotoFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Snowmobile-specific fields */}
+            {isSnowmobileListing && (
+              <SnowmobileFieldsForm data={snowmobileFields} onChange={setSnowmobileFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}

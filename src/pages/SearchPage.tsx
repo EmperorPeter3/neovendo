@@ -4,7 +4,7 @@ import { Layout } from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters, MotoQueryFilters } from '@/hooks/useListings';
+import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters, MotoQueryFilters, SnowmobileQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
@@ -39,6 +39,7 @@ import { KartingFilters, KartingFiltersState, defaultKartingFilters } from '@/co
 import { QuadFilters, QuadFiltersState, defaultQuadFilters } from '@/components/filters/QuadFilters';
 import { MopedFilters, MopedFiltersState, defaultMopedFilters } from '@/components/filters/MopedFilters';
 import { MotoFilters, MotoFiltersState, defaultMotoFilters } from '@/components/filters/MotoFilters';
+import { SnowmobileFilters, SnowmobileFiltersState, defaultSnowmobileFilters } from '@/components/filters/SnowmobileFilters';
 import { Separator } from '@/components/ui/separator';
 import { ListingCardLarge, ListingCardLargeSkeleton } from '@/components/ListingCardLarge';
 import { MobileCategorySelector } from '@/components/MobileCategorySelector';
@@ -153,6 +154,7 @@ const [searchParams, setSearchParams] = useSearchParams();
   const [quadFilters, setQuadFilters] = useState<QuadFiltersState>(defaultQuadFilters);
   const [mopedFilters, setMopedFilters] = useState<MopedFiltersState>(defaultMopedFilters);
   const [motoFilters, setMotoFilters] = useState<MotoFiltersState>(defaultMotoFilters);
+  const [snowmobileFilters, setSnowmobileFilters] = useState<SnowmobileFiltersState>(defaultSnowmobileFilters);
   
   // Local state for price inputs with debounce
   const [localMinPrice, setLocalMinPrice] = useState(searchParams.get('minPrice') || '');
@@ -479,6 +481,48 @@ const [searchParams, setSearchParams] = useSearchParams();
     return Object.keys(result).length > 0 ? result : undefined;
   };
 
+  // Convert SnowmobileFiltersState to SnowmobileQueryFilters
+  const convertSnowmobileFilters = (filters: SnowmobileFiltersState): SnowmobileQueryFilters | undefined => {
+    if (selectedSubcategory !== 'snowmobiles') return undefined;
+
+    const result: SnowmobileQueryFilters = {};
+
+    const types: string[] = [];
+    if (filters.typeUtility) types.push('utility');
+    if (filters.typeSportMountain) types.push('sport_mountain');
+    if (filters.typeTouring) types.push('touring');
+    if (filters.typeKids) types.push('kids');
+    if (filters.typeMotobuksir) types.push('motobuksir');
+    if (types.length > 0) result.types = types;
+
+    if (filters.brand) result.brand = filters.brand;
+    if (filters.originCountries.length > 0) result.originCountries = filters.originCountries;
+    if (filters.yearFrom) result.yearFrom = Number(filters.yearFrom);
+    if (filters.yearTo) result.yearTo = Number(filters.yearTo);
+    if (filters.condition !== 'all') result.condition = filters.condition;
+
+    const engineTypes: string[] = [];
+    if (filters.enginePetrol) engineTypes.push('petrol');
+    if (filters.engineElectric) engineTypes.push('electric');
+    if (engineTypes.length > 0) result.engineTypes = engineTypes;
+
+    if (filters.engineVolumeFrom) result.engineVolumeFrom = Number(filters.engineVolumeFrom);
+    if (filters.engineVolumeTo) result.engineVolumeTo = Number(filters.engineVolumeTo);
+    if (filters.powerFrom) result.powerFrom = Number(filters.powerFrom);
+    if (filters.powerTo) result.powerTo = Number(filters.powerTo);
+    if (filters.powerWattFrom) result.powerWattFrom = Number(filters.powerWattFrom);
+    if (filters.powerWattTo) result.powerWattTo = Number(filters.powerWattTo);
+    if (filters.mileageFrom) result.mileageFrom = Number(filters.mileageFrom);
+    if (filters.mileageTo) result.mileageTo = Number(filters.mileageTo);
+    if (filters.maxPassengersFrom) result.maxPassengersFrom = Number(filters.maxPassengersFrom);
+    if (filters.maxPassengersTo) result.maxPassengersTo = Number(filters.maxPassengersTo);
+    if (filters.trackWidthFrom) result.trackWidthFrom = Number(filters.trackWidthFrom);
+    if (filters.trackWidthTo) result.trackWidthTo = Number(filters.trackWidthTo);
+    if (filters.descriptionSearch) result.descriptionSearch = filters.descriptionSearch;
+
+    return Object.keys(result).length > 0 ? result : undefined;
+  };
+
   // Update search query and local prices when URL changes
   useEffect(() => {
     setSearchQuery(query);
@@ -538,6 +582,7 @@ const [searchParams, setSearchParams] = useSearchParams();
     quads: convertQuadFilters(quadFilters),
     mopeds: convertMopedFilters(mopedFilters),
     motos: convertMotoFilters(motoFilters),
+    snowmobiles: convertSnowmobileFilters(snowmobileFilters),
   });
 
   const handleSearch = (e: React.FormEvent) => {
@@ -983,6 +1028,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                     <MotoFilters filters={motoFilters} onChange={setMotoFilters} />
                   </>
                 )}
+                {selectedSubcategory === 'snowmobiles' && (
+                  <>
+                    <Separator className="my-4" />
+                    <SnowmobileFilters filters={snowmobileFilters} onChange={setSnowmobileFilters} />
+                  </>
+                )}
 
               </div>
             </div>
@@ -1075,6 +1126,12 @@ const [searchParams, setSearchParams] = useSearchParams();
                   <>
                     <Separator className="my-4" />
                     <MotoFilters filters={motoFilters} onChange={setMotoFilters} />
+                  </>
+                )}
+                {selectedSubcategory === 'snowmobiles' && (
+                  <>
+                    <Separator className="my-4" />
+                    <SnowmobileFilters filters={snowmobileFilters} onChange={setSnowmobileFilters} />
                   </>
                 )}
               </div>

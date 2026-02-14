@@ -164,6 +164,19 @@ export type Database = {
           quad_power_watt: number | null
           quad_type: string | null
           quad_year: number | null
+          snow_brand: string | null
+          snow_condition: string | null
+          snow_engine_type: string | null
+          snow_engine_volume: number | null
+          snow_max_passengers: number | null
+          snow_mileage: number | null
+          snow_model: string | null
+          snow_origin_country: string | null
+          snow_power: number | null
+          snow_power_watt: number | null
+          snow_track_width: number | null
+          snow_type: string | null
+          snow_year: number | null
           status: Database["public"]["Enums"]["listing_status"]
           subcategory: string | null
           title: string
@@ -254,6 +267,19 @@ export type Database = {
           quad_power_watt?: number | null
           quad_type?: string | null
           quad_year?: number | null
+          snow_brand?: string | null
+          snow_condition?: string | null
+          snow_engine_type?: string | null
+          snow_engine_volume?: number | null
+          snow_max_passengers?: number | null
+          snow_mileage?: number | null
+          snow_model?: string | null
+          snow_origin_country?: string | null
+          snow_power?: number | null
+          snow_power_watt?: number | null
+          snow_track_width?: number | null
+          snow_type?: string | null
+          snow_year?: number | null
           status?: Database["public"]["Enums"]["listing_status"]
           subcategory?: string | null
           title: string
@@ -344,6 +370,19 @@ export type Database = {
           quad_power_watt?: number | null
           quad_type?: string | null
           quad_year?: number | null
+          snow_brand?: string | null
+          snow_condition?: string | null
+          snow_engine_type?: string | null
+          snow_engine_volume?: number | null
+          snow_max_passengers?: number | null
+          snow_mileage?: number | null
+          snow_model?: string | null
+          snow_origin_country?: string | null
+          snow_power?: number | null
+          snow_power_watt?: number | null
+          snow_track_width?: number | null
+          snow_type?: string | null
+          snow_year?: number | null
           status?: Database["public"]["Enums"]["listing_status"]
           subcategory?: string | null
           title?: string

@@ -17,6 +17,7 @@ import KartingFieldsForm, { KartingFieldsData, defaultKartingFields } from '@/co
 import QuadFieldsForm, { QuadFieldsData, defaultQuadFields } from '@/components/QuadFieldsForm';
 import MopedFieldsForm, { MopedFieldsData, defaultMopedFields } from '@/components/MopedFieldsForm';
 import MotoFieldsForm, { MotoFieldsData, defaultMotoFields } from '@/components/MotoFieldsForm';
+import { SnowmobileFieldsForm, SnowmobileFieldsData, defaultSnowmobileFields } from '@/components/SnowmobileFieldsForm';
 import { CategoryModal } from '@/components/CategoryModal';
 import { LocationPicker, LocationPickerValue } from '@/components/LocationPicker';
 import { ImageDropZone } from '@/components/ImageDropZone';
@@ -46,6 +47,7 @@ const CreateListing = () => {
   const [quadFields, setQuadFields] = useState<QuadFieldsData>(defaultQuadFields);
   const [mopedFields, setMopedFields] = useState<MopedFieldsData>(defaultMopedFields);
   const [motoFields, setMotoFields] = useState<MotoFieldsData>(defaultMotoFields);
+  const [snowmobileFields, setSnowmobileFields] = useState<SnowmobileFieldsData>(defaultSnowmobileFields);
   const [fieldErrors, setFieldErrors] = useState<Record<string, boolean>>({});
   const [categorySuggestion, setCategorySuggestion] = useState<CategorySuggestion | null>(null);
   const [brandSuggestion, setBrandSuggestion] = useState<BrandModelSuggestion | null>(null);
@@ -58,6 +60,7 @@ const CreateListing = () => {
   const isQuadListing = subcategory === 'quads_buggies';
   const isMopedListing = subcategory === 'mopeds_scooters';
   const isMotoListing = subcategory === 'motorbikes';
+  const isSnowmobileListing = subcategory === 'snowmobiles';
 
   const handleCategoryChange = (newCategory: Category | '', newSubcategory?: string) => {
     setCategory(newCategory);
@@ -386,6 +389,22 @@ const CreateListing = () => {
         if (motoFields.mileage) (listingData as any).moto_mileage = parseInt(motoFields.mileage);
       }
 
+      if (isSnowmobileListing) {
+        if (snowmobileFields.type) (listingData as any).snow_type = snowmobileFields.type;
+        if (snowmobileFields.brand) (listingData as any).snow_brand = snowmobileFields.brand;
+        if (snowmobileFields.model) (listingData as any).snow_model = snowmobileFields.model;
+        if (snowmobileFields.originCountry) (listingData as any).snow_origin_country = snowmobileFields.originCountry;
+        if (snowmobileFields.year) (listingData as any).snow_year = parseInt(snowmobileFields.year);
+        if (snowmobileFields.condition) (listingData as any).snow_condition = snowmobileFields.condition;
+        if (snowmobileFields.engineType) (listingData as any).snow_engine_type = snowmobileFields.engineType;
+        if (snowmobileFields.engineVolume) (listingData as any).snow_engine_volume = parseFloat(snowmobileFields.engineVolume);
+        if (snowmobileFields.power) (listingData as any).snow_power = parseInt(snowmobileFields.power);
+        if (snowmobileFields.powerWatt) (listingData as any).snow_power_watt = parseInt(snowmobileFields.powerWatt);
+        if (snowmobileFields.mileage) (listingData as any).snow_mileage = parseInt(snowmobileFields.mileage);
+        if (snowmobileFields.maxPassengers) (listingData as any).snow_max_passengers = parseInt(snowmobileFields.maxPassengers);
+        if (snowmobileFields.trackWidth) (listingData as any).snow_track_width = parseInt(snowmobileFields.trackWidth);
+      }
+
       await createListing.mutateAsync(listingData);
 
       toast({
@@ -538,6 +557,11 @@ const CreateListing = () => {
             {/* Motorcycle-specific fields */}
             {isMotoListing && (
               <MotoFieldsForm data={motoFields} onChange={setMotoFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
+            )}
+
+            {/* Snowmobile-specific fields */}
+            {isSnowmobileListing && (
+              <SnowmobileFieldsForm data={snowmobileFields} onChange={setSnowmobileFields} fieldErrors={fieldErrors} onClearError={clearFieldError} />
             )}
 
             {/* Price */}
