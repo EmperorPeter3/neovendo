@@ -485,7 +485,7 @@ const CreateListing = () => {
                   className="text-sm text-primary hover:underline cursor-pointer mt-1 text-left"
                 >
                   {t('suggestedCategory' as TranslationKey)}: {t(categorySuggestion.category as TranslationKey)}
-                  {categorySuggestion.parentSubcategory && ` → ${t(categorySuggestion.parentSubcategory as TranslationKey)}`}
+                  {categorySuggestion.parentSubcategory && ` → ${t((categorySuggestion.parentSubcategory === 'buy' ? 'sell_housing' : categorySuggestion.parentSubcategory) as TranslationKey)}`}
                   {` → ${t(categorySuggestion.subcategory as TranslationKey)}`}
                   {`. ${t('applySuggestion' as TranslationKey)}?`}
                 </button>
