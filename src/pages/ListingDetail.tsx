@@ -208,6 +208,9 @@ const ListingDetail = () => {
               </div>
             )}
 
+            {/* Transport Specifications */}
+            <TransportSpecifications listing={listing} />
+
             {/* Description */}
             <div className="mt-8">
               <h2 className="font-display text-xl font-bold text-foreground mb-4">{t('description')}</h2>
@@ -215,9 +218,6 @@ const ListingDetail = () => {
                 {listing.description || 'No description provided.'}
               </p>
             </div>
-
-            {/* Transport Specifications */}
-            <TransportSpecifications listing={listing} />
 
           </div>
 
