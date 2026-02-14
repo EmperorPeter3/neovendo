@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { motoTypes, motoOriginCountries, motoConditions, motoEngineTypes, motoFuelDelivery, motoStrokes, motoTransmissions } from '@/data/motoData';
+import { motoTypes, motoOriginCountries, motoConditions, motoEngineTypes, motoFuelDelivery, motoStrokes, motoTransmissions, motoDriveTypes, motoCylinders, motoGears, motoCoolingTypes } from '@/data/motoData';
 
 export interface MotoFieldsData {
   type: string;
@@ -26,6 +26,10 @@ export interface MotoFieldsData {
   fuelDelivery: string;
   strokes: string;
   transmission: string;
+  driveType: string;
+  cylinders: string;
+  gears: string;
+  cooling: string;
   mileage: string;
 }
 
@@ -43,6 +47,10 @@ export const defaultMotoFields: MotoFieldsData = {
   fuelDelivery: '',
   strokes: '',
   transmission: '',
+  driveType: '',
+  cylinders: '',
+  gears: '',
+  cooling: '',
   mileage: '',
 };
 
@@ -276,6 +284,80 @@ export const MotoFieldsForm = ({ data, onChange, fieldErrors = {}, onClearError 
             {motoTransmissions.map(trans => (
               <SelectItem key={trans} value={trans}>
                 {t(`transmission.${trans}` as TranslationKey)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Drive Type */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.driveType' as TranslationKey)}</Label>
+        <RadioGroup
+          value={data.driveType}
+          onValueChange={(v) => updateField('driveType', v)}
+          className="flex flex-wrap gap-4"
+        >
+          {motoDriveTypes.map(dt => (
+            <div key={dt} className="flex items-center space-x-2">
+              <RadioGroupItem value={dt} id={`moto-drive-${dt}`} />
+              <Label htmlFor={`moto-drive-${dt}`} className="text-sm cursor-pointer">
+                {t(`moto.driveType.${dt}` as TranslationKey)}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
+
+      {/* Cylinders */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.cylinders' as TranslationKey)}</Label>
+        <RadioGroup
+          value={data.cylinders}
+          onValueChange={(v) => updateField('cylinders', v)}
+          className="flex flex-wrap gap-4"
+        >
+          {motoCylinders.map(c => (
+            <div key={c} className="flex items-center space-x-2">
+              <RadioGroupItem value={String(c)} id={`moto-cyl-${c}`} />
+              <Label htmlFor={`moto-cyl-${c}`} className="text-sm cursor-pointer">
+                {String(c)}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
+
+      {/* Gears */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.gears' as TranslationKey)}</Label>
+        <RadioGroup
+          value={data.gears}
+          onValueChange={(v) => updateField('gears', v)}
+          className="flex flex-wrap gap-4"
+        >
+          {motoGears.map(g => (
+            <div key={g} className="flex items-center space-x-2">
+              <RadioGroupItem value={String(g)} id={`moto-gears-${g}`} />
+              <Label htmlFor={`moto-gears-${g}`} className="text-sm cursor-pointer">
+                {String(g)}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+      </div>
+
+      {/* Cooling */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.cooling' as TranslationKey)}</Label>
+        <Select value={data.cooling} onValueChange={(v) => updateField('cooling', v)}>
+          <SelectTrigger className="h-12">
+            <SelectValue placeholder={t('select' as TranslationKey)} />
+          </SelectTrigger>
+          <SelectContent>
+            {motoCoolingTypes.map(ct => (
+              <SelectItem key={ct} value={ct}>
+                {t(`moto.cooling.${ct}` as TranslationKey)}
               </SelectItem>
             ))}
           </SelectContent>

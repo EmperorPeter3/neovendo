@@ -379,6 +379,10 @@ const CreateListing = () => {
         if (motoFields.fuelDelivery) (listingData as any).moto_fuel_delivery = motoFields.fuelDelivery;
         if (motoFields.strokes) (listingData as any).moto_strokes = parseInt(motoFields.strokes);
         if (motoFields.transmission) (listingData as any).moto_transmission = motoFields.transmission;
+        if (motoFields.driveType) (listingData as any).moto_drive_type = motoFields.driveType;
+        if (motoFields.cylinders) (listingData as any).moto_cylinders = parseInt(motoFields.cylinders);
+        if (motoFields.gears) (listingData as any).moto_gears = parseInt(motoFields.gears);
+        if (motoFields.cooling) (listingData as any).moto_cooling = motoFields.cooling;
         if (motoFields.mileage) (listingData as any).moto_mileage = parseInt(motoFields.mileage);
       }
 

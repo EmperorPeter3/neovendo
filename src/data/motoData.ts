@@ -64,6 +64,27 @@ export const motoTransmissions = [
   'variator',
 ] as const;
 
+// Drive types
+export const motoDriveTypes = [
+  'chain',
+  'cardan',
+  'belt',
+] as const;
+
+// Number of cylinders
+export const motoCylinders = [1, 2, 3, 4] as const;
+
+// Number of gears
+export const motoGears = [4, 5, 6] as const;
+
+// Cooling types
+export const motoCoolingTypes = [
+  'air',
+  'liquid',
+  'oil',
+  'air_oil',
+] as const;
+
 export type MotoType = typeof motoTypes[number];
 export type MotoOriginCountry = typeof motoOriginCountries[number];
 export type MotoCondition = typeof motoConditions[number];
@@ -71,3 +92,7 @@ export type MotoEngineType = typeof motoEngineTypes[number];
 export type MotoFuelDelivery = typeof motoFuelDelivery[number];
 export type MotoStroke = typeof motoStrokes[number];
 export type MotoTransmission = typeof motoTransmissions[number];
+export type MotoDriveType = typeof motoDriveTypes[number];
+export type MotoCylinder = typeof motoCylinders[number];
+export type MotoGear = typeof motoGears[number];
+export type MotoCoolingType = typeof motoCoolingTypes[number];
