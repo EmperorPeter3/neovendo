@@ -40,8 +40,12 @@ const categoryKeywords: { keywords: string[]; suggestion: CategorySuggestion }[]
     suggestion: { category: 'transport', subcategory: 'quads_buggies', parentSubcategory: 'motorcycles' },
   },
   {
-    keywords: ['atv', 'вездеход', 'all-terrain', 'снегоболотоход', 'снегоход', 'snowmobile'],
+    keywords: ['atv', 'вездеход', 'all-terrain', 'снегоболотоход'],
     suggestion: { category: 'transport', subcategory: 'atvs', parentSubcategory: 'motorcycles' },
+  },
+  {
+    keywords: ['снегоход', 'snowmobile'],
+    suggestion: { category: 'transport', subcategory: 'snowmobiles', parentSubcategory: 'motorcycles' },
   },
   {
     keywords: ['kart', 'картинг', 'go-kart', 'go kart'],
