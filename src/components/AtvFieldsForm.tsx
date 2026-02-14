@@ -155,6 +155,24 @@ export function AtvFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </RadioGroup>
       </div>
 
+      {/* Mileage - after condition, hidden when new */}
+      {data.condition !== 'new' && (
+        <div className="space-y-2">
+          <Label className="text-sm font-medium">
+            {safeT(t, 'atvFilters.mileage')}
+            <span className="text-muted-foreground ml-1">({safeT(t, 'units.km')})</span>
+          </Label>
+          <Input
+            type="number"
+            placeholder="0"
+            value={data.mileage}
+            onChange={(e) => handleChange('mileage', e.target.value)}
+            min="0"
+            className={getInputClass('mileage')}
+          />
+        </div>
+      )}
+
       {/* Engine Type */}
       <div className="space-y-2">
         <Label className="text-sm font-medium">{safeT(t, 'atvFilters.engineType')}</Label>
@@ -213,34 +231,17 @@ export function AtvFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </div>
       </div>
 
-      {/* Mileage & Max Passengers */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">
-            {safeT(t, 'atvFilters.mileage')}
-            <span className="text-muted-foreground ml-1">({safeT(t, 'units.km')})</span>
-          </Label>
-          <Input
-            type="number"
-            placeholder="0"
-            value={data.mileage}
-            onChange={(e) => handleChange('mileage', e.target.value)}
-            min="0"
-            className={getInputClass('mileage')}
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">{safeT(t, 'atvFilters.maxPassengers')}</Label>
-          <Input
-            type="number"
-            placeholder="1"
-            value={data.maxPassengers}
-            onChange={(e) => handleChange('maxPassengers', e.target.value)}
-            min="1"
-            max="20"
-          />
-        </div>
+      {/* Max Passengers */}
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">{safeT(t, 'atvFilters.maxPassengers')}</Label>
+        <Input
+          type="number"
+          placeholder="1"
+          value={data.maxPassengers}
+          onChange={(e) => handleChange('maxPassengers', e.target.value)}
+          min="1"
+          max="20"
+        />
       </div>
     </div>
   );

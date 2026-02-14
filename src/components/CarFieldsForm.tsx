@@ -149,22 +149,23 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
         </div>
       </div>
 
-      {/* Year & Mileage */}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="space-y-2">
-          <Label className="text-sm font-medium">{safeT(t, 'carFilters.year')}</Label>
-          <Select value={data.year} onValueChange={(v) => handleChange('year', v)}>
-            <SelectTrigger>
-              <SelectValue placeholder={safeT(t, 'filters.select') || 'Select'} />
-            </SelectTrigger>
-            <SelectContent>
-              {yearOptions.map(year => (
-                <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+      {/* Year */}
+      <div className="space-y-2">
+        <Label className="text-sm font-medium">{safeT(t, 'carFilters.year')}</Label>
+        <Select value={data.year} onValueChange={(v) => handleChange('year', v)}>
+          <SelectTrigger>
+            <SelectValue placeholder={safeT(t, 'filters.select') || 'Select'} />
+          </SelectTrigger>
+          <SelectContent>
+            {yearOptions.map(year => (
+              <SelectItem key={year} value={year.toString()}>{year}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
 
+      {/* Mileage - after condition, hidden when new */}
+      {data.condition !== 'new' && (
         <div className="space-y-2">
           <Label className="text-sm font-medium">{safeT(t, 'carFilters.mileage')}</Label>
           <Input
@@ -176,7 +177,7 @@ export function CarFieldsForm({ data, onChange, fieldErrors = {}, onClearError }
             className={getInputClass('mileage')}
           />
         </div>
-      </div>
+      )}
 
       {/* Transmission */}
       <div className="space-y-2">
