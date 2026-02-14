@@ -181,6 +181,10 @@ const EditListing = () => {
           fuelDelivery: (listing as any).moto_fuel_delivery || '',
           strokes: (listing as any).moto_strokes?.toString() || '',
           transmission: (listing as any).moto_transmission || '',
+          driveType: (listing as any).moto_drive_type || '',
+          cylinders: (listing as any).moto_cylinders?.toString() || '',
+          gears: (listing as any).moto_gears?.toString() || '',
+          cooling: (listing as any).moto_cooling || '',
           mileage: (listing as any).moto_mileage?.toString() || '',
         });
       }
@@ -510,6 +514,10 @@ const EditListing = () => {
         updateData.moto_fuel_delivery = motoFields.fuelDelivery || null;
         updateData.moto_strokes = motoFields.strokes ? parseInt(motoFields.strokes) : null;
         updateData.moto_transmission = motoFields.transmission || null;
+        updateData.moto_drive_type = motoFields.driveType || null;
+        updateData.moto_cylinders = motoFields.cylinders ? parseInt(motoFields.cylinders) : null;
+        updateData.moto_gears = motoFields.gears ? parseInt(motoFields.gears) : null;
+        updateData.moto_cooling = motoFields.cooling || null;
         updateData.moto_mileage = motoFields.mileage ? parseInt(motoFields.mileage) : null;
       }
 

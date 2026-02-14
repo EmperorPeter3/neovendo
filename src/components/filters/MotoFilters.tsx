@@ -11,7 +11,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { motoTypes, motoOriginCountries, motoFuelDelivery, motoStrokes, motoTransmissions } from '@/data/motoData';
+import { motoTypes, motoOriginCountries, motoFuelDelivery, motoStrokes, motoTransmissions, motoDriveTypes, motoCylinders, motoGears, motoCoolingTypes } from '@/data/motoData';
 
 export interface MotoFiltersState {
   // Types
@@ -45,6 +45,10 @@ export interface MotoFiltersState {
   fuelDelivery: string;
   strokes: string;
   transmission: string[];
+  driveType: string[];
+  cylinders: string;
+  gears: string;
+  cooling: string;
   mileageFrom: string;
   mileageTo: string;
   descriptionSearch: string;
@@ -81,6 +85,10 @@ export const defaultMotoFilters: MotoFiltersState = {
   fuelDelivery: '',
   strokes: '',
   transmission: [],
+  driveType: [],
+  cylinders: '',
+  gears: '',
+  cooling: '',
   mileageFrom: '',
   mileageTo: '',
   descriptionSearch: '',
@@ -115,6 +123,14 @@ export const MotoFilters = ({ filters, onChange }: MotoFiltersProps) => {
       ? current.filter(t => t !== trans)
       : [...current, trans];
     updateFilter('transmission', updated);
+  };
+
+  const toggleDriveType = (dt: string) => {
+    const current = filters.driveType;
+    const updated = current.includes(dt)
+      ? current.filter(d => d !== dt)
+      : [...current, dt];
+    updateFilter('driveType', updated);
   };
 
   return (
@@ -397,6 +413,84 @@ export const MotoFilters = ({ filters, onChange }: MotoFiltersProps) => {
             </div>
           ))}
         </div>
+      </div>
+
+      {/* Drive Type */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.driveType' as TranslationKey)}</Label>
+        <div className="flex flex-col space-y-2">
+          {motoDriveTypes.map(dt => (
+            <div key={dt} className="flex items-center space-x-2">
+              <Checkbox
+                id={`moto-drive-${dt}`}
+                checked={filters.driveType.includes(dt)}
+                onCheckedChange={() => toggleDriveType(dt)}
+              />
+              <label htmlFor={`moto-drive-${dt}`} className="text-xs cursor-pointer">
+                {t(`moto.driveType.${dt}` as TranslationKey)}
+              </label>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Cylinders */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.cylinders' as TranslationKey)}</Label>
+        <Select
+          value={filters.cylinders || 'all'}
+          onValueChange={(value) => updateFilter('cylinders', value === 'all' ? '' : value)}
+        >
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder={t('all')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('all')}</SelectItem>
+            {motoCylinders.map(c => (
+              <SelectItem key={c} value={String(c)}>{String(c)}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Gears */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.gears' as TranslationKey)}</Label>
+        <Select
+          value={filters.gears || 'all'}
+          onValueChange={(value) => updateFilter('gears', value === 'all' ? '' : value)}
+        >
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder={t('all')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('all')}</SelectItem>
+            {motoGears.map(g => (
+              <SelectItem key={g} value={String(g)}>{String(g)}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      </div>
+
+      {/* Cooling */}
+      <div>
+        <Label className="text-sm font-medium mb-2 block">{t('moto.cooling' as TranslationKey)}</Label>
+        <Select
+          value={filters.cooling || 'all'}
+          onValueChange={(value) => updateFilter('cooling', value === 'all' ? '' : value)}
+        >
+          <SelectTrigger className="h-9">
+            <SelectValue placeholder={t('all')} />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">{t('all')}</SelectItem>
+            {motoCoolingTypes.map(ct => (
+              <SelectItem key={ct} value={ct}>
+                {t(`moto.cooling.${ct}` as TranslationKey)}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Description Search */}

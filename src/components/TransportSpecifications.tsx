@@ -158,6 +158,18 @@ export const TransportSpecifications = ({ listing }: TransportSpecificationsProp
       };
       addSpec(<Settings className="w-5 h-5" />, tAny('carFilters.transmission'), m[l.moto_transmission] || l.moto_transmission);
     }
+    if ((l as any).moto_drive_type) {
+      addSpec(<Cog className="w-5 h-5" />, tAny('moto.driveType'), tAny(`moto.driveType.${(l as any).moto_drive_type}`));
+    }
+    if ((l as any).moto_cylinders) {
+      addSpec(<Cog className="w-5 h-5" />, tAny('moto.cylinders'), String((l as any).moto_cylinders));
+    }
+    if ((l as any).moto_gears) {
+      addSpec(<Cog className="w-5 h-5" />, tAny('moto.gears'), String((l as any).moto_gears));
+    }
+    if ((l as any).moto_cooling) {
+      addSpec(<Cog className="w-5 h-5" />, tAny('moto.cooling'), tAny(`moto.cooling.${(l as any).moto_cooling}`));
+    }
     if (l.moto_fuel_delivery) addSpec(<Cog className="w-5 h-5" />, tAny('moto.fuelDelivery'), tAny(`moto.fuelDelivery.${l.moto_fuel_delivery}`));
     if (l.moto_strokes) addSpec(<Cog className="w-5 h-5" />, tAny('moto.strokes'), `${l.moto_strokes}`);
     if (l.moto_origin_country) addSpec(<Globe className="w-5 h-5" />, tAny('mopedFilters.originCountry'), countryMap(l.moto_origin_country));

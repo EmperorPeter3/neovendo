@@ -87,6 +87,10 @@ export interface ListingWithOwner {
   moto_fuel_delivery: string | null;
   moto_strokes: number | null;
   moto_transmission: string | null;
+  moto_drive_type: string | null;
+  moto_cylinders: number | null;
+  moto_gears: number | null;
+  moto_cooling: string | null;
   moto_mileage: number | null;
   owner: {
     id: string;
@@ -207,6 +211,10 @@ export interface MotoQueryFilters {
   fuelDelivery?: string;
   strokes?: number;
   transmissions?: string[];
+  driveTypes?: string[];
+  cylinders?: number;
+  gears?: number;
+  cooling?: string;
   mileageFrom?: number;
   mileageTo?: number;
   descriptionSearch?: string;
@@ -593,6 +601,18 @@ export const useListings = (filters?: {
         }
         if (motos.transmissions && motos.transmissions.length > 0) {
           query = query.in('moto_transmission', motos.transmissions);
+        }
+        if (motos.driveTypes && motos.driveTypes.length > 0) {
+          query = query.in('moto_drive_type', motos.driveTypes);
+        }
+        if (motos.cylinders !== undefined) {
+          query = query.eq('moto_cylinders', motos.cylinders);
+        }
+        if (motos.gears !== undefined) {
+          query = query.eq('moto_gears', motos.gears);
+        }
+        if (motos.cooling) {
+          query = query.eq('moto_cooling', motos.cooling);
         }
         if (motos.mileageFrom !== undefined) {
           query = query.gte('moto_mileage', motos.mileageFrom);

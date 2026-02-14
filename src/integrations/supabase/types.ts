@@ -134,9 +134,13 @@ export type Database = {
           moped_year: number | null
           moto_brand: string | null
           moto_condition: string | null
+          moto_cooling: string | null
+          moto_cylinders: number | null
+          moto_drive_type: string | null
           moto_engine_type: string | null
           moto_engine_volume: number | null
           moto_fuel_delivery: string | null
+          moto_gears: number | null
           moto_mileage: number | null
           moto_model: string | null
           moto_origin_country: string | null
@@ -220,9 +224,13 @@ export type Database = {
           moped_year?: number | null
           moto_brand?: string | null
           moto_condition?: string | null
+          moto_cooling?: string | null
+          moto_cylinders?: number | null
+          moto_drive_type?: string | null
           moto_engine_type?: string | null
           moto_engine_volume?: number | null
           moto_fuel_delivery?: string | null
+          moto_gears?: number | null
           moto_mileage?: number | null
           moto_model?: string | null
           moto_origin_country?: string | null
@@ -306,9 +314,13 @@ export type Database = {
           moped_year?: number | null
           moto_brand?: string | null
           moto_condition?: string | null
+          moto_cooling?: string | null
+          moto_cylinders?: number | null
+          moto_drive_type?: string | null
           moto_engine_type?: string | null
           moto_engine_volume?: number | null
           moto_fuel_delivery?: string | null
+          moto_gears?: number | null
           moto_mileage?: number | null
           moto_model?: string | null
           moto_origin_country?: string | null
