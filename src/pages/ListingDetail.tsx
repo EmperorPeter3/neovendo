@@ -53,38 +53,33 @@ const ListingDetail = () => {
     if (id) addRecentlyViewed(id);
   }, [id]);
 
-  // Reset translation when listing changes
+  // Auto-translate when language changes or listing loads
   useEffect(() => {
-    setTranslatedContent(null);
-  }, [id]);
-
-  const handleTranslate = async () => {
-    if (translatedContent) {
-      setTranslatedContent(null);
-      return;
-    }
     if (!listing) return;
+    setTranslatedContent(null);
+
+    if (language === 'en') return; // default language, no need to translate
+
+    let cancelled = false;
     setIsTranslating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('translate-listing', {
-        body: {
-          title: listing.title,
-          description: listing.description,
-          targetLanguage: language,
-        },
-      });
-      if (error) throw error;
-      setTranslatedContent(data);
-    } catch (err: any) {
-      toast({
-        title: t('error' as TranslationKey),
-        description: err.message || 'Translation failed',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsTranslating(false);
-    }
-  };
+
+    supabase.functions.invoke('translate-listing', {
+      body: {
+        title: listing.title,
+        description: listing.description,
+        targetLanguage: language,
+      },
+    }).then(({ data, error }) => {
+      if (cancelled) return;
+      if (!error && data) setTranslatedContent(data);
+    }).catch(() => {
+      // silently fail
+    }).finally(() => {
+      if (!cancelled) setIsTranslating(false);
+    });
+
+    return () => { cancelled = true; };
+  }, [listing, language]);
   
 
   const handleContact = async () => {
@@ -252,31 +247,19 @@ const ListingDetail = () => {
             <div className="mt-8">
               <div className="flex items-center justify-between mb-4">
                 <h2 className="font-display text-xl font-bold text-foreground">{t('description' as TranslationKey)}</h2>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={handleTranslate}
-                  disabled={isTranslating}
-                  className="gap-2 text-sm"
-                >
-                  {isTranslating ? (
+                {isTranslating && (
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Loader2 className="w-3.5 h-3.5 animate-spin" />
-                  ) : (
-                    <Languages className="w-3.5 h-3.5" />
-                  )}
-                  {isTranslating
-                    ? t('translating' as TranslationKey)
-                    : translatedContent
-                    ? t('showOriginal' as TranslationKey)
-                    : t('translate' as TranslationKey)}
-                </Button>
+                    {t('translating' as TranslationKey)}
+                  </span>
+                )}
+                {translatedContent && !isTranslating && (
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <Languages className="w-3 h-3" />
+                    {t('translated' as TranslationKey)}
+                  </span>
+                )}
               </div>
-              {translatedContent && (
-                <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1">
-                  <Languages className="w-3 h-3" />
-                  {t('translated' as TranslationKey)}
-                </p>
-              )}
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
                 {translatedContent?.description || listing.description || 'No description provided.'}
               </p>
