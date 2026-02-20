@@ -17,13 +17,15 @@ import {
   ChevronLeft, 
   ChevronRight,
   Star,
-  Loader2
+  Loader2,
+  Languages,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useState, useEffect } from 'react';
 import { addRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
+import { supabase } from '@/integrations/supabase/client';
 
 const categoryIcons: Record<string, string> = {
   electronics: '📱',
@@ -35,11 +37,13 @@ const categoryIcons: Record<string, string> = {
 
 const ListingDetail = () => {
   const { id } = useParams();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { user } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isTranslating, setIsTranslating] = useState(false);
+  const [translatedContent, setTranslatedContent] = useState<{ title: string; description: string } | null>(null);
 
   const { data: listing, isLoading, error } = useListing(id || '');
   const createChat = useCreateChat();
@@ -48,6 +52,39 @@ const ListingDetail = () => {
   useEffect(() => {
     if (id) addRecentlyViewed(id);
   }, [id]);
+
+  // Reset translation when listing changes
+  useEffect(() => {
+    setTranslatedContent(null);
+  }, [id]);
+
+  const handleTranslate = async () => {
+    if (translatedContent) {
+      setTranslatedContent(null);
+      return;
+    }
+    if (!listing) return;
+    setIsTranslating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('translate-listing', {
+        body: {
+          title: listing.title,
+          description: listing.description,
+          targetLanguage: language,
+        },
+      });
+      if (error) throw error;
+      setTranslatedContent(data);
+    } catch (err: any) {
+      toast({
+        title: t('error' as TranslationKey),
+        description: err.message || 'Translation failed',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsTranslating(false);
+    }
+  };
   
 
   const handleContact = async () => {
@@ -213,9 +250,35 @@ const ListingDetail = () => {
 
             {/* Description */}
             <div className="mt-8">
-              <h2 className="font-display text-xl font-bold text-foreground mb-4">{t('description')}</h2>
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="font-display text-xl font-bold text-foreground">{t('description' as TranslationKey)}</h2>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={handleTranslate}
+                  disabled={isTranslating}
+                  className="gap-2 text-sm"
+                >
+                  {isTranslating ? (
+                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                  ) : (
+                    <Languages className="w-3.5 h-3.5" />
+                  )}
+                  {isTranslating
+                    ? t('translating' as TranslationKey)
+                    : translatedContent
+                    ? t('showOriginal' as TranslationKey)
+                    : t('translate' as TranslationKey)}
+                </Button>
+              </div>
+              {translatedContent && (
+                <p className="text-xs text-muted-foreground mb-3 flex items-center gap-1">
+                  <Languages className="w-3 h-3" />
+                  {t('translated' as TranslationKey)}
+                </p>
+              )}
               <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
-                {listing.description || 'No description provided.'}
+                {translatedContent?.description || listing.description || 'No description provided.'}
               </p>
             </div>
 
@@ -236,7 +299,7 @@ const ListingDetail = () => {
               </div>
 
               <h1 className="font-display text-2xl font-bold text-foreground mb-2">
-                {listing.title}
+                {translatedContent?.title || listing.title}
               </h1>
 
               <p className="text-3xl font-bold text-primary mb-4">
