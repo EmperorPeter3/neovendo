@@ -5109,6 +5109,7 @@ export const translations = {
     business: "Бизнес и оборудование",
     listings: "Объявления",
     recentListings: "Новые объявления",
+    nearYou: "Рядом с вами",
     forYou: "Для вас",
     dropImages: "Отпустите для загрузки",
     dragOrClick: "Перетащите фото сюда или нажмите для выбора",
