@@ -913,12 +913,24 @@ export const useListings = (filters?: {
         result.sort((a, b) => {
           const aHasCoords = a.lat != null && a.lng != null;
           const bHasCoords = b.lat != null && b.lng != null;
-          if (!aHasCoords && !bHasCoords) return 0;
+          if (!aHasCoords && !bHasCoords) {
+            // Both without coords — sort by seller rating descending
+            const ratingA = a.owner?.rating ?? 0;
+            const ratingB = b.owner?.rating ?? 0;
+            return ratingB - ratingA;
+          }
           if (!aHasCoords) return 1;
           if (!bHasCoords) return -1;
           const distA = haversineDistance(userLat, userLng, a.lat!, a.lng!);
           const distB = haversineDistance(userLat, userLng, b.lat!, b.lng!);
-          return distA - distB;
+          const distDiff = distA - distB;
+          // If distances are roughly equal (within 1km), sort by seller rating
+          if (Math.abs(distDiff) < 1) {
+            const ratingA = a.owner?.rating ?? 0;
+            const ratingB = b.owner?.rating ?? 0;
+            return ratingB - ratingA;
+          }
+          return distDiff;
         });
       }
 
