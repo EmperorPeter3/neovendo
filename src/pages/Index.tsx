@@ -5,7 +5,8 @@ import { LocationSelector } from '@/components/LocationSelector';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
 import { useForYouListings } from '@/hooks/useForYouListings';
-import { ChevronRight, MapPin, Search, ChevronDown } from 'lucide-react';
+import { useGeolocation } from '@/hooks/useGeolocation';
+import { ChevronRight, MapPin, Search, ChevronDown, Navigation } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -73,7 +74,11 @@ const Index = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { data: listings, isLoading } = useListings({ limit: 8 });
+  const geo = useGeolocation(true);
+  const { data: listings, isLoading } = useListings({ 
+    limit: 8,
+    ...(geo.lat && geo.lng ? { lat: geo.lat, lng: geo.lng, sortByLocation: true } : {}),
+  });
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
@@ -241,9 +246,17 @@ const Index = () => {
       <section className="py-6 md:py-10">
         <div className="container">
           <div className="flex items-center justify-between mb-6 gap-2">
-            <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
-              {t('recentListings')}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
+                {t('recentListings')}
+              </h2>
+              {geo.lat && geo.lng && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
+                  <Navigation className="w-3 h-3" />
+                  {t('nearYou' as TranslationKey)}
+                </span>
+              )}
+            </div>
             <Link to="/search">
               <Button variant="ghost" className="gap-1 text-primary hover:text-primary/80 text-xs md:text-sm px-2 md:px-4 shrink-0">
                 {t('viewAll')}

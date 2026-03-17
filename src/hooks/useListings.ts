@@ -302,6 +302,7 @@ export const useListings = (filters?: {
   lat?: number;
   lng?: number;
   radius?: number; // in km
+  sortByLocation?: boolean; // sort by distance from lat/lng instead of filtering
   cars?: CarsQueryFilters;
   atvs?: AtvQueryFilters;
   karting?: KartingQueryFilters;
@@ -876,32 +877,48 @@ export const useListings = (filters?: {
         owner: ownersMap.get(listing.owner_id) || null,
       })) as ListingWithOwner[];
 
+      // Haversine formula to calculate distance between two points
+      const haversineDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
+        const R = 6371; // Earth's radius in km
+        const dLat = (lat2 - lat1) * Math.PI / 180;
+        const dLng = (lng2 - lng1) * Math.PI / 180;
+        const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                  Math.sin(dLng / 2) * Math.sin(dLng / 2);
+        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+      };
+
       // Client-side geo filtering using Haversine formula
-      if (filters?.lat !== undefined && filters?.lng !== undefined && filters?.radius !== undefined) {
+      if (filters?.lat !== undefined && filters?.lng !== undefined && filters?.radius !== undefined && !filters?.sortByLocation) {
         const userLat = filters.lat;
         const userLng = filters.lng;
         const radiusKm = filters.radius;
 
-        // Haversine formula to calculate distance between two points
-        const haversineDistance = (lat1: number, lng1: number, lat2: number, lng2: number): number => {
-          const R = 6371; // Earth's radius in km
-          const dLat = (lat2 - lat1) * Math.PI / 180;
-          const dLng = (lng2 - lng1) * Math.PI / 180;
-          const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                    Math.sin(dLng / 2) * Math.sin(dLng / 2);
-          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-          return R * c;
-        };
-
         result = result.filter(listing => {
-          // Listings without coordinates cannot be geo-filtered - exclude them
           if (listing.lat === null || listing.lat === undefined || 
               listing.lng === null || listing.lng === undefined) {
             return false;
           }
           const distance = haversineDistance(userLat, userLng, listing.lat, listing.lng);
           return distance <= radiusKm;
+        });
+      }
+
+      // Sort by distance from user location (listings without coords go to end)
+      if (filters?.sortByLocation && filters?.lat !== undefined && filters?.lng !== undefined) {
+        const userLat = filters.lat;
+        const userLng = filters.lng;
+
+        result.sort((a, b) => {
+          const aHasCoords = a.lat != null && a.lng != null;
+          const bHasCoords = b.lat != null && b.lng != null;
+          if (!aHasCoords && !bHasCoords) return 0;
+          if (!aHasCoords) return 1;
+          if (!bHasCoords) return -1;
+          const distA = haversineDistance(userLat, userLng, a.lat!, a.lng!);
+          const distB = haversineDistance(userLat, userLng, b.lat!, b.lng!);
+          return distA - distB;
         });
       }
 
