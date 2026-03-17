@@ -182,6 +182,8 @@ const Index = () => {
                 </Button>
               </div>
               
+              <VoiceSearchButton />
+              
               <LocationSelector 
                 value={selectedLocation}
                 onChange={handleLocationChange}
