@@ -32,6 +32,7 @@ export const translations = {
     // Listings
     listings: "Listings",
     recentListings: "Recent Listings",
+    nearYou: "Near you",
     forYou: "For You",
     dropImages: "Drop to upload",
     dragOrClick: "Drag photos here or click to select",
