@@ -796,6 +796,7 @@ const [searchParams, setSearchParams] = useSearchParams();
                 >
                   {t('search')}
                 </Button>
+                <VoiceSearchButton className="ml-1" />
               </div>
               
               {/* 4. Category path - Clickable, shows when category is selected */}
