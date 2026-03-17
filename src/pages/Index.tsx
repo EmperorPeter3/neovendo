@@ -284,7 +284,7 @@ const Index = () => {
                   className="animate-slide-up"
                   style={{ animationDelay: `${index * 50}ms` }}
                 >
-                  <ListingCardDB listing={listing} />
+                  <ListingCardDB listing={listing} translated={getTranslated(listing)} />
                 </div>
               ))}
             </div>
