@@ -246,9 +246,17 @@ const Index = () => {
       <section className="py-6 md:py-10">
         <div className="container">
           <div className="flex items-center justify-between mb-6 gap-2">
-            <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
-              {t('recentListings')}
-            </h2>
+            <div className="flex items-center gap-2">
+              <h2 className="font-display text-xl md:text-2xl font-bold text-foreground">
+                {t('recentListings')}
+              </h2>
+              {geo.lat && geo.lng && (
+                <span className="flex items-center gap-1 text-xs text-muted-foreground bg-secondary px-2 py-1 rounded-full">
+                  <Navigation className="w-3 h-3" />
+                  {t('nearYou' as TranslationKey)}
+                </span>
+              )}
+            </div>
             <Link to="/search">
               <Button variant="ghost" className="gap-1 text-primary hover:text-primary/80 text-xs md:text-sm px-2 md:px-4 shrink-0">
                 {t('viewAll')}
