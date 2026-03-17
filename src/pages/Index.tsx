@@ -235,6 +235,7 @@ const Index = () => {
                 >
                   {t('search')}
                 </Button>
+                <VoiceSearchButton className="ml-1" />
               </div>
             </div>
           </form>
