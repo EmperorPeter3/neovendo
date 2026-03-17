@@ -3500,6 +3500,7 @@ export const translations = {
     business: "Entreprise & Équipement",
     listings: "Annonces",
     recentListings: "Annonces Récentes",
+    nearYou: "Près de vous",
     forYou: "Pour Vous",
     dropImages: "Déposez pour télécharger",
     dragOrClick: "Glissez des photos ici ou cliquez pour sélectionner",
