@@ -6,6 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner, CarsQueryFilters, AtvQueryFilters, KartingQueryFilters, QuadQueryFilters, MopedQueryFilters, MotoQueryFilters, SnowmobileQueryFilters, ApartmentQueryFilters } from '@/hooks/useListings';
 import { SlidersHorizontal, X, MapPin, Search, ChevronDown, ChevronRight } from 'lucide-react';
+import { VoiceSearchButton } from '@/components/VoiceSearchButton';
 import { TranslationKey } from '@/i18n/translations';
 import { Category } from '@/types/listing';
 import { subcategoriesData, Subcategory } from '@/data/subcategories';
