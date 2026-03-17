@@ -16,8 +16,11 @@ import { useState } from 'react';
 import { Category } from '@/types/listing';
 import { categoryIcons } from '@/data/subcategories';
 import { useIsMobile } from '@/hooks/use-mobile';
-const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
+const ListingCardDB = ({ listing, translated }: { listing: ListingWithOwner; translated?: { title: string; city: string; country: string } }) => {
   const { t } = useLanguage();
+  const displayTitle = translated?.title || listing.title;
+  const displayCity = translated?.city || listing.city;
+  const displayCountry = translated?.country || listing.country;
   
   return (
     <Link to={`/listing/${listing.id}`} className="group block">
@@ -26,7 +29,7 @@ const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
           {listing.images?.[0] ? (
             <img
               src={listing.images[0]}
-              alt={listing.title}
+              alt={displayTitle}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
             />
           ) : (
@@ -45,14 +48,14 @@ const ListingCardDB = ({ listing }: { listing: ListingWithOwner }) => {
         </div>
         <div className="p-4">
           <h3 className="font-semibold text-foreground line-clamp-2 mb-2 group-hover:text-primary transition-colors">
-            {listing.title}
+            {displayTitle}
           </h3>
           <p className="text-xl font-bold text-primary mb-2">
             €{Number(listing.price).toLocaleString()}
           </p>
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="w-3.5 h-3.5" />
-            <span>{listing.city}, {listing.country}</span>
+            <span>{displayCity}, {displayCountry}</span>
           </div>
         </div>
       </div>
