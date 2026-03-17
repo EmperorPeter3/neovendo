@@ -74,7 +74,11 @@ const Index = () => {
   const { t } = useLanguage();
   const navigate = useNavigate();
   const isMobile = useIsMobile();
-  const { data: listings, isLoading } = useListings({ limit: 8 });
+  const geo = useGeolocation(true);
+  const { data: listings, isLoading } = useListings({ 
+    limit: 8,
+    ...(geo.lat && geo.lng ? { lat: geo.lat, lng: geo.lng, sortByLocation: true } : {}),
+  });
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
