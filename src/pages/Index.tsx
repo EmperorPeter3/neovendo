@@ -311,6 +311,7 @@ const Index = () => {
 const ForYouSection = () => {
   const { t } = useLanguage();
   const { data: forYouListings, isLoading: forYouLoading } = useForYouListings(8);
+  const { getTranslated } = useListingsTranslation(forYouListings);
 
   if (!forYouLoading && (!forYouListings || forYouListings.length === 0)) return null;
 
@@ -337,7 +338,7 @@ const ForYouSection = () => {
                 className="animate-slide-up"
                 style={{ animationDelay: `${index * 50}ms` }}
               >
-                <ListingCardDB listing={listing} />
+                <ListingCardDB listing={listing} translated={getTranslated(listing)} />
               </div>
             ))}
           </div>
