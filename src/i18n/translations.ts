@@ -1079,6 +1079,7 @@ export const translations = {
     business: "Negócios e Equipamentos",
     listings: "Anúncios",
     recentListings: "Anúncios Recentes",
+    nearYou: "Perto de si",
     forYou: "Para Você",
     dropImages: "Solte para carregar",
     dragOrClick: "Arraste fotos aqui ou clique para selecionar",
