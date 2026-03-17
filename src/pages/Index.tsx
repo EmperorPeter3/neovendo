@@ -83,6 +83,7 @@ const Index = () => {
     limit: 8,
     ...(geo.lat && geo.lng ? { lat: geo.lat, lng: geo.lng, sortByLocation: true } : {}),
   });
+  const { getTranslated } = useListingsTranslation(listings);
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<Category | ''>('');
