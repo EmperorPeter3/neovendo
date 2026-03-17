@@ -6,6 +6,7 @@ import { useLanguage } from '@/contexts/LanguageContext';
 import { useListings, ListingWithOwner } from '@/hooks/useListings';
 import { useForYouListings } from '@/hooks/useForYouListings';
 import { useGeolocation } from '@/hooks/useGeolocation';
+import { useListingsTranslation } from '@/hooks/useListingsTranslation';
 import { ChevronRight, MapPin, Search, ChevronDown, Navigation } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
