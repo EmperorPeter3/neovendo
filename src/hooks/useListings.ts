@@ -302,6 +302,7 @@ export const useListings = (filters?: {
   lat?: number;
   lng?: number;
   radius?: number; // in km
+  sortByLocation?: boolean; // sort by distance from lat/lng instead of filtering
   cars?: CarsQueryFilters;
   atvs?: AtvQueryFilters;
   karting?: KartingQueryFilters;
