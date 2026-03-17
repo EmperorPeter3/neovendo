@@ -864,6 +864,8 @@ const [searchParams, setSearchParams] = useSearchParams();
                 {t('search')}
               </Button>
             </div>
+            
+            <VoiceSearchButton />
           </div>
         </form>
 
