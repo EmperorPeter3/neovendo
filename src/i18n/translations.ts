@@ -2693,6 +2693,7 @@ export const translations = {
     business: "Geschäft & Ausrüstung",
     listings: "Anzeigen",
     recentListings: "Neueste Anzeigen",
+    nearYou: "In deiner Nähe",
     forYou: "Für Dich",
     dropImages: "Zum Hochladen loslassen",
     dragOrClick: "Fotos hierher ziehen oder klicken zum Auswählen",
