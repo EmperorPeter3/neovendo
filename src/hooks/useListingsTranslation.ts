@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -22,15 +22,27 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
   const { language } = useLanguage();
   const [translations, setTranslations] = useState<Record<string, TranslatedListing>>({});
   const [isTranslating, setIsTranslating] = useState(false);
+  const prevKeyRef = useRef('');
+
+  // Stable key based on listing ids + language
+  const stableKey = useMemo(() => {
+    if (!listings || listings.length === 0) return '';
+    return listings.map(l => l.id).sort().join(',') + '::' + language;
+  }, [listings, language]);
 
   useEffect(() => {
-    setTranslations({});
-    if (!listings || listings.length === 0 || language === 'en') return;
+    if (!listings || listings.length === 0 || language === 'en') {
+      setTranslations({});
+      return;
+    }
+
+    // Skip if we already fetched for this exact set
+    if (stableKey === prevKeyRef.current) return;
+    prevKeyRef.current = stableKey;
 
     let cancelled = false;
     setIsTranslating(true);
 
-    // Build a stable key from listing ids to avoid re-fetching same set
     const items = listings.map(l => ({
       id: l.id,
       title: l.title,
@@ -51,9 +63,17 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
     });
 
     return () => { cancelled = true; };
-  }, [listings, language]);
+  }, [stableKey, listings, language]);
 
   const getTranslated = (listing: ListingInput) => {
+    if (language === 'en') {
+      return {
+        title: listing.title,
+        description: listing.description || '',
+        city: listing.city,
+        country: listing.country,
+      };
+    }
     const t = translations[listing.id];
     return t ? {
       title: t.title || listing.title,

@@ -21,7 +21,7 @@ import {
   Languages,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { addRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
@@ -43,7 +43,7 @@ const ListingDetail = () => {
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTranslating, setIsTranslating] = useState(false);
-  const [translatedContent, setTranslatedContent] = useState<{ title: string; description: string } | null>(null);
+  const [translatedContent, setTranslatedContent] = useState<{ title: string; description: string; city?: string; country?: string } | null>(null);
 
   const { data: listing, isLoading, error } = useListing(id || '');
   const createChat = useCreateChat();
@@ -54,11 +54,20 @@ const ListingDetail = () => {
   }, [id]);
 
   // Auto-translate when language changes or listing loads
+  const translateKey = listing ? `${listing.id}::${language}` : '';
+  const prevTranslateKeyRef = useRef('');
+
   useEffect(() => {
     if (!listing) return;
-    setTranslatedContent(null);
 
-    if (language === 'en') return; // default language, no need to translate
+    if (language === 'en') {
+      setTranslatedContent(null);
+      setIsTranslating(false);
+      return;
+    }
+
+    if (translateKey === prevTranslateKeyRef.current) return;
+    prevTranslateKeyRef.current = translateKey;
 
     let cancelled = false;
     setIsTranslating(true);
@@ -67,6 +76,8 @@ const ListingDetail = () => {
       body: {
         title: listing.title,
         description: listing.description,
+        city: listing.city,
+        country: listing.country,
         targetLanguage: language,
       },
     }).then(({ data, error }) => {
@@ -79,7 +90,7 @@ const ListingDetail = () => {
     });
 
     return () => { cancelled = true; };
-  }, [listing, language]);
+  }, [translateKey, listing, language]);
   
 
   const handleContact = async () => {
@@ -292,7 +303,7 @@ const ListingDetail = () => {
               <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                 <div className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
-                  <span>{listing.city}, {listing.country}</span>
+                  <span>{translatedContent?.city || listing.city}, {translatedContent?.country || listing.country}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
