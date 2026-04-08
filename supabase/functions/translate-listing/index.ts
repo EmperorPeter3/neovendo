@@ -92,7 +92,7 @@ Deno.serve(async (req) => {
     }
 
     // Single mode (backward compatible)
-    const { title, description } = body;
+    const { title, description, city, country } = body;
     if (!title && !description) {
       return new Response(JSON.stringify({ error: 'No content to translate' }), {
         status: 400,
@@ -100,7 +100,7 @@ Deno.serve(async (req) => {
       });
     }
 
-    const contentToTranslate = JSON.stringify({ title: title || '', description: description || '' });
+    const contentToTranslate = JSON.stringify({ title: title || '', description: description || '', city: city || '', country: country || '' });
     const cleaned = await translateWithAI(contentToTranslate, langName);
     const translated = JSON.parse(cleaned);
 
