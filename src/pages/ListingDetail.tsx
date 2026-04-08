@@ -55,7 +55,7 @@ const ListingDetail = () => {
 
   // Auto-translate when language changes or listing loads
   const translateKey = listing ? `${listing.id}::${language}` : '';
-  const prevTranslateKeyRef = React.useRef('');
+  const prevTranslateKeyRef = useRef('');
 
   useEffect(() => {
     if (!listing) return;
