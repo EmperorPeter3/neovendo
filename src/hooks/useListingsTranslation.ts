@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
 
@@ -22,37 +22,36 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
   const { language } = useLanguage();
   const [translations, setTranslations] = useState<Record<string, TranslatedListing>>({});
   const [isTranslating, setIsTranslating] = useState(false);
-  const prevKeyRef = useRef('');
 
-  // Stable key based on listing ids + language
+  // Stable key: sorted IDs + language
   const stableKey = useMemo(() => {
     if (!listings || listings.length === 0) return '';
     return listings.map(l => l.id).sort().join(',') + '::' + language;
   }, [listings, language]);
 
-  useEffect(() => {
-    if (!listings || listings.length === 0 || language === 'en') {
-      setTranslations({});
-      return;
-    }
-
-    // Skip if we already fetched for this exact set
-    if (stableKey === prevKeyRef.current) return;
-    prevKeyRef.current = stableKey;
-
-    let cancelled = false;
-    setIsTranslating(true);
-
-    const items = listings.map(l => ({
+  // Memoize listings snapshot to avoid re-fetching on reference changes
+  const listingsSnapshot = useMemo(() => {
+    if (!listings || listings.length === 0) return null;
+    return listings.map(l => ({
       id: l.id,
       title: l.title,
       description: l.description || '',
       city: l.city,
       country: l.country,
     }));
+  }, [stableKey]); // only recompute when stableKey changes
+
+  useEffect(() => {
+    if (!listingsSnapshot || language === 'en') {
+      setTranslations({});
+      return;
+    }
+
+    let cancelled = false;
+    setIsTranslating(true);
 
     supabase.functions.invoke('translate-listing', {
-      body: { listings: items, targetLanguage: language },
+      body: { listings: listingsSnapshot, targetLanguage: language },
     }).then(({ data, error }) => {
       if (cancelled || error || !data?.translations) return;
       setTranslations(data.translations);
@@ -63,7 +62,7 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
     });
 
     return () => { cancelled = true; };
-  }, [stableKey, listings, language]);
+  }, [stableKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getTranslated = (listing: ListingInput) => {
     if (language === 'en') {
