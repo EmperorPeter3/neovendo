@@ -21,7 +21,7 @@ import {
   Languages,
 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { addRecentlyViewed } from '@/hooks/useRecentlyViewed';
 import { TranslationKey } from '@/i18n/translations';
 import { useToast } from '@/hooks/use-toast';
