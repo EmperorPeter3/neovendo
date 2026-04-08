@@ -54,11 +54,20 @@ const ListingDetail = () => {
   }, [id]);
 
   // Auto-translate when language changes or listing loads
+  const translateKey = listing ? `${listing.id}::${language}` : '';
+  const prevTranslateKeyRef = React.useRef('');
+
   useEffect(() => {
     if (!listing) return;
-    setTranslatedContent(null);
 
-    if (language === 'en') return; // default language, no need to translate
+    if (language === 'en') {
+      setTranslatedContent(null);
+      setIsTranslating(false);
+      return;
+    }
+
+    if (translateKey === prevTranslateKeyRef.current) return;
+    prevTranslateKeyRef.current = translateKey;
 
     let cancelled = false;
     setIsTranslating(true);
@@ -67,6 +76,8 @@ const ListingDetail = () => {
       body: {
         title: listing.title,
         description: listing.description,
+        city: listing.city,
+        country: listing.country,
         targetLanguage: language,
       },
     }).then(({ data, error }) => {
@@ -79,7 +90,7 @@ const ListingDetail = () => {
     });
 
     return () => { cancelled = true; };
-  }, [listing, language]);
+  }, [translateKey, listing, language]);
   
 
   const handleContact = async () => {
