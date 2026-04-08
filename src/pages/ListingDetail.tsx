@@ -43,7 +43,7 @@ const ListingDetail = () => {
   const { toast } = useToast();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isTranslating, setIsTranslating] = useState(false);
-  const [translatedContent, setTranslatedContent] = useState<{ title: string; description: string } | null>(null);
+  const [translatedContent, setTranslatedContent] = useState<{ title: string; description: string; city?: string; country?: string } | null>(null);
 
   const { data: listing, isLoading, error } = useListing(id || '');
   const createChat = useCreateChat();
@@ -303,7 +303,7 @@ const ListingDetail = () => {
               <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
                 <div className="flex items-center gap-1">
                   <MapPin className="w-4 h-4" />
-                  <span>{listing.city}, {listing.country}</span>
+                  <span>{translatedContent?.city || listing.city}, {translatedContent?.country || listing.country}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   <Clock className="w-4 h-4" />
