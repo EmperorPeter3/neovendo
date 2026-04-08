@@ -16,7 +16,43 @@ const languageNames: Record<string, string> = {
   pt: 'Portuguese',
 };
 
-async function translateWithAI(content: string, langName: string): Promise<string> {
+const cyrillicRegex = /[А-Яа-яЁё]/;
+
+function cleanupAiJson(rawText: string): string {
+  return rawText.replace(/```json\n?|\n?```/g, '').trim();
+}
+
+function needsLocationRetry(source: string, translated: string | undefined, targetLanguage: string): boolean {
+  if (!source || targetLanguage === 'ru') return false;
+
+  const sourceValue = source.trim();
+  const translatedValue = (translated || '').trim();
+
+  if (!translatedValue) return true;
+  if (!cyrillicRegex.test(sourceValue)) return false;
+
+  return translatedValue === sourceValue || cyrillicRegex.test(translatedValue);
+}
+
+async function translateWithAI(
+  content: string,
+  langName: string,
+  mode: 'full' | 'location' = 'full',
+): Promise<string> {
+  const systemPrompt = mode === 'location'
+    ? `You localize ONLY geographic names in JSON to ${langName}.
+Translate city and country values to their standard localized form.
+If no common localized form exists, transliterate them into the target language/script.
+Never leave Cyrillic text unchanged when the target language is not Russian.
+Return ONLY valid JSON with the exact same structure and ids unchanged.`
+    : `You are a professional translator. Translate all text fields in the given JSON to ${langName}.
+Return ONLY valid JSON with the exact same structure.
+Keep brand names, model numbers, and prices as-is.
+IMPORTANT: city and country names MUST be localized to ${langName}. Use standard exonyms where they exist.
+If a location has no standard translated form, transliterate it into the target language/script.
+If text is already in ${langName}, return it unchanged.
+Do not add any explanation or markdown.`;
+
   const response = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
     method: 'POST',
     headers: {
@@ -28,15 +64,11 @@ async function translateWithAI(content: string, langName: string): Promise<strin
       messages: [
         {
           role: 'system',
-          content: `You are a professional translator. Translate all text fields in the given JSON to ${langName}. 
-Return ONLY valid JSON with the exact same structure.
-Keep proper nouns, brand names, model numbers, and prices as-is.
-If text is already in ${langName}, return it unchanged.
-Do not add any explanation or markdown.`,
+          content: systemPrompt,
         },
         { role: 'user', content },
       ],
-      temperature: 0.1,
+      temperature: 0,
     }),
   });
 
@@ -46,7 +78,7 @@ Do not add any explanation or markdown.`,
 
   const data = await response.json();
   const rawText = data.choices?.[0]?.message?.content || '';
-  return rawText.replace(/```json\n?|\n?```/g, '').trim();
+  return cleanupAiJson(rawText);
 }
 
 Deno.serve(async (req) => {
@@ -86,6 +118,30 @@ Deno.serve(async (req) => {
         }
       }
 
+      const itemsNeedingLocationRetry = items.filter((item) => {
+        const translatedItem = translationsMap[item.id];
+        return (
+          needsLocationRetry(item.city, translatedItem?.city, targetLanguage) ||
+          needsLocationRetry(item.country, translatedItem?.country, targetLanguage)
+        );
+      });
+
+      if (itemsNeedingLocationRetry.length > 0) {
+        const localizedOnly = JSON.parse(
+          await translateWithAI(JSON.stringify(itemsNeedingLocationRetry), langName, 'location')
+        );
+
+        if (Array.isArray(localizedOnly)) {
+          for (const item of localizedOnly) {
+            translationsMap[item.id] = {
+              ...translationsMap[item.id],
+              city: item.city || translationsMap[item.id]?.city,
+              country: item.country || translationsMap[item.id]?.country,
+            };
+          }
+        }
+      }
+
       return new Response(JSON.stringify({ translations: translationsMap }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       });
@@ -103,6 +159,18 @@ Deno.serve(async (req) => {
     const contentToTranslate = JSON.stringify({ title: title || '', description: description || '', city: city || '', country: country || '' });
     const cleaned = await translateWithAI(contentToTranslate, langName);
     const translated = JSON.parse(cleaned);
+
+    if (
+      needsLocationRetry(city || '', translated.city, targetLanguage) ||
+      needsLocationRetry(country || '', translated.country, targetLanguage)
+    ) {
+      const localizedOnly = JSON.parse(
+        await translateWithAI(JSON.stringify({ city: city || '', country: country || '' }), langName, 'location')
+      );
+
+      translated.city = localizedOnly.city || translated.city;
+      translated.country = localizedOnly.country || translated.country;
+    }
 
     return new Response(JSON.stringify(translated), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
