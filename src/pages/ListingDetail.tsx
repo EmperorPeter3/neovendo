@@ -60,7 +60,9 @@ const ListingDetail = () => {
   useEffect(() => {
     if (!listing) return;
 
-    if (language === 'en') {
+    // Listing content is authored in Russian, so only 'ru' needs no
+    // translation; every other language (including English) is translated.
+    if (language === 'ru') {
       setTranslatedContent(null);
       setIsTranslating(false);
       return;

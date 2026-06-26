@@ -81,7 +81,9 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
   }, [stableKey]); // only recompute when stableKey changes
 
   useEffect(() => {
-    if (!listingsSnapshot || language === 'en') {
+    // Listing content is authored in Russian, so 'ru' is the source language
+    // and needs no translation. Every other language (incl. English) does.
+    if (!listingsSnapshot || language === 'ru') {
       setTranslations({});
       clearTranslatingToast();
       return;
@@ -107,7 +109,7 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
   }, [stableKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const getTranslated = (listing: ListingInput) => {
-    if (language === 'en') {
+    if (language === 'ru') {
       return {
         title: listing.title,
         description: listing.description || '',
