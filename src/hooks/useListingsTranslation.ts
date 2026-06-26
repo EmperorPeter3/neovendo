@@ -1,6 +1,45 @@
 import { useState, useEffect, useMemo } from 'react';
+import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
+
+// Shared across every hook instance so concurrent lists (e.g. the homepage
+// renders two) show a single toast that only dismisses once all are done.
+const TRANSLATING_TOAST_ID = 'translating-listings';
+let pendingTranslations = 0;
+
+const showTranslatingToast = (message: string) => {
+  pendingTranslations += 1;
+  toast.loading(message, {
+    id: TRANSLATING_TOAST_ID,
+    position: 'top-center',
+    duration: Infinity,
+    // Bright, high-contrast styling so the user clearly notices it.
+    className: 'font-semibold',
+    style: {
+      background: 'hsl(var(--primary))',
+      color: 'hsl(var(--primary-foreground))',
+      border: '1px solid hsl(var(--primary))',
+      fontSize: '0.95rem',
+      padding: '14px 18px',
+      boxShadow: '0 12px 32px -6px hsl(var(--primary) / 0.6)',
+    },
+  });
+};
+
+const hideTranslatingToast = () => {
+  pendingTranslations = Math.max(0, pendingTranslations - 1);
+  if (pendingTranslations === 0) {
+    toast.dismiss(TRANSLATING_TOAST_ID);
+  }
+};
+
+// Force the toast away (e.g. when switching to English): no translation runs,
+// so no message should linger from a previous in-flight request.
+const clearTranslatingToast = () => {
+  pendingTranslations = 0;
+  toast.dismiss(TRANSLATING_TOAST_ID);
+};
 
 interface TranslatedListing {
   id: string;
@@ -19,7 +58,7 @@ interface ListingInput {
 }
 
 export const useListingsTranslation = (listings: ListingInput[] | undefined) => {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [translations, setTranslations] = useState<Record<string, TranslatedListing>>({});
   const [isTranslating, setIsTranslating] = useState(false);
 
@@ -44,11 +83,13 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
   useEffect(() => {
     if (!listingsSnapshot || language === 'en') {
       setTranslations({});
+      clearTranslatingToast();
       return;
     }
 
     let cancelled = false;
     setIsTranslating(true);
+    showTranslatingToast(t('translatingListings'));
 
     supabase.functions.invoke('translate-listing', {
       body: { listings: listingsSnapshot, targetLanguage: language },
@@ -58,6 +99,7 @@ export const useListingsTranslation = (listings: ListingInput[] | undefined) => 
     }).catch(() => {
       // silently fail
     }).finally(() => {
+      hideTranslatingToast();
       if (!cancelled) setIsTranslating(false);
     });
 

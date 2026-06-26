@@ -17,7 +17,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 const languages: { code: Language; label: string; flag: string }[] = [
   { code: 'en', label: 'English', flag: '🇬🇧' },
-  { code: 'pt', label: 'Português', flag: '🇧🇷' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
   { code: 'es', label: 'Español', flag: '🇪🇸' },
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },

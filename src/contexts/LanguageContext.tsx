@@ -12,7 +12,8 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguage] = useState<Language>(() => {
     const saved = localStorage.getItem('neovendo-lang');
-    return (saved as Language) || 'en';
+    // Default to English unless a valid language was previously chosen.
+    return saved && saved in translations ? (saved as Language) : 'en';
   });
 
   const handleSetLanguage = useCallback((lang: Language) => {
